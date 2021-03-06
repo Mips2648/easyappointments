@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#35A768">
 
-    <title><?= lang('forgot_your_password') ?> | Easy!Appointments</title>
+    <title><?= lang('forgot_your_password') ?> | Îlot Santé - Rendez-vous</title>
 
     <link rel="stylesheet" type="text/css" href="<?= asset_url('assets/ext/bootstrap/css/bootstrap.min.css') ?>">
     <link rel="stylesheet" type="text/css" href="<?= asset_url('assets/ext/jquery-ui/jquery-ui.min.css') ?>">
@@ -58,13 +58,6 @@
         <a href="<?= site_url('user/login') ?>" class="user-login">
             <?= lang('go_to_login') ?></a>
     </form>
-
-    <div class="mt-4">
-        <small>
-            Powered by
-            <a href="https://easyappointments.org">Easy!Appointments</a>
-        </small>
-    </div>
 </div>
 <script src="<?= asset_url('assets/ext/fontawesome/js/fontawesome.min.js') ?>"></script>
 <script src="<?= asset_url('assets/ext/fontawesome/js/solid.min.js') ?>"></script>

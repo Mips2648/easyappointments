@@ -396,12 +396,6 @@
 
             <div id="frame-footer">
                 <small>
-                    <span class="footer-powered-by">
-                        Powered By
-
-                        <a href="https://easyappointments.org" target="_blank">Easy!Appointments</a>
-                    </span>
-
                     <span class="footer-options">
                         <span id="select-language" class="badge badge-secondary">
                             <i class="fas fa-language mr-2"></i>
