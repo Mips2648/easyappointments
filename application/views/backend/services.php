@@ -103,81 +103,94 @@
 
                     <input type="hidden" id="service-id">
 
-                    <div class="form-group">
-                        <label for="service-name">
-                            <?= lang('name') ?>
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input id="service-name" class="form-control required" maxlength="128">
-                    </div>
+                    <div class="row">
+                        <div class="service-details col-12 col-md-12">
+                            <div class="form-group">
+                                <label for="service-name">
+                                    <?= lang('name') ?>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input id="service-name" class="form-control required" maxlength="128">
+                            </div>
 
-                    <div class="form-group">
-                        <label for="service-duration">
-                            <?= lang('duration_minutes') ?>
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input id="service-duration" class="form-control required" type="number" min="15">
-                    </div>
+                            <div class="form-group">
+                                <label for="service-description">
+                                    <?= lang('description') ?>
+                                </label>
+                                <textarea id="service-description" rows="4" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="service-details col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="service-duration">
+                                    <?= lang('duration_minutes') ?>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input id="service-duration" class="form-control required" type="number" min="15">
+                            </div>
 
-                    <div class="form-group">
-                        <label for="service-price">
-                            <?= lang('price') ?>
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input id="service-price" class="form-control required">
-                    </div>
+                            <div class="form-group">
+                                <label for="service-category">
+                                    <?= lang('category') ?>
+                                </label>
+                                <select id="service-category" class="form-control"></select>
+                            </div>
 
-                    <div class="form-group">
-                        <label for="service-currency">
-                            <?= lang('currency') ?>
+                            <div class="form-group">
+                                <label for="service-price">
+                                    <?= lang('price') ?>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input id="service-price" class="form-control required">
+                            </div>
 
-                        </label>
-                        <input id="service-currency" class="form-control" maxlength="32">
-                    </div>
+                            <div class="form-group">
+                                <label for="service-attendants-number">
+                                    <?= lang('attendants_number') ?>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input id="service-attendants-number" class="form-control required" type="number" min="1">
+                            </div>
+                        </div>
+                        <div class="service-details col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="service-availabilities-type">
+                                    <?= lang('availabilities_type') ?>
 
-                    <div class="form-group">
-                        <label for="service-category">
-                            <?= lang('category') ?>
-                        </label>
-                        <select id="service-category" class="form-control"></select>
-                    </div>
+                                </label>
+                                <select id="service-availabilities-type" class="form-control">
+                                    <option value="<?= AVAILABILITIES_TYPE_FLEXIBLE ?>">
+                                        <?= lang('flexible') ?>
+                                    </option>
+                                    <option value="<?= AVAILABILITIES_TYPE_FIXED ?>">
+                                        <?= lang('fixed') ?>
+                                    </option>
+                                </select>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="service-visible">
+                                <label class="custom-control-label" for="service-visible">
+                                    <?= lang('visible') ?>
+                                </label>
+                            </div>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <label for="service-currency">
+                                    <?= lang('currency') ?>
+                                </label>
+                                <input id="service-currency" class="form-control" maxlength="32">
+                            </div>
 
-                    <div class="form-group">
-                        <label for="service-availabilities-type">
-                            <?= lang('availabilities_type') ?>
-
-                        </label>
-                        <select id="service-availabilities-type" class="form-control">
-                            <option value="<?= AVAILABILITIES_TYPE_FLEXIBLE ?>">
-                                <?= lang('flexible') ?>
-                            </option>
-                            <option value="<?= AVAILABILITIES_TYPE_FIXED ?>">
-                                <?= lang('fixed') ?>
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="service-attendants-number">
-                            <?= lang('attendants_number') ?>
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input id="service-attendants-number" class="form-control required" type="number" min="1">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="service-location">
-                            <?= lang('location') ?>
-
-                        </label>
-                        <input id="service-location" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="service-description">
-                            <?= lang('description') ?>
-                        </label>
-                        <textarea id="service-description" rows="4" class="form-control"></textarea>
+                            <div class="form-group">
+                                <label for="service-location">
+                                    <?= lang('location') ?>
+                                </label>
+                                <input id="service-location" class="form-control">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
