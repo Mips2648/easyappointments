@@ -190,7 +190,7 @@ $(function () {
                         }),
                         $('<button/>', {
                             'type': 'button',
-                            'class': 'btn btn-outline-secondary btn-sm working-plan-exceptions-delete-break',
+                            'class': 'btn btn-danger btn-sm working-plan-exceptions-delete-break',
                             'title': EALang.delete,
                             'html': [
                                 $('<span/>', {

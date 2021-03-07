@@ -53,9 +53,6 @@
                 <a class="nav-link" href="#current-user" data-toggle="tab"><?= lang('current_user') ?></a>
             </li>
         <?php endif ?>
-        <li class="nav-item">
-            <a class="nav-link" href="#about-app" data-toggle="tab"><?= lang('about_app') ?></a>
-        </li>
     </ul>
 
     <div class="tab-content">
@@ -494,58 +491,5 @@
                 </div>
             </form>
         </div>
-
-        <!-- ABOUT TAB -->
-
-        <div class="tab-pane" id="about-app">
-            <h3>Easy!Appointments</h3>
-
-            <p>
-                <?= lang('about_app_info') ?>
-            </p>
-
-            <div class="current-version card card-body bg-light border-light mb-3">
-                <?= lang('current_version') ?>
-                <?= config('version') ?>
-                <?php if (config('release_label')): ?>
-                    - <?= config('release_label') ?>
-                <?php endif ?>
-            </div>
-
-            <h3><?= lang('support') ?></h3>
-            <p>
-                <?= lang('about_app_support') ?>
-
-                <br><br>
-
-                <a href="https://easyappointments.org">
-                    <?= lang('official_website') ?>
-                </a>
-                |
-                <a href="https://groups.google.com/forum/#!forum/easy-appointments">
-                    <?= lang('support_group') ?>
-                </a>
-                |
-                <a href="https://github.com/alextselegidis/easyappointments/issues">
-                    <?= lang('project_issues') ?>
-                </a>
-                |
-                <a href="https://facebook.com/easyappts">
-                    Facebook
-                </a>
-                |
-                <a href="https://twitter.com/easyappts">
-                    Twitter
-                </a>
-            </p>
-
-            <h3><?= lang('license') ?></h3>
-
-            <p>
-                <?= lang('about_app_license') ?>
-                <a href="http://www.gnu.org/copyleft/gpl.html">http://www.gnu.org/copyleft/gpl.html</a>
-            </p>
-        </div>
-
     </div>
 </div>

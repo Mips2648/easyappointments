@@ -141,7 +141,7 @@
                                     }),
                                     $('<button/>', {
                                         'type': 'button',
-                                        'class': 'btn btn-outline-secondary btn-sm delete-break',
+                                        'class': 'btn btn-danger btn-sm delete-break',
                                         'title': EALang.delete,
                                         'html': [
                                             $('<span/>', {
@@ -327,7 +327,7 @@
                         }),
                         $('<button/>', {
                             'type': 'button',
-                            'class': 'btn btn-outline-secondary btn-sm delete-working-plan-exception',
+                            'class': 'btn btn-danger btn-sm delete-working-plan-exception',
                             'title': EALang.delete,
                             'html': [
                                 $('<span/>', {
@@ -399,7 +399,7 @@
                             }),
                             $('<button/>', {
                                 'type': 'button',
-                                'class': 'btn btn-outline-secondary btn-sm delete-break',
+                                'class': 'btn btn-danger btn-sm delete-break',
                                 'title': EALang.delete,
                                 'html': [
                                     $('<span/>', {

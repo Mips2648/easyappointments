@@ -341,17 +341,9 @@
                     }),
                     $('<br/>'),
 
-                    // End
-
+                    // Notes
                     $('<small/>', {
-                        'text': end
-                    }),
-                    $('<br/>'),
-
-                    // Timezone
-
-                    $('<small/>', {
-                        'text': GlobalVariables.timezones[appointment.provider.timezone]
+                        'text': appointment.notes
                     })
                 ]
             })

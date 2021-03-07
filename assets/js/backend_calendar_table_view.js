@@ -1127,7 +1127,7 @@ window.BackendCalendarTableView = window.BackendCalendarTableView || {};
                                 ]
                             }),
                             $('<button/>', {
-                                'class': 'delete-popover btn btn-outline-secondary mr-2 ' + displayDelete,
+                                'class': 'delete-popover btn btn-danger mr-2 ' + displayDelete,
                                 'html': [
                                     $('<i/>', {
                                         'class': 'fas fa-trash-alt mr-2'
@@ -1212,7 +1212,7 @@ window.BackendCalendarTableView = window.BackendCalendarTableView || {};
                                 ]
                             }),
                             $('<button/>', {
-                                'class': 'delete-popover btn btn-outline-secondary mr-2 ' + displayDelete,
+                                'class': 'delete-popover btn btn-danger mr-2 ' + displayDelete,
                                 'html': [
                                     $('<i/>', {
                                         'class': 'fas fa-trash-alt mr-2'
@@ -1338,7 +1338,7 @@ window.BackendCalendarTableView = window.BackendCalendarTableView || {};
                                 ]
                             }),
                             $('<button/>', {
-                                'class': 'delete-popover btn btn-outline-secondary mr-2' + displayDelete,
+                                'class': 'delete-popover btn btn-danger mr-2 ' + displayDelete,
                                 'html': [
                                     $('<i/>', {
                                         'class': 'fas fa-trash-alt mr-2'
