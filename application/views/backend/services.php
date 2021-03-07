@@ -68,7 +68,7 @@
                     <div class="results"></div>
                 </div>
 
-                <div class="record-details column col-12 col-md-5">
+                <div class="record-details column col-12 col-md-7">
                     <div class="btn-toolbar mb-4">
                         <div class="add-edit-delete-group btn-group">
                             <button id="add-service" class="btn btn-primary">
@@ -79,7 +79,7 @@
                                 <i class="fas fa-edit mr-2"></i>
                                 <?= lang('edit') ?>
                             </button>
-                            <button id="delete-service" class="btn btn-outline-secondary" disabled="disabled">
+                            <button id="delete-service" class="btn btn-danger" disabled="disabled">
                                 <i class="fas fa-trash-alt mr-2"></i>
                                 <?= lang('delete') ?>
                             </button>
@@ -137,6 +137,15 @@
                             </div>
 
                             <div class="form-group">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="service-visible">
+                                    <label class="custom-control-label" for="service-visible">
+                                        <?= lang('visible') ?>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="service-price">
                                     <?= lang('price') ?>
                                     <span class="text-danger">*</span>
@@ -167,16 +176,20 @@
                                     </option>
                                 </select>
                             </div>
-                            <br>
+
                             <div class="form-group">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="service-visible">
-                                <label class="custom-control-label" for="service-visible">
-                                    <?= lang('visible') ?>
+                                <label for="service-color">
+                                    <?= lang('color') ?>
+                                </label>
+                                <input type="color" id="service-color" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">
+
                                 </label>
                             </div>
-                            </div>
-                            <br>
+
                             <div class="form-group">
                                 <label for="service-currency">
                                     <?= lang('currency') ?>
@@ -235,7 +248,7 @@
                                 <i class="fas fa-edit mr-2"></i>
                                 <?= lang('edit') ?>
                             </button>
-                            <button id="delete-category" class="btn btn-outline-secondary" disabled="disabled">
+                            <button id="delete-category" class="btn btn-danger" disabled="disabled">
                                 <i class="fas fa-trash-alt mr-2"></i>
                                 <?= lang('delete') ?>
                             </button>
