@@ -84,29 +84,29 @@ $config['url_suffix'] = '';
 
 $config['language'] = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ?
     [
-        'ar' => 'arabic',
-        'bu' => 'bulgarian',
-        'zh' => 'chinese',
-        'da' => 'danish',
-        'nl' => 'dutch',
+        // 'ar' => 'arabic',
+        // 'bu' => 'bulgarian',
+        // 'zh' => 'chinese',
+        // 'da' => 'danish',
+        // 'nl' => 'dutch',
         'en' => 'english',
-        'fi' => 'finnish',
+        // 'fi' => 'finnish',
         'fr' => 'french',
-        'de' => 'german',
-        'el' => 'greek',
-        'he' => 'hebrew',
-        'hi' => 'hindi',
-        'hu' => 'hungarian',
-        'it' => 'italian',
-        'ja' => 'japanese',
-        'pl' => 'polish',
-        'pt' => 'portuguese',
-        'ro' => 'romanian',
-        'ru' => 'russian',
-        'sk' => 'slovak',
-        'es' => 'spanish',
-        'tr' => 'turkish',
-        'sv' => 'swedish'
+        // 'de' => 'german'
+        // 'el' => 'greek',
+        // 'he' => 'hebrew',
+        // 'hi' => 'hindi',
+        // 'hu' => 'hungarian',
+        // 'it' => 'italian',
+        // 'ja' => 'japanese',
+        // 'pl' => 'polish',
+        // 'pt' => 'portuguese',
+        // 'ro' => 'romanian',
+        // 'ru' => 'russian',
+        // 'sk' => 'slovak',
+        // 'es' => 'spanish',
+        // 'tr' => 'turkish',
+        // 'sv' => 'swedish'
     ][substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2)]
     : Config::LANGUAGE;
 
@@ -121,33 +121,33 @@ $config['language'] = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ?
 |
 */
 $config['available_languages'] = [
-    'arabic',
-    'bulgarian',
-    'catalan',
-    'chinese',
-    'czech',
-    'danish',
-    'dutch',
+    // 'arabic',
+    // 'bulgarian',
+    // 'catalan',
+    // 'chinese',
+    // 'czech',
+    // 'danish',
+    // 'dutch',
     'english',
-    'finnish',
+    // 'finnish',
     'french',
-    'german',
-    'greek',
-    'hebrew',
-    'hindi',
-    'hungarian',
-    'italian',
-    'japanese',
-    'marathi',
-    'luxembourgish',
-    'polish',
-    'portuguese',
-    'portuguese-br',
-    'romanian',
-    'russian',
-    'slovak',
-    'spanish',
-    'turkish'
+    // 'german'
+    // 'greek',
+    // 'hebrew',
+    // 'hindi',
+    // 'hungarian',
+    // 'italian',
+    // 'japanese',
+    // 'marathi',
+    // 'luxembourgish',
+    // 'polish',
+    // 'portuguese',
+    // 'portuguese-br',
+    // 'romanian',
+    // 'russian',
+    // 'slovak',
+    // 'spanish',
+    // 'turkish'
 ];
 
 /*
@@ -336,10 +336,13 @@ $config['encryption_key'] = base64_encode(APPPATH);
 |
 */
 $config['sess_driver'] = 'files';
-$config['sess_cookie_name'] = 'ea_session';
+$config['sess_cookie_name'] = 'rdv_session';
 $config['sess_expiration'] = 7200;
+$config['sess_expire_on_close'] = TRUE;
+$config['sess_encrypt_cookie'] = TRUE;
 $config['sess_save_path'] = __DIR__ . '/../../storage/sessions';
-$config['sess_match_ip'] = FALSE;
+$config['sess_match_ip'] = TRUE;
+$config['sess_match_useragent'] = TRUE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
 
@@ -357,7 +360,7 @@ $config['sess_regenerate_destroy'] = FALSE;
 $config['cookie_prefix'] = "";
 $config['cookie_domain'] = "";
 $config['cookie_path'] = "/";
-$config['cookie_secure'] = FALSE;
+$config['cookie_secure'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
@@ -385,7 +388,7 @@ $config['global_xss_filtering'] = TRUE;
 $config['csrf_protection'] = TRUE;
 $config['csrf_token_name'] = 'csrfToken';
 $config['csrf_cookie_name'] = 'csrfCookie';
-$config['csrf_expire'] = 7200;
+$config['csrf_expire'] = 3600;
 $config['csrf_exclude_uris'] = ['api/v1/.*'];
 
 /*

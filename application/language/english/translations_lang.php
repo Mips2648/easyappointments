@@ -329,3 +329,4 @@ $lang['default'] = 'Default';
 $lang['table'] = 'Table';
 $lang['date'] = 'Date';
 $lang['visible'] = 'Visible';
+$lang['color'] = 'Color';
