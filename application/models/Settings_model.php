@@ -29,8 +29,7 @@ class Settings_model extends EA_Model {
      * @throws Exception If the $name argument is invalid.
      * @throws Exception If the requested $name setting does not exist in the database.
      */
-    public function get_setting($name)
-    {
+    public function get_setting($name) {
         if ( ! is_string($name))
         {
             // Check argument type.
@@ -61,8 +60,7 @@ class Settings_model extends EA_Model {
      * @throws Exception If $name argument is invalid.
      * @throws Exception If the save operation fails.
      */
-    public function set_setting($name, $value)
-    {
+    public function set_setting($name, $value) {
         if ( ! is_string($name))
         {
             throw new Exception('$name argument is not a string: ' . $name);
@@ -107,8 +105,7 @@ class Settings_model extends EA_Model {
      *
      * @throws Exception If the $name argument is invalid.
      */
-    public function remove_setting($name)
-    {
+    public function remove_setting($name) {
         if ( ! is_string($name))
         {
             throw new Exception('$name is not a string: ' . $name);
@@ -134,15 +131,13 @@ class Settings_model extends EA_Model {
      *
      * @throws Exception When the update operation won't work for a specific setting.
      */
-    public function save_settings($settings)
-    {
+    public function save_settings($settings) {
         if ( ! is_array($settings))
         {
             throw new Exception('$settings argument is invalid: ' . print_r($settings, TRUE));
         }
 
-        foreach ($settings as $setting)
-        {
+        foreach ($settings as $setting) {
             $this->db->where('name', $setting['name']);
             if ( ! $this->db->update('settings', ['value' => $setting['value']]))
             {
@@ -159,8 +154,7 @@ class Settings_model extends EA_Model {
      *
      * @return array Array of all the system settings stored in the 'settings' table.
      */
-    public function get_settings()
-    {
+    public function get_settings() {
         return $this->db->get('settings')->result_array();
     }
 }

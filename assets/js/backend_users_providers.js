@@ -88,12 +88,7 @@
             $('#providers .save-cancel-group').show();
             $('#providers .record-details').find('input, select, textarea').prop('disabled', false);
             $('#provider-password, #provider-password-confirm').addClass('required');
-            $('#providers').find('.add-break, .edit-break, .delete-break, .add-working-plan-exception, .edit-working-plan-exception, .delete-working-plan-exception, #reset-working-plan').prop('disabled', false);
             $('#provider-services input:checkbox').prop('disabled', false);
-
-            // Apply default working plan
-            BackendUsers.wp.setup(GlobalVariables.workingPlan);
-            BackendUsers.wp.timepickers(false);
         }.bind(this));
 
         /**
@@ -107,9 +102,7 @@
             $('#providers .record-details').find('input, select, textarea').prop('disabled', false);
             $('#provider-password, #provider-password-confirm').removeClass('required');
             $('#provider-services input:checkbox').prop('disabled', false);
-            $('#providers').find('.add-break, .edit-break, .delete-break, .add-working-plan-exception, .edit-working-plan-exception, .delete-working-plan-exception, #reset-working-plan').prop('disabled', false);
             $('#providers input:checkbox').prop('disabled', false);
-            BackendUsers.wp.timepickers(false);
         });
 
         /**
@@ -155,8 +148,6 @@
                 timezone: $('#provider-timezone').val(),
                 settings: {
                     username: $('#provider-username').val(),
-                    working_plan: JSON.stringify(BackendUsers.wp.get()),
-                    working_plan_exceptions: JSON.stringify(BackendUsers.wp.getWorkingPlanExceptions()),
                     notifications: $('#provider-notifications').prop('checked'),
                     calendar_view: $('#provider-calendar-view').val()
                 }
@@ -199,24 +190,6 @@
                 this.select(id, true);
             }
         }.bind(this));
-
-        /**
-         * Event: Display Provider Details "Click"
-         */
-        $('#providers').on('shown.bs.tab', 'a[data-toggle="tab"]', function () {
-            Backend.placeFooterToBottom();
-        });
-
-        /**
-         * Event: Reset Working Plan Button "Click".
-         */
-        $('#providers').on('click', '#reset-working-plan', function () {
-            $('.breaks tbody').empty();
-            $('.working-plan-exceptions tbody').empty();
-            $('.work-start, .work-end').val('');
-            BackendUsers.wp.setup(GlobalVariables.workingPlan);
-            BackendUsers.wp.timepickers(false);
-        });
     };
 
     /**
@@ -232,8 +205,6 @@
             .off('click', '#delete-provider')
             .off('click', '#save-provider')
             .off('click', '#cancel-provider')
-            .off('shown.bs.tab', 'a[data-toggle="tab"]')
-            .off('click', '#reset-working-plan');
     };
 
     /**
@@ -351,13 +322,8 @@
             .val('')
             .prop('disabled', true);
         $('#providers .record-details #provider-calendar-view').val('default');
-        $('#providers .record-details #provider-timezone').val('UTC');
-        // $('#providers .add-break, .add-working-plan-exception, #reset-working-plan').prop('disabled', true);
-        // BackendUsers.wp.timepickers(true);
-        // $('#providers .working-plan input:text').timepicker('destroy');
-        // $('#providers .working-plan input:checkbox').prop('disabled', true);
-        // $('.breaks').find('.edit-break, .delete-break').prop('disabled', true);
-        // $('.working-plan-exceptions').find('.edit-working-plan-exception, .delete-working-plan-exception').prop('disabled', true);
+        $('#providers .record-details #provider-timezone').val(GlobalVariables.defaultTimezone);
+        $('#provider-notifications').prop('checked', false);
 
         $('#providers .record-details .has-error').removeClass('has-error');
         $('#providers .record-details .form-message').hide();
@@ -367,9 +333,6 @@
             .prop('disabled', true)
             .prop('checked', false);
         $('#provider-services a').remove();
-        // $('#providers .working-plan tbody').empty();
-        // $('#providers .breaks tbody').empty();
-        // $('#providers .working-plan-exceptions tbody').empty();
     };
 
     /**

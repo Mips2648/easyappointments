@@ -48,12 +48,10 @@ class Appointments extends EA_Controller {
      *
      * @param string $appointment_hash The appointment hash identifier.
      */
-    public function index($appointment_hash = '')
-    {
+    public function index($appointment_hash = '') {
         try
         {
-            if ( ! is_app_installed())
-            {
+            if ( ! is_app_installed()) {
                 redirect('installation/index');
                 return;
             }
@@ -65,6 +63,8 @@ class Appointments extends EA_Controller {
             $date_format = $this->settings_model->get_setting('date_format');
             $time_format = $this->settings_model->get_setting('time_format');
             $first_weekday = $this->settings_model->get_setting('first_weekday');
+            $default_timezone = $this->settings_model->get_setting('default_timezone');
+            $default_language = $this->settings_model->get_setting('default_language');
             $require_phone_number = $this->settings_model->get_setting('require_phone_number');
             $display_cookie_notice = $this->settings_model->get_setting('display_cookie_notice');
             $cookie_notice_content = $this->settings_model->get_setting('cookie_notice_content');
@@ -73,11 +73,11 @@ class Appointments extends EA_Controller {
             $display_privacy_policy = $this->settings_model->get_setting('display_privacy_policy');
             $privacy_policy_content = $this->settings_model->get_setting('privacy_policy_content');
             $display_any_provider = $this->settings_model->get_setting('display_any_provider');
+            $display_timezone = $this->settings_model->get_setting('display_timezone');
             $timezones = $this->timezones->to_array();
 
             // Remove the data that are not needed inside the $available_providers array.
-            foreach ($available_providers as $index => $provider)
-            {
+            foreach ($available_providers as $index => $provider) {
                 $stripped_data = [
                     'id' => $provider['id'],
                     'first_name' => $provider['first_name'],
@@ -90,8 +90,7 @@ class Appointments extends EA_Controller {
 
             // If an appointment hash is provided then it means that the customer is trying to edit a registered
             // appointment record.
-            if ($appointment_hash !== '')
-            {
+            if ($appointment_hash !== '') {
                 // Load the appointments data and enable the manage mode of the page.
                 $manage_mode = TRUE;
 
@@ -141,8 +140,7 @@ class Appointments extends EA_Controller {
                 // Save the token for 10 minutes.
                 $this->cache->save('customer-token-' . $customer_token, $customer['id'], 600);
             }
-            else
-            {
+            else {
                 // The customer is going to book a new appointment so there is no need for the manage functionality to
                 // be initialized.
                 $manage_mode = FALSE;
@@ -173,11 +171,13 @@ class Appointments extends EA_Controller {
                 'display_privacy_policy' => $display_privacy_policy,
                 'privacy_policy_content' => $privacy_policy_content,
                 'timezones' => $timezones,
+                'default_timezone' => $default_timezone,
+                'default_language' => $default_language,
                 'display_any_provider' => $display_any_provider,
+                'display_timezone' => $display_timezone
             ];
         }
-        catch (Exception $exception)
-        {
+        catch (Exception $exception) {
             $variables['exceptions'][] = $exception;
         }
 

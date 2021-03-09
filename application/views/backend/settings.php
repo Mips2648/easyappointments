@@ -141,6 +141,17 @@
                                     <?= lang('first_weekday_hint') ?>
                                 </span>
                             </div>
+                            <div class="form-group">
+                                <label for="default-timezone"><?= lang('timezone') ?></label>
+                                <?= render_timezone_dropdown('data-field="default_timezone" id="default-timezone" class="form-control"') ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="default-language">
+                                    <?= lang('language') ?>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select id="default-language" data-field="default_language" class="form-control required"></select>
+                            </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
@@ -203,6 +214,14 @@
                                 <span class="help-block">
                                     <?= lang('display_any_provider_hint') ?>
                                 </span>
+                            </div>
+                            <div class="form-group">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="display-timezone">
+                                    <label class="custom-control-label" for="display-timezone">
+                                        <?= lang('display_timezone') ?>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>

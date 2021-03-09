@@ -55,6 +55,8 @@
                 // Update variables also used in other setting tabs
                 GlobalVariables.timeFormat = $('#time-format').val();
                 GlobalVariables.firstWeekday = $('#first-weekday').val();
+                GlobalVariables.defaultTimezone = $('#default-timezone').val();
+                GlobalVariables.defaultLanguage = $('#default-language').val();
 
                 // We need to refresh the working plan.
                 var workingPlan = BackendSettings.wp.get();
@@ -100,6 +102,11 @@
         settings.push({
             name: 'display_any_provider',
             value: $('#display-any-provider').prop('checked') ? '1' : '0'
+        });
+
+        settings.push({
+            name: 'display_timezone',
+            value: $('#display-timezone').prop('checked') ? '1' : '0'
         });
 
 

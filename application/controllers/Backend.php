@@ -194,6 +194,8 @@ class Backend extends EA_Controller {
         $view['date_format'] = $this->settings_model->get_setting('date_format');
         $view['time_format'] = $this->settings_model->get_setting('time_format');
         $view['first_weekday'] = $this->settings_model->get_setting('first_weekday');
+        $view['default_timezone'] = $this->settings_model->get_setting('default_timezone');
+        $view['default_language'] = $this->settings_model->get_setting('default_language');
         $view['require_phone_number'] = $this->settings_model->get_setting('require_phone_number');
         $view['customers'] = $this->customers_model->get_batch();
         $view['available_providers'] = $this->providers_model->get_available_providers();
@@ -280,6 +282,8 @@ class Backend extends EA_Controller {
         $view['secretaries'] = $this->secretaries_model->get_batch();
         $view['services'] = $this->services_model->get_batch();
         $view['timezones'] = $this->timezones->to_array();
+        $view['default_timezone'] = $this->settings_model->get_setting('default_timezone');
+        $view['default_language'] = $this->settings_model->get_setting('default_language');
         $this->set_user_data($view);
 
         $this->load->view('backend/header', $view);

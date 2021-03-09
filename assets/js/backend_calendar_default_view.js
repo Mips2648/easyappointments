@@ -667,7 +667,6 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
                 end_datetime: eventInfo.event.end.toString('yyyy-MM-dd HH:mm:ss'),
                 id_users_provider: eventData.id_users_provider
             };
-            console.log(unavailable);
 
             // eventInfo.event.extendedProps.data.end_datetime = unavailable.end_datetime;
 

@@ -259,9 +259,9 @@
             .find('input, select, textarea')
             .val('')
             .prop('disabled', true);
-        $('.record-details #timezone').val('UTC');
+        $('.record-details #timezone').val(GlobalVariables.defaultTimezone);
 
-        $('#language').val('english');
+        $('#language').val(GlobalVariables.defaultLanguage);
 
         $('#customer-appointments').empty();
         $('#edit-customer, #delete-customer').prop('disabled', true);

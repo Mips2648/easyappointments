@@ -51,6 +51,11 @@ window.BackendSettings = window.BackendSettings || {};
 
         $('#cookie-notice-content, #terms-and-conditions-content, #privacy-policy-content').trumbowyg();
 
+        // Add the available languages to the language dropdown.
+        availableLanguages.forEach(function (language) {
+            $('#default-language').append(new Option(language, language));
+        });
+
         // Apply setting values from database.
         var workingPlan = {};
 
@@ -76,6 +81,10 @@ window.BackendSettings = window.BackendSettings || {};
 
             if (setting.name === 'display_any_provider') {
                 $('#display-any-provider').prop('checked', Boolean(Number(setting.value)));
+            }
+
+            if (setting.name === 'display_timezone') {
+                $('#display-timezone').prop('checked', Boolean(Number(setting.value)));
             }
 
             if (setting.name === 'display_cookie_notice') {
