@@ -1,9 +1,9 @@
-<link rel="stylesheet" type="text/css" href="<?= asset_url('/assets/ext/jquery-fullcalendar/fullcalendar.min.css') ?>">
+<link rel="stylesheet" type="text/css" href="<?= asset_url('/assets/ext/jquery-fullcalendar/main.min.css') ?>">
 
-<script src="<?= asset_url('assets/ext/jquery-fullcalendar/fullcalendar.min.js') ?>"></script>
+<script src="<?= asset_url('assets/ext/jquery-fullcalendar/main.min.js') ?>"></script>
+<script src="<?= asset_url('assets/ext/jquery-fullcalendar/locales-all.min.js') ?>"></script>
 <script src="<?= asset_url('assets/ext/jquery-jeditable/jquery.jeditable.min.js') ?>"></script>
 <script src="<?= asset_url('assets/ext/jquery-ui/jquery-ui-timepicker-addon.min.js') ?>"></script>
-<script src="<?= asset_url('assets/js/working_plan_exceptions_modal.js') ?>"></script>
 <script src="<?= asset_url('assets/js/backend_calendar.js') ?>"></script>
 <script src="<?= asset_url('assets/js/backend_calendar_default_view.js') ?>"></script>
 <script src="<?= asset_url('assets/js/backend_calendar_table_view.js') ?>"></script>
@@ -82,10 +82,10 @@
                             <i class="fas fa-plus-square mr-2"></i>
                             <?= lang('unavailable') ?>
                         </a>
-                        <a class="dropdown-item" href="#" id="insert-working-plan-exception"
+                        <a class="dropdown-item" href="#" id="insert-planning"
                             <?= $this->session->userdata('role_slug') !== 'admin' ? 'hidden' : '' ?>>
                             <i class="fas fa-plus-square mr-2"></i>
-                            <?= lang('working_plan_exception') ?>
+                            <?= lang('planning') ?>
                         </a>
                     </div>
                 </div>
@@ -489,8 +489,3 @@
         </div>
     </div>
 </div>
-
-<!-- WORKING PLAN EXCEPTIONS MODAL -->
-
-<?php require __DIR__ . '/working_plan_exceptions_modal.php' ?>
-
