@@ -120,7 +120,7 @@
                                 <textarea id="service-description" rows="4" class="form-control"></textarea>
                             </div>
                         </div>
-                        <div class="service-details col-12 col-md-6">
+                        <div class="service-details col-12 col-md-4">
                             <div class="form-group">
                                 <label for="service-duration">
                                     <?= lang('duration_minutes') ?>
@@ -137,15 +137,6 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="service-visible">
-                                    <label class="custom-control-label" for="service-visible">
-                                        <?= lang('visible') ?>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
                                 <label for="service-price">
                                     <?= lang('price') ?>
                                     <span class="text-danger">*</span>
@@ -154,14 +145,13 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="service-attendants-number">
-                                    <?= lang('attendants_number') ?>
-                                    <span class="text-danger">*</span>
+                                <label for="service-location">
+                                    <?= lang('location') ?>
                                 </label>
-                                <input id="service-attendants-number" class="form-control required" type="number" min="1">
+                                <input id="service-location" class="form-control">
                             </div>
                         </div>
-                        <div class="service-details col-12 col-md-6">
+                        <div class="service-details col-12 col-md-4">
                             <div class="form-group">
                                 <label for="service-availabilities-type">
                                     <?= lang('availabilities_type') ?>
@@ -185,23 +175,23 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="">
-
-                                </label>
-                            </div>
-
-                            <div class="form-group">
                                 <label for="service-currency">
                                     <?= lang('currency') ?>
                                 </label>
                                 <input id="service-currency" class="form-control" maxlength="32">
                             </div>
-
+                        </div>
+                        <div class="service-details col-12 col-md-4">
                             <div class="form-group">
-                                <label for="service-location">
-                                    <?= lang('location') ?>
+                                <label for="service-visible">
+                                    <?= lang('visible') ?>
                                 </label>
-                                <input id="service-location" class="form-control">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="service-visible">
+                                    <label class="custom-control-label" for="service-visible">
+                                        <?= lang('visible') ?>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>

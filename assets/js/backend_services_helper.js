@@ -109,8 +109,8 @@
             $('#service-price').val('0');
             $('#service-currency').val('');
             $('#service-category').val('null');
-            $('#service-availabilities-type').val('flexible');
-            $('#service-attendants-number').val('1');
+            $('#service-availabilities-type').val('fixed');
+            $('#service-visible').prop('checked', false);
         });
 
         /**
@@ -138,7 +138,6 @@
                 description: $('#service-description').val(),
                 location: $('#service-location').val(),
                 availabilities_type: $('#service-availabilities-type').val(),
-                attendants_number: $('#service-attendants-number').val(),
                 visible: $('#service-visible').prop('checked'),
                 color: $('#service-color').val()
             };
@@ -331,7 +330,6 @@
         $('#service-description').val(service.description);
         $('#service-location').val(service.location);
         $('#service-availabilities-type').val(service.availabilities_type);
-        $('#service-attendants-number').val(service.attendants_number);
         $('#service-visible').prop('checked', Boolean(Number(service.visible)));
         $('#service-color').val(service.color);
 

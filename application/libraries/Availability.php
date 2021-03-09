@@ -56,11 +56,6 @@ class Availability {
 
         $available_hours = $this->generate_available_hours($date, $service, $available_periods);
 
-        if ($service['attendants_number'] > 1)
-        {
-            $available_hours = $this->consider_multiple_attendants($date, $service, $provider, $exclude_appointment_id);
-        }
-
         return $this->consider_book_advance_timeout($date, $available_hours, $provider);
     }
 
@@ -79,18 +74,7 @@ class Availability {
      *
      * @throws Exception
      */
-    protected function get_available_periods(
-        $date,
-        $provider,
-        $exclude_appointment_id = NULL
-    )
-    {
-        // Get the service, provider's working plan and provider appointments.
-        $working_plan = json_decode($provider['settings']['working_plan'], TRUE);
-
-        // Get the provider's working plan exceptions.
-        $working_plan_exceptions = json_decode($provider['settings']['working_plan_exceptions'], TRUE);
-
+    protected function get_available_periods($date, $provider, $exclude_appointment_id = NULL) {
         $conditions = [
             'id_users_provider' => $provider['id'],
         ];
@@ -104,96 +88,14 @@ class Availability {
 
         $appointments = $this->CI->appointments_model->get_batch($conditions);
 
-        // Find the empty spaces on the plan. The first split between the plan is due to a break (if any). After that
-        // every reserved appointment is considered to be a taken space in the plan.
-        $working_day = strtolower(date('l', strtotime($date)));
-
-        $date_working_plan = $working_plan[$working_day] ?? NULL;
-
-        // Search if the $date is an custom availability period added outside the normal working plan.
-        if (isset($working_plan_exceptions[$date]))
-        {
-            $date_working_plan = $working_plan_exceptions[$date];
-        }
-
-        $periods = [];
-
-        if (isset($date_working_plan['breaks']))
-        {
-            $periods[] = [
-                'start' => $date_working_plan['start'],
-                'end' => $date_working_plan['end']
-            ];
-
-            $day_start = new DateTime($date_working_plan['start']);
-            $day_end = new DateTime($date_working_plan['end']);
-
-            // Split the working plan to available time periods that do not contain the breaks in them.
-            foreach ($date_working_plan['breaks'] as $index => $break)
-            {
-                $break_start = new DateTime($break['start']);
-                $break_end = new DateTime($break['end']);
-
-                if ($break_start < $day_start)
-                {
-                    $break_start = $day_start;
-                }
-
-                if ($break_end > $day_end)
-                {
-                    $break_end = $day_end;
-                }
-
-                if ($break_start >= $break_end)
-                {
-                    continue;
-                }
-
-                foreach ($periods as $key => $period)
-                {
-                    $period_start = new DateTime($period['start']);
-                    $period_end = new DateTime($period['end']);
-
-                    $remove_current_period = FALSE;
-
-                    if ($break_start > $period_start && $break_start < $period_end && $break_end > $period_start)
-                    {
-                        $periods[] = [
-                            'start' => $period_start->format('H:i'),
-                            'end' => $break_start->format('H:i')
-                        ];
-
-                        $remove_current_period = TRUE;
-                    }
-
-                    if ($break_start < $period_end && $break_end > $period_start && $break_end < $period_end)
-                    {
-                        $periods[] = [
-                            'start' => $break_end->format('H:i'),
-                            'end' => $period_end->format('H:i')
-                        ];
-
-                        $remove_current_period = TRUE;
-                    }
-
-                    if ($break_start == $period_start && $break_end == $period_end)
-                    {
-                        $remove_current_period = TRUE;
-                    }
-
-                    if ($remove_current_period)
-                    {
-                        unset($periods[$key]);
-                    }
-                }
-            }
-        }
+        $periods[] = [
+            'start' => '00:00:00',
+            'end' => '23:59:59'
+        ];
 
         // Break the empty periods with the reserved appointments.
-        foreach ($appointments as $appointment)
-        {
-            foreach ($periods as $index => &$period)
-            {
+        foreach ($appointments as $appointment) {
+            foreach ($periods as $index => &$period) {
                 $appointment_start = new DateTime($appointment['start_datetime']);
                 $appointment_end = new DateTime($appointment['end_datetime']);
 
@@ -316,114 +218,6 @@ class Availability {
         }
 
         return $available_hours;
-    }
-
-    /**
-     * Get multiple attendants hours.
-     *
-     * This method will add the additional appointment hours whenever a service accepts multiple attendants.
-     *
-     * @param string $date Selected date (Y-m-d).
-     * @param array $service Service record.
-     * @param array $provider Provider record.
-     * @param int|null $exclude_appointment_id Exclude an appointment from the availability generation.
-     *
-     * @return array Returns the available hours array.
-     *
-     * @throws Exception
-     */
-    protected function consider_multiple_attendants(
-        $date,
-        $service,
-        $provider,
-        $exclude_appointment_id = NULL
-    )
-    {
-        $unavailability_events = $this->CI->appointments_model->get_batch([
-            'is_unavailable' => TRUE,
-            'DATE(start_datetime)' => $date,
-            'id_users_provider' => $provider['id']
-        ]);
-
-        $working_plan = json_decode($provider['settings']['working_plan'], TRUE);
-
-        $working_plan_exceptions = json_decode($provider['settings']['working_plan_exceptions'], TRUE);
-
-        $working_day = strtolower(date('l', strtotime($date)));
-
-        $date_working_plan = $working_plan[$working_day] ?? NULL;
-
-        // Search if the $date is an custom availability period added outside the normal working plan.
-        if (isset($working_plan_exceptions[$date]))
-        {
-            $date_working_plan = $working_plan_exceptions[$date];
-        }
-
-        if ( ! $date_working_plan)
-        {
-            return [];
-        }
-
-        $periods = [
-            [
-                'start' => new DateTime($date . ' ' . $date_working_plan['start']),
-                'end' => new DateTime($date . ' ' . $date_working_plan['end'])
-            ]
-        ];
-
-        $periods = $this->remove_breaks($date, $periods, $date_working_plan['breaks']);
-        $periods = $this->remove_unavailability_events($periods, $unavailability_events);
-
-        $hours = [];
-
-        $interval_value = $service['availabilities_type'] == AVAILABILITIES_TYPE_FIXED ? $service['duration'] : '15';
-        $interval = new DateInterval('PT' . (int)$interval_value . 'M');
-        $duration = new DateInterval('PT' . (int)$service['duration'] . 'M');
-
-        foreach ($periods as $period)
-        {
-            $slot_start = clone $period['start'];
-            $slot_end = clone $slot_start;
-            $slot_end->add($duration);
-
-            while ($slot_end <= $period['end'])
-            {
-                // Make sure there is no other service appointment for this time slot.
-                $other_service_attendants_number = $this->CI->appointments_model->get_other_service_attendants_number(
-                    $slot_start,
-                    $slot_end,
-                    $service['id'],
-                    $provider['id'],
-                    $exclude_appointment_id
-                );
-
-                if ($other_service_attendants_number > 0)
-                {
-                    $slot_start->add($interval);
-                    $slot_end->add($interval);
-                    continue;
-                }
-
-                // Check reserved attendants for this time slot and see if current attendants fit.
-                $appointment_attendants_number = $this->CI->appointments_model->get_attendants_number_for_period(
-                    $slot_start,
-                    $slot_end,
-                    $service['id'],
-                    $provider['id'],
-                    $exclude_appointment_id
-                );
-
-                if ($appointment_attendants_number < $service['attendants_number'])
-                {
-                    $hours[] = $slot_start->format('H:i');
-                }
-
-                $slot_start->add($interval);
-                $slot_end->add($interval);
-            }
-        }
-
-        return $hours;
     }
 
     /**

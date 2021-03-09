@@ -124,8 +124,7 @@ class Console extends EA_Controller {
             'duration' => '30',
             'price' => '0',
             'currency' => '',
-            'availabilities_type' => 'flexible',
-            'attendants_number' => '1'
+            'availabilities_type' => 'flexible'
         ]);
 
         // Provider
@@ -140,7 +139,6 @@ class Console extends EA_Controller {
             'settings' => [
                 'username' => 'janedoe',
                 'password' => 'janedoe',
-                'working_plan' => $this->settings_model->get_setting('company_working_plan'),
                 'notifications' => TRUE,
                 'google_sync' => FALSE,
                 'sync_past_days' => 30,

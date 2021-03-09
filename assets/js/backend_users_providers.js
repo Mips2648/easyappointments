@@ -352,12 +352,12 @@
             .prop('disabled', true);
         $('#providers .record-details #provider-calendar-view').val('default');
         $('#providers .record-details #provider-timezone').val('UTC');
-        $('#providers .add-break, .add-working-plan-exception, #reset-working-plan').prop('disabled', true);
-        BackendUsers.wp.timepickers(true);
-        $('#providers .working-plan input:text').timepicker('destroy');
-        $('#providers .working-plan input:checkbox').prop('disabled', true);
-        $('.breaks').find('.edit-break, .delete-break').prop('disabled', true);
-        $('.working-plan-exceptions').find('.edit-working-plan-exception, .delete-working-plan-exception').prop('disabled', true);
+        // $('#providers .add-break, .add-working-plan-exception, #reset-working-plan').prop('disabled', true);
+        // BackendUsers.wp.timepickers(true);
+        // $('#providers .working-plan input:text').timepicker('destroy');
+        // $('#providers .working-plan input:checkbox').prop('disabled', true);
+        // $('.breaks').find('.edit-break, .delete-break').prop('disabled', true);
+        // $('.working-plan-exceptions').find('.edit-working-plan-exception, .delete-working-plan-exception').prop('disabled', true);
 
         $('#providers .record-details .has-error').removeClass('has-error');
         $('#providers .record-details .form-message').hide();
@@ -367,9 +367,9 @@
             .prop('disabled', true)
             .prop('checked', false);
         $('#provider-services a').remove();
-        $('#providers .working-plan tbody').empty();
-        $('#providers .breaks tbody').empty();
-        $('#providers .working-plan-exceptions tbody').empty();
+        // $('#providers .working-plan tbody').empty();
+        // $('#providers .breaks tbody').empty();
+        // $('#providers .working-plan-exceptions tbody').empty();
     };
 
     /**
@@ -441,15 +441,15 @@
         });
 
         // Display working plan
-        var workingPlan = $.parseJSON(provider.settings.working_plan);
-        BackendUsers.wp.setup(workingPlan);
-        $('.working-plan').find('input').prop('disabled', true);
-        $('.breaks').find('.edit-break, .delete-break').prop('disabled', true);
-        $('#providers .working-plan-exceptions tbody').empty();
-        var workingPlanExceptions = $.parseJSON(provider.settings.working_plan_exceptions);
-        BackendUsers.wp.setupWorkingPlanExceptions(workingPlanExceptions);
-        $('.working-plan-exceptions').find('.edit-working-plan-exception, .delete-working-plan-exception').prop('disabled', true);
-        $('#providers .working-plan input:checkbox').prop('disabled', true);
+        // var workingPlan = $.parseJSON(provider.settings.working_plan);
+        // BackendUsers.wp.setup(workingPlan);
+        // $('.working-plan').find('input').prop('disabled', true);
+        // $('.breaks').find('.edit-break, .delete-break').prop('disabled', true);
+        // $('#providers .working-plan-exceptions tbody').empty();
+        // var workingPlanExceptions = $.parseJSON(provider.settings.working_plan_exceptions);
+        // BackendUsers.wp.setupWorkingPlanExceptions(workingPlanExceptions);
+        // $('.working-plan-exceptions').find('.edit-working-plan-exception, .delete-working-plan-exception').prop('disabled', true);
+        // $('#providers .working-plan input:checkbox').prop('disabled', true);
         Backend.placeFooterToBottom();
     };
 

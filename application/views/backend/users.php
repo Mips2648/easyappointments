@@ -2,8 +2,6 @@
 <script src="<?= asset_url('assets/js/backend_users_providers.js') ?>"></script>
 <script src="<?= asset_url('assets/js/backend_users_secretaries.js') ?>"></script>
 <script src="<?= asset_url('assets/js/backend_users.js') ?>"></script>
-<script src="<?= asset_url('assets/js/working_plan.js') ?>"></script>
-<script src="<?= asset_url('assets/js/working_plan_exceptions_modal.js') ?>"></script>
 <script src="<?= asset_url('assets/ext/jquery-ui/jquery-ui-timepicker-addon.min.js') ?>"></script>
 <script src="<?= asset_url('assets/ext/jquery-jeditable/jquery.jeditable.min.js') ?>"></script>
 <script>
@@ -18,8 +16,6 @@
         secretaries: <?= json_encode($secretaries) ?>,
         services: <?= json_encode($services) ?>,
         timezones: <?= json_encode($timezones) ?>,
-        workingPlan: <?= json_encode(json_decode($working_plan)) ?>,
-        workingPlanExceptions: <?= json_encode(json_decode($working_plan_exceptions)) ?>,
         user: {
             id: <?= $user_id ?>,
             email: <?= json_encode($user_email) ?>,
@@ -113,19 +109,6 @@
                             </button>
                         </div>
                     </div>
-
-                    <ul class="nav nav-pills switch-view">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#details" data-toggle="tab">
-                                <?= lang('details') ?>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#working-plan" data-toggle="tab">
-                                <?= lang('working_plan') ?>
-                            </a>
-                        </li>
-                    </ul>
 
                     <?php
                     // This form message is outside the details view, so that it can be
@@ -357,8 +340,6 @@
                                 </thead>
                                 <tbody><!-- Dynamic Content --></tbody>
                             </table>
-
-                            <?php require __DIR__ . '/working_plan_exceptions_modal.php' ?>
                         </div>
                     </div>
                 </div>

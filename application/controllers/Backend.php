@@ -279,9 +279,7 @@ class Backend extends EA_Controller {
         $view['providers'] = $this->providers_model->get_batch();
         $view['secretaries'] = $this->secretaries_model->get_batch();
         $view['services'] = $this->services_model->get_batch();
-        $view['working_plan'] = $this->settings_model->get_setting('company_working_plan');
         $view['timezones'] = $this->timezones->to_array();
-        $view['working_plan_exceptions'] = '{}';
         $this->set_user_data($view);
 
         $this->load->view('backend/header', $view);

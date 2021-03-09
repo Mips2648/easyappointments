@@ -37,7 +37,6 @@ class Services implements ParsersInterface {
             'description' => $response['description'],
             'location' => $response['location'],
             'availabilitiesType' => $response['availabilities_type'],
-            'attendantsNumber' => (int)$response['attendants_number'],
             'categoryId' => $response['id_service_categories'] !== NULL ? (int)$response['id_service_categories'] : NULL
         ];
 
@@ -92,11 +91,6 @@ class Services implements ParsersInterface {
         if (array_key_exists('availabilitiesType', $request))
         {
             $decoded_request['availabilities_type'] = $request['availabilitiesType'];
-        }
-
-        if (array_key_exists('attendantsNumber', $request))
-        {
-            $decoded_request['attendants_number'] = $request['attendantsNumber'];
         }
 
         if (array_key_exists('categoryId', $request))

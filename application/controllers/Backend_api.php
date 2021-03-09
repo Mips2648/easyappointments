@@ -188,9 +188,9 @@ class Backend_api extends EA_Controller {
             $end_date = $this->db->escape(date('Y-m-d', strtotime($this->input->post('end_date') . ' +1 day')));
 
             $where_clause = $where_id . ' = ' . $record_id . '
-                AND ((start_datetime > ' . $start_date . ' AND start_datetime < ' . $end_date . ') 
-                or (end_datetime > ' . $start_date . ' AND end_datetime < ' . $end_date . ') 
-                or (start_datetime <= ' . $start_date . ' AND end_datetime >= ' . $end_date . ')) 
+                AND ((start_datetime > ' . $start_date . ' AND start_datetime < ' . $end_date . ')
+                or (end_datetime > ' . $start_date . ' AND end_datetime < ' . $end_date . ')
+                or (start_datetime <= ' . $start_date . ' AND end_datetime >= ' . $end_date . '))
                 AND is_unavailable = 0
             ';
 
@@ -209,9 +209,9 @@ class Backend_api extends EA_Controller {
             if ($this->input->post('filter_type') == FILTER_TYPE_PROVIDER)
             {
                 $where_clause = $where_id . ' = ' . $record_id . '
-                    AND ((start_datetime > ' . $start_date . ' AND start_datetime < ' . $end_date . ') 
-                    or (end_datetime > ' . $start_date . ' AND end_datetime < ' . $end_date . ') 
-                    or (start_datetime <= ' . $start_date . ' AND end_datetime >= ' . $end_date . ')) 
+                    AND ((start_datetime > ' . $start_date . ' AND start_datetime < ' . $end_date . ')
+                    or (end_datetime > ' . $start_date . ' AND end_datetime < ' . $end_date . ')
+                    or (start_datetime <= ' . $start_date . ' AND end_datetime >= ' . $end_date . '))
                     AND is_unavailable = 1
                 ';
 
@@ -731,95 +731,6 @@ class Backend_api extends EA_Controller {
     }
 
     /**
-     * Insert of update working plan exceptions to database.
-     */
-    public function ajax_save_working_plan_exception()
-    {
-        try
-        {
-            // Check privileges
-            $required_privileges = $this->privileges[PRIV_USERS]['edit'];
-
-            if ($required_privileges == FALSE)
-            {
-                throw new Exception('You do not have the required privileges for this task.');
-            }
-
-            $date = $this->input->post('date');
-            $working_plan_exception = $this->input->post('working_plan_exception');
-            $provider_id = $this->input->post('provider_id');
-
-            $success = $this->providers_model->save_working_plan_exception($date, $working_plan_exception, $provider_id);
-
-            if ($success)
-            {
-                $response = AJAX_SUCCESS;
-            }
-            else
-            {
-                $response = ['warnings' => 'Error on saving working plan exception.'];
-            }
-        }
-        catch (Exception $exception)
-        {
-            $this->output->set_status_header(500);
-
-            $response = [
-                'message' => $exception->getMessage(),
-                'trace' => config('debug') ? $exception->getTrace() : []
-            ];
-        }
-
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($response));
-    }
-
-    /**
-     * Delete an working plan exceptions time period to database.
-     */
-    public function ajax_delete_working_plan_exception()
-    {
-        try
-        {
-            // Check privileges
-            $required_privileges = $this->privileges[PRIV_USERS]['edit'];
-
-            if ($required_privileges == FALSE)
-            {
-                throw new Exception('You do not have the required privileges for this task.');
-            }
-
-            $date = $this->input->post('date');
-            $provider_id = $this->input->post('provider_id');
-
-            $success = $this->providers_model->delete_working_plan_exception($date, $provider_id);
-
-            if ($success)
-            {
-                $response = AJAX_SUCCESS;
-            }
-            else
-            {
-                $response = ['warnings' => 'Error on deleting working plan exception.'];
-            }
-        }
-        catch (Exception $exception)
-        {
-            $this->output->set_status_header(500);
-
-            $response = [
-                'message' => $exception->getMessage(),
-                'trace' => config('debug') ? $exception->getTrace() : []
-            ];
-        }
-
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($response));
-    }
-
-    /**
      * Save (insert or update) a customer record.
      */
     public function ajax_save_customer()
@@ -1260,12 +1171,6 @@ class Backend_api extends EA_Controller {
                 throw new Exception('You do not have the required privileges for this task.');
             }
 
-            if ( ! isset($provider['settings']['working_plan']))
-            {
-                $provider['settings']['working_plan'] = $this->settings_model
-                    ->get_setting('company_working_plan');
-            }
-
             $provider_id = $this->providers_model->add($provider);
 
             $response = [
@@ -1625,44 +1530,6 @@ class Backend_api extends EA_Controller {
                 $this->input->post('provider_id'));
 
             $response = $result ? AJAX_SUCCESS : AJAX_FAILURE;
-        }
-        catch (Exception $exception)
-        {
-            $this->output->set_status_header(500);
-
-            $response = [
-                'message' => $exception->getMessage(),
-                'trace' => config('debug') ? $exception->getTrace() : []
-            ];
-        }
-
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($response));
-    }
-
-    /**
-     * Apply global working plan to all providers.
-     */
-    public function ajax_apply_global_working_plan()
-    {
-        try
-        {
-            if ($this->privileges[PRIV_SYSTEM_SETTINGS]['edit'] == FALSE)
-            {
-                throw new Exception('You do not have the required privileges for this task.');
-            }
-
-            $working_plan = $this->input->post('working_plan');
-
-            $providers = $this->providers_model->get_batch();
-
-            foreach ($providers as $provider)
-            {
-                $this->providers_model->set_setting('working_plan', $working_plan, $provider['id']);
-            }
-
-            $response = AJAX_SUCCESS;
         }
         catch (Exception $exception)
         {
