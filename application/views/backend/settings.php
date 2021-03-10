@@ -172,6 +172,16 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="captcha-site-key">reCAPTCHA v3 Site Key</label>
+                                <input id="captcha-site-key" data-field="captcha_site_key" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="captcha-secret-key">reCAPTCHA v3 Secret Key</label>
+                                <input id="captcha-secret-key" data-field="captcha_secret_key" class="form-control">
+                            </div>
+
+                            <div class="form-group">
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="customer-notifications">
                                     <label class="custom-control-label" for="customer-notifications">
