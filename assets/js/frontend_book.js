@@ -101,18 +101,24 @@ window.FrontendBook = window.FrontendBook || {};
 
             dayNames: [
                 EALang.sunday, EALang.monday, EALang.tuesday, EALang.wednesday,
-                EALang.thursday, EALang.friday, EALang.saturday],
-            dayNamesShort: [EALang.sunday.substr(0, 3), EALang.monday.substr(0, 3),
+                EALang.thursday, EALang.friday, EALang.saturday
+            ],
+            dayNamesShort: [
+                EALang.sunday.substr(0, 3), EALang.monday.substr(0, 3),
                 EALang.tuesday.substr(0, 3), EALang.wednesday.substr(0, 3),
                 EALang.thursday.substr(0, 3), EALang.friday.substr(0, 3),
-                EALang.saturday.substr(0, 3)],
-            dayNamesMin: [EALang.sunday.substr(0, 2), EALang.monday.substr(0, 2),
+                EALang.saturday.substr(0, 3)
+            ],
+            dayNamesMin: [
+                EALang.sunday.substr(0, 2), EALang.monday.substr(0, 2),
                 EALang.tuesday.substr(0, 2), EALang.wednesday.substr(0, 2),
                 EALang.thursday.substr(0, 2), EALang.friday.substr(0, 2),
                 EALang.saturday.substr(0, 2)],
-            monthNames: [EALang.january, EALang.february, EALang.march, EALang.april,
+            monthNames: [
+                EALang.january, EALang.february, EALang.march, EALang.april,
                 EALang.may, EALang.june, EALang.july, EALang.august, EALang.september,
-                EALang.october, EALang.november, EALang.december],
+                EALang.october, EALang.november, EALang.december
+            ],
             prevText: EALang.previous,
             nextText: EALang.next,
             currentText: EALang.now,
@@ -429,16 +435,6 @@ window.FrontendBook = window.FrontendBook || {};
             FrontendBookApi.registerAppointment();
         });
 
-        /**
-         * Event: Refresh captcha image.
-         *
-         * @param {jQuery.Event} event
-         */
-        $('.captcha-title button').on('click', function (event) {
-            $('.captcha-image').attr('src', GlobalVariables.baseUrl + '/index.php/captcha?' + Date.now());
-        });
-
-
         $('#select-date').on('mousedown', '.ui-datepicker-calendar td', function (event) {
             setTimeout(function () {
                 FrontendBookApi.applyPreviousUnavailableDates(); // New jQuery UI version will replace the td elements.
@@ -664,7 +660,7 @@ window.FrontendBook = window.FrontendBook || {};
         var endDatetime;
 
         if (service.duration && startDatetime) {
-            endDatetime = startDatetime.add({'minutes': parseInt(service.duration)});
+            endDatetime = startDatetime.add({ 'minutes': parseInt(service.duration) });
         } else {
             endDatetime = new Date();
         }

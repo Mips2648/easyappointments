@@ -217,32 +217,6 @@ body {
     margin-bottom: 25px;
 }
 
-#book-appointment-wizard .captcha-title {
-    float: left;
-    margin: 7px 0 10px 0;
-}
-
-#book-appointment-wizard .captcha-title .fa-sync-alt {
-    cursor: pointer;
-    transition: all 0.3s linear;
-}
-
-#book-appointment-wizard .captcha-title .fa-sync-alt:hover {
-    color: #1A865F;
-}
-
-#book-appointment-wizard .captcha-image {
-    float: left;
-    margin-bottom: 20px;
-    border-radius: 3px;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-}
-
-#book-appointment-wizard .captcha-text {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
 #book-appointment-wizard #service-description {
     overflow-y: auto;
     clear: both;
@@ -296,15 +270,6 @@ body {
     #book-appointment-wizard .wizard-frame .command-buttons {
         display: flex;
         justify-content: space-between;
-    }
-
-    #book-appointment-wizard .captcha-title {
-        margin-right: 20px;
-        margin-top: 7px;
-    }
-
-    #book-appointment-wizard .captcha-image {
-        float: right;
     }
 
     #book-appointment-wizard #select-language {
@@ -418,5 +383,3 @@ body {
         text-align: left;
     }
 }
-
-

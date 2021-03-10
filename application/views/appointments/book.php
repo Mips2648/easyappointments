@@ -342,21 +342,6 @@
                             <div id="appointment-details" class="col-12 col-md-6"></div>
                             <div id="customer-details" class="col-12 col-md-6"></div>
                         </div>
-                        <?php if ($this->settings_model->get_setting('require_captcha') === '1') : ?>
-                            <div class="row frame-content">
-                                <div class="col-12 col-md-6">
-                                    <h4 class="captcha-title">
-                                        CAPTCHA
-                                        <button class="btn btn-link text-dark text-decoration-none py-0">
-                                            <i class="fas fa-sync-alt"></i>
-                                        </button>
-                                    </h4>
-                                    <img class="captcha-image" src="<?= site_url('captcha') ?>">
-                                    <input class="captcha-text form-control" type="text" value="" />
-                                    <span id="captcha-hint" class="help-block" style="opacity:0">&nbsp;</span>
-                                </div>
-                            </div>
-                        <?php endif; ?>
                     </div>
 
                     <div class="command-buttons">
@@ -424,7 +409,8 @@
             customerData: <?= json_encode($customer_data) ?>,
             displayAnyProvider: <?= json_encode($display_any_provider) ?>,
             displayTimezone: <?= json_encode($display_timezone === '1') ?>,
-            csrfToken: <?= json_encode($this->security->get_csrf_hash()) ?>
+            csrfToken: <?= json_encode($this->security->get_csrf_hash()) ?>,
+            captchaSiteKey: <?= json_encode(($require_captcha === '1' ? $captcha_site_key : '')) ?>
         };
 
         var EALang = <?= json_encode($this->lang->language) ?>;

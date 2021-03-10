@@ -403,7 +403,7 @@ class Appointments extends EA_Controller {
     public function ajax_register_appointment() {
         try {
             $post_data = $this->input->post('post_data');
-            $captcha = $this->input->post('captcha');
+            $captchaToken = $this->input->post('captchaToken');
             $manage_mode = filter_var($post_data['manage_mode'], FILTER_VALIDATE_BOOLEAN);
             $appointment = $post_data['appointment'];
             $customer = $post_data['customer'];
@@ -419,17 +419,15 @@ class Appointments extends EA_Controller {
             $service = $this->services_model->get_row($appointment['id_services']);
 
             $require_captcha = $this->settings_model->get_setting('require_captcha');
-            $captcha_phrase = $this->session->userdata('captcha_phrase');
 
             // Validate the CAPTCHA string.
-            if ($require_captcha === '1' && $captcha_phrase !== $captcha) {
-                $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode([
-                        'captcha_verification' => FALSE
-                    ]));
+            if ($require_captcha === '1') {
+                //     ->set_content_type('application/json')
+                //     ->set_output(json_encode([
+                //         'captcha_verification' => FALSE
+                //     ]));
 
-                return;
+                // return;
             }
 
             if ($this->customers_model->exists($customer)) {

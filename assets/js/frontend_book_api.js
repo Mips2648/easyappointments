@@ -141,16 +141,6 @@ window.FrontendBookApi = window.FrontendBookApi || {};
      * the appointment to the database.
      */
     exports.registerAppointment = function () {
-        var $captchaText = $('.captcha-text');
-
-        if ($captchaText.length > 0) {
-            $captchaText.closest('.form-group').removeClass('has-error');
-            if ($captchaText.val() === '') {
-                $captchaText.closest('.form-group').addClass('has-error');
-                return;
-            }
-        }
-
         var formData = JSON.parse($('input[name="post_data"]').val());
 
         var data = {
@@ -158,8 +148,12 @@ window.FrontendBookApi = window.FrontendBookApi || {};
             post_data: formData
         };
 
-        if ($captchaText.length > 0) {
-            data.captcha = $captchaText.val();
+        if (GlobalVariables.captchaSiteKey) {
+            grecaptcha.ready(function () {
+                grecaptcha.execute(GlobalVariables.captchaSiteKey, { action: 'register_appointment' }).then(function (token) {
+                    data.captchaToken = token;
+                });
+            });
         }
 
         if (GlobalVariables.manageMode) {
@@ -191,18 +185,6 @@ window.FrontendBookApi = window.FrontendBookApi || {};
         })
             .done(function (response) {
                 if (response.captcha_verification === false) {
-                    $('#captcha-hint')
-                        .text(EALang.captcha_is_wrong)
-                        .fadeTo(400, 1);
-
-                    setTimeout(function () {
-                        $('#captcha-hint').fadeTo(400, 0);
-                    }, 3000);
-
-                    $('.captcha-title button').trigger('click');
-
-                    $captchaText.closest('.form-group').addClass('has-error');
-
                     return false;
                 }
 
@@ -210,7 +192,7 @@ window.FrontendBookApi = window.FrontendBookApi || {};
                     + '/index.php/appointments/book_success/' + response.appointment_hash;
             })
             .fail(function (jqxhr, textStatus, errorThrown) {
-                $('.captcha-title button').trigger('click');
+
             })
             .always(function () {
                 $layer.remove();
@@ -294,7 +276,7 @@ window.FrontendBookApi = window.FrontendBookApi || {};
 
         // Grey out unavailable dates.
         $('#select-date .ui-datepicker-calendar td:not(.ui-datepicker-other-month)').each(function (index, td) {
-            selectedDate.set({day: index + 1});
+            selectedDate.set({ day: index + 1 });
             if (unavailableDates.indexOf(selectedDate.toString('yyyy-MM-dd')) !== -1) {
                 $(td).addClass('ui-datepicker-unselectable ui-state-disabled');
             }
