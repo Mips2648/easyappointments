@@ -402,8 +402,32 @@ class Appointments extends EA_Controller {
      */
     public function ajax_register_appointment() {
         try {
+
+            $require_captcha = $this->settings_model->get_setting('require_captcha');
+            // Validate the CAPTCHA string.
+            if ($require_captcha === '1') {
+                // use the reCAPTCHA PHP client library for validation
+                $recaptcha = new \ReCaptcha\ReCaptcha($this->settings_model->get_setting('captcha_secret_key'));
+                $resp = $recaptcha->setExpectedAction('register_appointment')
+                    ->setScoreThreshold(0.5)
+                    ->verify($this->input->post('captchaToken'), $this->input->ip_address());
+
+                // verify the response
+                if (!$resp->isSuccess()) {
+                    log_message('error', "ReCaptcha failure for action {$resp->getAction()} with score {$resp->getScore()}");
+                    $this->output
+                        ->set_content_type('application/json')
+                        ->set_output(json_encode([
+                            'captcha_verification' => FALSE
+                        ]));
+
+                    return;
+                }
+                log_message('info', "ReCaptcha for action {$resp->getAction()} with score {$resp->getScore()} is success");
+            }
+
+
             $post_data = $this->input->post('post_data');
-            $captchaToken = $this->input->post('captchaToken');
             $manage_mode = filter_var($post_data['manage_mode'], FILTER_VALIDATE_BOOLEAN);
             $appointment = $post_data['appointment'];
             $customer = $post_data['customer'];
@@ -417,18 +441,6 @@ class Appointments extends EA_Controller {
 
             $provider = $this->providers_model->get_row($appointment['id_users_provider']);
             $service = $this->services_model->get_row($appointment['id_services']);
-
-            $require_captcha = $this->settings_model->get_setting('require_captcha');
-
-            // Validate the CAPTCHA string.
-            if ($require_captcha === '1') {
-                //     ->set_content_type('application/json')
-                //     ->set_output(json_encode([
-                //         'captcha_verification' => FALSE
-                //     ]));
-
-                // return;
-            }
 
             if ($this->customers_model->exists($customer)) {
                 $customer['id'] = $this->customers_model->find_record_id($customer);

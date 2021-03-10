@@ -140,7 +140,7 @@ window.FrontendBookApi = window.FrontendBookApi || {};
      * This method will make an ajax call to the appointments controller that will register
      * the appointment to the database.
      */
-    exports.registerAppointment = function () {
+    exports.registerAppointment = function (captchaToken = '') {
         var formData = JSON.parse($('input[name="post_data"]').val());
 
         var data = {
@@ -148,12 +148,8 @@ window.FrontendBookApi = window.FrontendBookApi || {};
             post_data: formData
         };
 
-        if (GlobalVariables.captchaSiteKey) {
-            grecaptcha.ready(function () {
-                grecaptcha.execute(GlobalVariables.captchaSiteKey, { action: 'register_appointment' }).then(function (token) {
-                    data.captchaToken = token;
-                });
-            });
+        if (captchaToken) {
+            data.captchaToken = captchaToken;
         }
 
         if (GlobalVariables.manageMode) {

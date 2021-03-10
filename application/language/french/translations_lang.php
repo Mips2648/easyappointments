@@ -328,3 +328,5 @@ $lang['table'] = 'Table';
 $lang['date'] = 'Date';
 $lang['visible'] = 'Visible';
 $lang['color'] = 'Couleur';
+$lang['display_timezone'] = 'Affichage de la timezone';
+$lang['logsviewer'] = 'Logs';

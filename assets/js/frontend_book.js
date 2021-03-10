@@ -432,7 +432,15 @@ window.FrontendBook = window.FrontendBook || {};
          * @param {jQuery.Event} event
          */
         $('#book-appointment-submit').on('click', function () {
-            FrontendBookApi.registerAppointment();
+            if (GlobalVariables.captchaSiteKey) {
+                grecaptcha.ready(function () {
+                    grecaptcha.execute(GlobalVariables.captchaSiteKey, { action: 'register_appointment' }).then(function (token) {
+                        FrontendBookApi.registerAppointment(token);
+                    });
+                });
+            } else {
+                FrontendBookApi.registerAppointment();
+            }
         });
 
         $('#select-date').on('mousedown', '.ui-datepicker-calendar td', function (event) {

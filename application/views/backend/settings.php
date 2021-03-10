@@ -181,17 +181,6 @@
 
                             <div class="form-group">
                                 <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="customer-notifications">
-                                    <label class="custom-control-label" for="customer-notifications">
-                                        <?= lang('customer_notifications') ?>
-                                    </label>
-                                </div>
-                                <span class="form-text text-muted">
-                                    <?= lang('customer_notifications_hint') ?>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="require-captcha">
                                     <label class="custom-control-label" for="require-captcha">
                                         reCAPTCHA
@@ -199,6 +188,18 @@
                                 </div>
                                 <span class="form-text text-muted">
                                     <?= lang('require_captcha_hint') ?>
+                                </span>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customer-notifications">
+                                    <label class="custom-control-label" for="customer-notifications">
+                                        <?= lang('customer_notifications') ?>
+                                    </label>
+                                </div>
+                                <span class="form-text text-muted">
+                                    <?= lang('customer_notifications_hint') ?>
                                 </span>
                             </div>
                             <div class="form-group">

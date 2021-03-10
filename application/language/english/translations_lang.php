@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 // English
 $lang['page_title'] = 'Book Appointment With';
 $lang['service_and_provider'] = 'Service & Provider';
@@ -330,3 +330,5 @@ $lang['table'] = 'Table';
 $lang['date'] = 'Date';
 $lang['visible'] = 'Visible';
 $lang['color'] = 'Color';
+$lang['display_timezone'] = 'Display timezone';
+$lang['logsviewer'] = 'Logs';
