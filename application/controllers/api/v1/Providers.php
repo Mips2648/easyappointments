@@ -33,8 +33,7 @@ class Providers extends API_V1_Controller {
     /**
      * Class Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->model('providers_model');
         $this->parser = new \EA\Engine\Api\V1\Parsers\Providers;
@@ -45,16 +44,13 @@ class Providers extends API_V1_Controller {
      *
      * @param int $id Optional (null), the record ID to be returned.
      */
-    public function get($id = NULL)
-    {
-        try
-        {
+    public function get($id = NULL) {
+        try {
             $conditions = $id !== NULL ? ['id' => $id] : NULL;
 
             $providers = $this->providers_model->get_batch($conditions);
 
-            if ($id !== NULL && count($providers) === 0)
-            {
+            if ($id !== NULL && count($providers) === 0) {
                 $this->throw_record_not_found();
             }
 
@@ -67,10 +63,7 @@ class Providers extends API_V1_Controller {
                 ->minimize()
                 ->singleEntry($id)
                 ->output();
-
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->handle_exception($exception);
         }
     }
@@ -78,27 +71,22 @@ class Providers extends API_V1_Controller {
     /**
      * POST API Method
      */
-    public function post()
-    {
-        try
-        {
+    public function post() {
+        try {
             // Insert the provider to the database.
             $request = new Request();
             $provider = $request->get_body();
             $this->parser->decode($provider);
 
-            if (array_key_exists('id', $provider))
-            {
+            if (array_key_exists('id', $provider)) {
                 unset($provider['id']);
             }
 
-            if ( ! array_key_exists('services', $provider))
-            {
+            if (!array_key_exists('services', $provider)) {
                 throw new Exception('No services property provided.');
             }
 
-            if ( ! array_key_exists('settings', $provider))
-            {
+            if (!array_key_exists('settings', $provider)) {
                 throw new Exception('No settings property provided.');
             }
 
@@ -109,9 +97,7 @@ class Providers extends API_V1_Controller {
             $response = new Response($batch);
             $status = new NonEmptyText('201 Created');
             $response->encode($this->parser)->singleEntry(TRUE)->output($status);
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->handle_exception($exception);
         }
     }
@@ -121,15 +107,12 @@ class Providers extends API_V1_Controller {
      *
      * @param int $id The record ID to be updated.
      */
-    public function put($id)
-    {
-        try
-        {
+    public function put($id) {
+        try {
             // Update the provider record.
             $batch = $this->providers_model->get_batch(['id' => $id]);
 
-            if ($id !== NULL && count($batch) === 0)
-            {
+            if ($id !== NULL && count($batch) === 0) {
                 $this->throw_record_not_found();
             }
 
@@ -144,9 +127,7 @@ class Providers extends API_V1_Controller {
             $batch = $this->providers_model->get_batch(['id' => $id]);
             $response = new Response($batch);
             $response->encode($this->parser)->singleEntry($id)->output();
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->handle_exception($exception);
         }
     }
@@ -156,10 +137,8 @@ class Providers extends API_V1_Controller {
      *
      * @param int $id The record ID to be deleted.
      */
-    public function delete($id)
-    {
-        try
-        {
+    public function delete($id) {
+        try {
             $result = $this->providers_model->delete($id);
 
             $response = new Response([
@@ -168,9 +147,7 @@ class Providers extends API_V1_Controller {
             ]);
 
             $response->output();
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->handle_exception($exception);
         }
     }

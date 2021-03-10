@@ -20,8 +20,7 @@ class Services_model extends EA_Model {
     /**
      * Services_Model constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->helper('data_validation');
     }
@@ -34,16 +33,12 @@ class Services_model extends EA_Model {
      * @return int Returns the record id.
      * @throws Exception
      */
-    public function add($service)
-    {
+    public function add($service) {
         $this->validate($service);
 
-        if ( ! isset($service['id']))
-        {
+        if (!isset($service['id'])) {
             $service['id'] = $this->insert($service);
-        }
-        else
-        {
+        } else {
             $this->update($service);
         }
 
@@ -59,58 +54,51 @@ class Services_model extends EA_Model {
      *
      * @throws Exception If service validation fails.
      */
-    public function validate($service)
-    {
+    public function validate($service) {
         // If record id is provided we need to check whether the record exists in the database.
-        if (isset($service['id']))
-        {
+        if (isset($service['id'])) {
             $num_rows = $this->db->get_where('services', ['id' => $service['id']])->num_rows();
 
-            if ($num_rows == 0)
-            {
+            if ($num_rows == 0) {
                 throw new Exception('Provided service id does not exist in the database.');
             }
         }
 
         // Check if service category id is valid (only when present).
-        if ( ! empty($service['id_service_categories']))
-        {
-            $num_rows = $this->db->get_where('service_categories',
-                ['id' => $service['id_service_categories']])->num_rows();
-            if ($num_rows == 0)
-            {
+        if (!empty($service['id_service_categories'])) {
+            $num_rows = $this->db->get_where(
+                'service_categories',
+                ['id' => $service['id_service_categories']]
+            )->num_rows();
+            if ($num_rows == 0) {
                 throw new Exception('Provided service category id does not exist in database.');
             }
         }
 
         // Check for required fields
-        if ($service['name'] == '')
-        {
+        if ($service['name'] == '') {
             throw new Exception('Not all required service fields where provided: '
                 . print_r($service, TRUE));
         }
 
         // Duration must be int
-        if ($service['duration'] !== NULL)
-        {
-            if ( ! is_numeric($service['duration']))
-            {
+        if ($service['duration'] !== NULL) {
+            if (!is_numeric($service['duration'])) {
                 throw new Exception('Service duration is not numeric.');
             }
         }
 
-        if ($service['price'] !== NULL)
-        {
-            if ( ! is_numeric($service['price']))
-            {
+        if ($service['price'] !== NULL) {
+            if (!is_numeric($service['price'])) {
                 throw new Exception('Service price is not numeric.');
             }
         }
 
         // Availabilities type must have the correct value.
-        if ($service['availabilities_type'] !== NULL && $service['availabilities_type'] !== AVAILABILITIES_TYPE_FLEXIBLE
-            && $service['availabilities_type'] !== AVAILABILITIES_TYPE_FIXED)
-        {
+        if (
+            $service['availabilities_type'] !== NULL && $service['availabilities_type'] !== AVAILABILITIES_TYPE_FLEXIBLE
+            && $service['availabilities_type'] !== AVAILABILITIES_TYPE_FIXED
+        ) {
             throw new Exception('Service availabilities type must be either ' . AVAILABILITIES_TYPE_FLEXIBLE
                 . ' or ' . AVAILABILITIES_TYPE_FIXED . ' (given ' . $service['availabilities_type'] . ')');
         }
@@ -127,10 +115,8 @@ class Services_model extends EA_Model {
      *
      * @throws Exception If service record could not be inserted.
      */
-    protected function insert($service)
-    {
-        if ( ! $this->db->insert('services', $service))
-        {
+    protected function insert($service) {
+        if (!$this->db->insert('services', $service)) {
             throw new Exception('Could not insert service record.');
         }
         return (int)$this->db->insert_id();
@@ -143,11 +129,9 @@ class Services_model extends EA_Model {
      *
      * @throws Exception If service record could not be updated.
      */
-    protected function update($service)
-    {
+    protected function update($service) {
         $this->db->where('id', $service['id']);
-        if ( ! $this->db->update('services', $service))
-        {
+        if (!$this->db->update('services', $service)) {
             throw new Exception('Could not update service record');
         }
     }
@@ -162,14 +146,12 @@ class Services_model extends EA_Model {
      *
      * @throws Exception If required fields are missing.
      */
-    public function exists($service)
-    {
-        if ( ! isset(
+    public function exists($service) {
+        if (!isset(
             $service['name'],
             $service['duration'],
             $service['price']
-        ))
-        {
+        )) {
             throw new Exception('Not all service fields are provided in order to check whether '
                 . 'a service record already exists: ' . print_r($service, TRUE));
         }
@@ -196,12 +178,12 @@ class Services_model extends EA_Model {
      * @throws Exception If required fields are missing.
      * @throws Exception If requested service was not found.
      */
-    public function find_record_id($service)
-    {
-        if ( ! isset($service['name'])
-            || ! isset($service['duration'])
-            || ! isset($service['price']))
-        {
+    public function find_record_id($service) {
+        if (
+            !isset($service['name'])
+            || !isset($service['duration'])
+            || !isset($service['price'])
+        ) {
             throw new Exception('Not all required fields where provided in order to find the '
                 . 'service record id.');
         }
@@ -212,8 +194,7 @@ class Services_model extends EA_Model {
             'price' => $service['price']
         ]);
 
-        if ($result->num_rows() == 0)
-        {
+        if ($result->num_rows() == 0) {
             throw new Exception('Could not find service record id');
         }
 
@@ -229,16 +210,13 @@ class Services_model extends EA_Model {
      *
      * @throws Exception If $service_id argument is invalid.
      */
-    public function delete($service_id)
-    {
-        if ( ! is_numeric($service_id))
-        {
+    public function delete($service_id) {
+        if (!is_numeric($service_id)) {
             throw new Exception('Invalid argument type $service_id (value:"' . $service_id . '"');
         }
 
         $num_rows = $this->db->get_where('services', ['id' => $service_id])->num_rows();
-        if ($num_rows == 0)
-        {
+        if ($num_rows == 0) {
             return FALSE; // Record does not exist
         }
 
@@ -255,10 +233,8 @@ class Services_model extends EA_Model {
      *
      * @throws Exception If $service_id argument is not valid.
      */
-    public function get_row($service_id)
-    {
-        if ( ! is_numeric($service_id))
-        {
+    public function get_row($service_id) {
+        if (!is_numeric($service_id)) {
             throw new Exception('$service_id argument is not an numeric (value: "' . $service_id . '")');
         }
         return $this->db->get_where('services', ['id' => $service_id])->row_array();
@@ -278,27 +254,22 @@ class Services_model extends EA_Model {
      * @throws Exception if requested service does not exist in the database.
      * @throws Exception If requested field name does not exist in the database.
      */
-    public function get_value($field_name, $service_id)
-    {
-        if ( ! is_numeric($service_id))
-        {
+    public function get_value($field_name, $service_id) {
+        if (!is_numeric($service_id)) {
             throw new Exception('Invalid argument provided as $service_id: ' . $service_id);
         }
 
-        if ( ! is_string($field_name))
-        {
+        if (!is_string($field_name)) {
             throw new Exception('$field_name argument is not a string: ' . $field_name);
         }
 
-        if ($this->db->get_where('services', ['id' => $service_id])->num_rows() == 0)
-        {
+        if ($this->db->get_where('services', ['id' => $service_id])->num_rows() == 0) {
             throw new Exception('The record with the $service_id argument does not exist in the database: ' . $service_id);
         }
 
         $row_data = $this->db->get_where('services', ['id' => $service_id])->row_array();
 
-        if ( ! array_key_exists($field_name, $row_data))
-        {
+        if (!array_key_exists($field_name, $row_data)) {
             throw new Exception('The given $field_name argument does not exist in the database: '
                 . $field_name);
         }
@@ -320,15 +291,12 @@ class Services_model extends EA_Model {
      *
      * @return array Returns the rows from the database.
      */
-    public function get_batch($where = NULL, $limit = NULL, $offset = NULL, $order_by = NULL)
-    {
-        if ($where !== NULL)
-        {
+    public function get_batch($where = NULL, $limit = NULL, $offset = NULL, $order_by = NULL) {
+        if ($where !== NULL) {
             $this->db->where($where);
         }
 
-        if ($order_by !== NULL)
-        {
+        if ($order_by !== NULL) {
             $this->db->order_by($order_by);
         }
 
@@ -340,17 +308,22 @@ class Services_model extends EA_Model {
      *
      * @return array Returns an object array with all the database services.
      */
-    public function get_available_services()
-    {
+    public function get_available_services() {
         $this->db->distinct();
         return $this->db
             ->select('services.*, service_categories.name AS category_name, '
                 . 'service_categories.id AS category_id')
             ->from('services')
-            ->join('services_providers',
-                'services_providers.id_services = services.id', 'inner')
-            ->join('service_categories',
-                'service_categories.id = services.id_service_categories', 'left')
+            ->join(
+                'services_providers',
+                'services_providers.id_services = services.id',
+                'inner'
+            )
+            ->join(
+                'service_categories',
+                'service_categories.id = services.id_service_categories',
+                'left'
+            )
             ->order_by('name ASC')
             ->get()->result_array();
     }
@@ -364,20 +337,15 @@ class Services_model extends EA_Model {
      *
      * @throws Exception If service category data are invalid.
      */
-    public function add_category($category)
-    {
-        if ( ! $this->validate_category($category))
-        {
+    public function add_category($category) {
+        if (!$this->validate_category($category)) {
             throw new Exception('Service category data are invalid.');
         }
 
-        if ( ! isset($category['id']))
-        {
+        if (!isset($category['id'])) {
             $this->db->insert('service_categories', $category);
             $category['id'] = $this->db->insert_id();
-        }
-        else
-        {
+        } else {
             $this->db->where('id', $category['id']);
             $this->db->update('service_categories', $category);
         }
@@ -395,26 +363,20 @@ class Services_model extends EA_Model {
      *
      * @throws Exception If required fields are missing.
      */
-    public function validate_category($category)
-    {
-        try
-        {
+    public function validate_category($category) {
+        try {
             // Required Fields
-            if ( ! isset($category['name']))
-            {
+            if (!isset($category['name'])) {
                 throw new Exception('Not all required fields where provided ');
             }
 
-            if ($category['name'] == '' || $category['name'] == NULL)
-            {
+            if ($category['name'] == '' || $category['name'] == NULL) {
                 throw new Exception('Required fields cannot be empty or null ($category: '
                     . print_r($category, TRUE) . ')');
             }
 
             return TRUE;
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             return FALSE;
         }
     }
@@ -428,17 +390,14 @@ class Services_model extends EA_Model {
      *
      * @throws Exception if Service category record was not found.
      */
-    public function delete_category($category_id)
-    {
-        if ( ! is_numeric($category_id))
-        {
+    public function delete_category($category_id) {
+        if (!is_numeric($category_id)) {
             throw new Exception('Invalid argument given for $category_id: ' . $category_id);
         }
 
         $num_rows = $this->db->get_where('service_categories', ['id' => $category_id])
             ->num_rows();
-        if ($num_rows == 0)
-        {
+        if ($num_rows == 0) {
             throw new Exception('Service category record not found in database.');
         }
 
@@ -456,17 +415,14 @@ class Services_model extends EA_Model {
      * @throws Exception If $category_id argument is invalid.
      * @throws Exception If service category record does not exist.
      */
-    public function get_category($category_id)
-    {
-        if ( ! is_numeric($category_id))
-        {
+    public function get_category($category_id) {
+        if (!is_numeric($category_id)) {
             throw new Exception('Invalid argument type given $category_id: ' . $category_id);
         }
 
         $result = $this->db->get_where('service_categories', ['id' => $category_id]);
 
-        if ($result->num_rows() == 0)
-        {
+        if ($result->num_rows() == 0) {
             throw new Exception('Service category record does not exist.');
         }
 
@@ -483,15 +439,12 @@ class Services_model extends EA_Model {
      *
      * @return array Returns an array that contains all the service category records.
      */
-    public function get_all_categories($where = NULL, $limit = NULL, $offset = NULL, $order_by = NULL)
-    {
-        if ($where !== NULL)
-        {
+    public function get_all_categories($where = NULL, $limit = NULL, $offset = NULL, $order_by = NULL) {
+        if ($where !== NULL) {
             $this->db->where($where);
         }
 
-        if ($order_by !== NULL)
-        {
+        if ($order_by !== NULL) {
             $this->db->order_by($order_by);
         }
 

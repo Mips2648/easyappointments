@@ -18,8 +18,7 @@
  *
  * @return mixed Returns the configuration value.
  */
-function config($key)
-{
+function config($key) {
     $CI = &get_instance();
 
     return $CI->config->item($key);

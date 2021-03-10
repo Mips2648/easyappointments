@@ -23,8 +23,7 @@
  *
  * @return string Returns the html markup of the exception.
  */
-function exceptionToHtml($exception)
-{
+function exceptionToHtml($exception) {
     return
         '<div class="accordion" id="error-accordion">
             <div class="accordion-group">

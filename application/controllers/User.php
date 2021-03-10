@@ -24,8 +24,7 @@ class User extends EA_Controller {
     /**
      * User constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->model('settings_model');
         $this->load->model('user_model');
@@ -36,8 +35,7 @@ class User extends EA_Controller {
      *
      * The default method will redirect the browser to the user/login URL.
      */
-    public function index()
-    {
+    public function index() {
         header('Location: ' . site_url('user/login'));
     }
 
@@ -46,13 +44,11 @@ class User extends EA_Controller {
      *
      * @throws Exception
      */
-    public function login()
-    {
+    public function login() {
         $view['base_url'] = config('base_url');
         $view['dest_url'] = $this->session->userdata('dest_url');
 
-        if ( ! $view['dest_url'])
-        {
+        if (!$view['dest_url']) {
             $view['dest_url'] = site_url('backend');
         }
 
@@ -64,8 +60,7 @@ class User extends EA_Controller {
     /**
      * Display the logout page.
      */
-    public function logout()
-    {
+    public function logout() {
         $this->session->unset_userdata('user_id');
         $this->session->unset_userdata('user_email');
         $this->session->unset_userdata('role_slug');
@@ -81,8 +76,7 @@ class User extends EA_Controller {
      * Display the "forgot password" page.
      * @throws Exception
      */
-    public function forgot_password()
-    {
+    public function forgot_password() {
         $view['base_url'] = config('base_url');
         $view['company_name'] = $this->settings_model->get_setting('company_name');
         $this->load->view('user/forgot_password', $view);
@@ -92,8 +86,7 @@ class User extends EA_Controller {
      * Display the "not authorized" page.
      * @throws Exception
      */
-    public function no_privileges()
-    {
+    public function no_privileges() {
         $view['base_url'] = config('base_url');
         $view['company_name'] = $this->settings_model->get_setting('company_name');
         $this->load->view('user/no_privileges', $view);
@@ -108,30 +101,22 @@ class User extends EA_Controller {
      *   - 'role_slug'
      *   - 'dest_url'
      */
-    public function ajax_check_login()
-    {
-        try
-        {
-            if ( ! $this->input->post('username') || ! $this->input->post('password'))
-            {
+    public function ajax_check_login() {
+        try {
+            if (!$this->input->post('username') || !$this->input->post('password')) {
                 throw new Exception('Invalid credentials given!');
             }
 
             $user_data = $this->user_model->check_login($this->input->post('username'), $this->input->post('password'));
 
-            if ($user_data)
-            {
+            if ($user_data) {
                 $this->session->set_userdata($user_data); // Save data on user's session.
 
                 $response = AJAX_SUCCESS;
-            }
-            else
-            {
+            } else {
                 $response = AJAX_FAILURE;
             }
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->output->set_status_header(500);
 
             $response = [
@@ -154,12 +139,9 @@ class User extends EA_Controller {
      * - string $_POST['username'] Username to be validated.
      * - string $_POST['email'] Email to be validated.
      */
-    public function ajax_forgot_password()
-    {
-        try
-        {
-            if ( ! $this->input->post('username') || ! $this->input->post('email'))
-            {
+    public function ajax_forgot_password() {
+        try {
+            if (!$this->input->post('username') || !$this->input->post('email')) {
                 throw new Exception('You must enter a valid username and email address in '
                     . 'order to get a new password!');
             }
@@ -169,8 +151,7 @@ class User extends EA_Controller {
                 $this->input->post('email')
             );
 
-            if ($new_password != FALSE)
-            {
+            if ($new_password != FALSE) {
                 $this->config->load('email');
 
                 $email = new EmailClient($this, $this->config->config);
@@ -181,14 +162,15 @@ class User extends EA_Controller {
                     'company_email' => $this->settings_model->get_setting('company_email')
                 ];
 
-                $email->send_password(new NonEmptyText($new_password), new Email($this->input->post('email')),
-                    $company_settings);
+                $email->send_password(
+                    new NonEmptyText($new_password),
+                    new Email($this->input->post('email')),
+                    $company_settings
+                );
             }
 
             $response = $new_password != FALSE ? AJAX_SUCCESS : AJAX_FAILURE;
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->output->set_status_header(500);
 
             $response = [

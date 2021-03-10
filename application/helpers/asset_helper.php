@@ -22,19 +22,16 @@
  *
  * @return string Returns the final asset URL.
  */
-function asset_url($uri = '', $protocol = NULL)
-{
+function asset_url($uri = '', $protocol = NULL) {
     $debug = config('debug');
 
-    $cache_busting_token = ! $debug ? '?' . config('cache_busting_token') : '';
+    $cache_busting_token = !$debug ? '?' . config('cache_busting_token') : '';
 
-    if (strpos(basename($uri), '.js') !== FALSE && strpos(basename($uri), '.min.js') === FALSE && ! $debug)
-    {
+    if (strpos(basename($uri), '.js') !== FALSE && strpos(basename($uri), '.min.js') === FALSE && !$debug) {
         $uri = str_replace('.js', '.min.js', $uri);
     }
 
-    if (strpos(basename($uri), '.css') !== FALSE && strpos(basename($uri), '.min.css') === FALSE && ! $debug)
-    {
+    if (strpos(basename($uri), '.css') !== FALSE && strpos(basename($uri), '.min.css') === FALSE && !$debug) {
         $uri = str_replace('.css', '.min.css', $uri);
     }
 

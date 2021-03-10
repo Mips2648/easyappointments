@@ -18,8 +18,7 @@
  *
  * @return string
  */
-function render_timezone_dropdown($attributes = '')
-{
+function render_timezone_dropdown($attributes = '') {
     $CI = get_instance();
 
     $CI->load->library('timezones');

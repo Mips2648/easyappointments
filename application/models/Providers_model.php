@@ -22,8 +22,7 @@ class Providers_model extends EA_Model {
     /**
      * Providers_Model constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->helper('data_validation');
         $this->load->helper('general');
@@ -41,21 +40,16 @@ class Providers_model extends EA_Model {
      *
      * @throws Exception When the record data validation fails.
      */
-    public function add($provider)
-    {
+    public function add($provider) {
         $this->validate($provider);
 
-        if ($this->exists($provider) && ! isset($provider['id']))
-        {
+        if ($this->exists($provider) && !isset($provider['id'])) {
             $provider['id'] = $this->find_record_id($provider);
         }
 
-        if ( ! isset($provider['id']))
-        {
+        if (!isset($provider['id'])) {
             $provider['id'] = $this->insert($provider);
-        }
-        else
-        {
+        } else {
             $provider['id'] = $this->update($provider);
         }
 
@@ -71,47 +65,39 @@ class Providers_model extends EA_Model {
      *
      * @throws Exception If provider validation fails.
      */
-    public function validate($provider)
-    {
+    public function validate($provider) {
         // If a provider id is present, check whether the record exist in the database.
-        if (isset($provider['id']))
-        {
-            $num_rows = $this->db->get_where('users',
-                ['id' => $provider['id']])->num_rows();
-            if ($num_rows == 0)
-            {
+        if (isset($provider['id'])) {
+            $num_rows = $this->db->get_where(
+                'users',
+                ['id' => $provider['id']]
+            )->num_rows();
+            if ($num_rows == 0) {
                 throw new Exception('Provided record id does not exist in the database.');
             }
         }
 
         // Validate required fields.
-        if ( ! isset(
+        if (!isset(
             $provider['last_name'],
             $provider['email'],
             $provider['phone_number']
-        ))
-        {
+        )) {
             throw new Exception('Not all required fields are provided: ' . print_r($provider, TRUE));
         }
 
         // Validate provider email address.
-        if ( ! filter_var($provider['email'], FILTER_VALIDATE_EMAIL))
-        {
+        if (!filter_var($provider['email'], FILTER_VALIDATE_EMAIL)) {
             throw new Exception('Invalid email address provided: ' . $provider['email']);
         }
 
         // Validate provider services.
-        if ( ! isset($provider['services']) || ! is_array($provider['services']))
-        {
+        if (!isset($provider['services']) || !is_array($provider['services'])) {
             throw new Exception('Invalid provider services given: ' . print_r($provider, TRUE));
-        }
-        else
-        {
+        } else {
             // Check if services are valid int values.
-            foreach ($provider['services'] as $service_id)
-            {
-                if ( ! is_numeric($service_id))
-                {
+            foreach ($provider['services'] as $service_id) {
+                if (!is_numeric($service_id)) {
                     throw new Exception('A provider service with invalid id was found: '
                         . print_r($provider, TRUE));
                 }
@@ -119,42 +105,37 @@ class Providers_model extends EA_Model {
         }
 
         // Validate provider settings.
-        if ( ! isset($provider['settings']) || count($provider['settings']) === 0
-            || ! is_array($provider['settings']))
-        {
+        if (
+            !isset($provider['settings']) || count($provider['settings']) === 0
+            || !is_array($provider['settings'])
+        ) {
             throw new Exception('Invalid provider settings given: ' . print_r($provider, TRUE));
         }
 
         // Check if username exists.
-        if (isset($provider['settings']['username']))
-        {
+        if (isset($provider['settings']['username'])) {
             $user_id = (isset($provider['id'])) ? $provider['id'] : '';
-            if ( ! $this->validate_username($provider['settings']['username'], $user_id))
-            {
-                throw new Exception ('Username already exists. Please select a different '
+            if (!$this->validate_username($provider['settings']['username'], $user_id)) {
+                throw new Exception('Username already exists. Please select a different '
                     . 'username for this record.');
             }
         }
 
         // Validate provider password
-        if (isset($provider['settings']['password']))
-        {
-            if (strlen($provider['settings']['password']) < MIN_PASSWORD_LENGTH)
-            {
+        if (isset($provider['settings']['password'])) {
+            if (strlen($provider['settings']['password']) < MIN_PASSWORD_LENGTH) {
                 throw new Exception('The user password must be at least '
                     . MIN_PASSWORD_LENGTH . ' characters long.');
             }
         }
 
-        if ( ! isset($provider['id']) && ! isset($provider['settings']['password']))
-        {
+        if (!isset($provider['id']) && !isset($provider['settings']['password'])) {
             throw new Exception('The user password cannot be empty for new users.');
         }
 
         // Validate calendar view mode.
         if (isset($provider['settings']['calendar_view']) && ($provider['settings']['calendar_view'] !== CALENDAR_VIEW_DEFAULT
-                && $provider['settings']['calendar_view'] !== CALENDAR_VIEW_TABLE))
-        {
+            && $provider['settings']['calendar_view'] !== CALENDAR_VIEW_TABLE)) {
             throw new Exception('The calendar view setting must be either "' . CALENDAR_VIEW_DEFAULT
                 . '" or "' . CALENDAR_VIEW_TABLE . '", given: ' . $provider['settings']['calendar_view']);
         }
@@ -172,8 +153,7 @@ class Providers_model extends EA_Model {
             ->get()
             ->num_rows();
 
-        if ($num_rows > 0)
-        {
+        if ($num_rows > 0) {
             throw new Exception('Given email address belongs to another provider record. '
                 . 'Please use a different email.');
         }
@@ -189,10 +169,8 @@ class Providers_model extends EA_Model {
      *
      * @return bool Returns the validation result.
      */
-    public function validate_username($username, $user_id)
-    {
-        if ( ! empty($user_id))
-        {
+    public function validate_username($username, $user_id) {
+        if (!empty($user_id)) {
             $this->db->where('id_users !=', $user_id);
         }
 
@@ -210,10 +188,8 @@ class Providers_model extends EA_Model {
      *
      * @throws Exception When the 'email' value is not provided.
      */
-    public function exists($provider)
-    {
-        if ( ! isset($provider['email']))
-        {
+    public function exists($provider) {
+        if (!isset($provider['email'])) {
             throw new Exception('Provider email is not provided:' . print_r($provider, TRUE));
         }
 
@@ -238,10 +214,8 @@ class Providers_model extends EA_Model {
      *
      * @throws Exception When the provider's email value is not provided.
      */
-    public function find_record_id($provider)
-    {
-        if ( ! isset($provider['email']))
-        {
+    public function find_record_id($provider) {
+        if (!isset($provider['email'])) {
             throw new Exception('Provider email was not provided:' . print_r($provider, TRUE));
         }
 
@@ -253,8 +227,7 @@ class Providers_model extends EA_Model {
             ->where('roles.slug', DB_SLUG_PROVIDER)
             ->get();
 
-        if ($result->num_rows() == 0)
-        {
+        if ($result->num_rows() == 0) {
             throw new Exception('Could not find provider record id.');
         }
 
@@ -270,8 +243,7 @@ class Providers_model extends EA_Model {
      *
      * @throws Exception When the insert operation fails.
      */
-    protected function insert($provider)
-    {
+    protected function insert($provider) {
 
         // Get provider role id.
         $provider['id_roles'] = $this->get_providers_role_id();
@@ -283,8 +255,7 @@ class Providers_model extends EA_Model {
         unset($provider['settings']);
 
         // Insert provider record and save settings.
-        if ( ! $this->db->insert('users', $provider))
-        {
+        if (!$this->db->insert('users', $provider)) {
             throw new Exception('Could not insert provider into the database');
         }
 
@@ -304,8 +275,7 @@ class Providers_model extends EA_Model {
      *
      * @return int Returns the role id for the provider records.
      */
-    public function get_providers_role_id()
-    {
+    public function get_providers_role_id() {
         return $this->db->get_where('roles', ['slug' => DB_SLUG_PROVIDER])->row()->id;
     }
 
@@ -318,26 +288,21 @@ class Providers_model extends EA_Model {
      * @throws Exception If $provider_id argument is invalid.
      * @throws Exception If $settings argument is invalid.
      */
-    protected function save_settings($settings, $provider_id)
-    {
-        if ( ! is_numeric($provider_id))
-        {
+    protected function save_settings($settings, $provider_id) {
+        if (!is_numeric($provider_id)) {
             throw new Exception('Invalid $provider_id argument given:' . $provider_id);
         }
 
-        if (count($settings) == 0 || ! is_array($settings))
-        {
+        if (count($settings) == 0 || !is_array($settings)) {
             throw new Exception('Invalid $settings argument given:' . print_r($settings, TRUE));
         }
 
         // Check if the setting record exists in db.
-        if ($this->db->get_where('user_settings', ['id_users' => $provider_id])->num_rows() === 0)
-        {
+        if ($this->db->get_where('user_settings', ['id_users' => $provider_id])->num_rows() === 0) {
             $this->db->insert('user_settings', ['id_users' => $provider_id]);
         }
 
-        foreach ($settings as $name => $value)
-        {
+        foreach ($settings as $name => $value) {
             $this->set_setting($name, $value, $provider_id);
         }
     }
@@ -353,8 +318,7 @@ class Providers_model extends EA_Model {
      *
      * @return bool
      */
-    public function set_setting($setting_name, $value, $provider_id)
-    {
+    public function set_setting($setting_name, $value, $provider_id) {
         $this->db->where(['id_users' => $provider_id]);
         return $this->db->update('user_settings', [$setting_name => $value]);
     }
@@ -368,24 +332,20 @@ class Providers_model extends EA_Model {
      * @throws Exception When the $services argument type is not array.
      * @throws Exception When the $provider_id argument type is not int.
      */
-    protected function save_services($services, $provider_id)
-    {
+    protected function save_services($services, $provider_id) {
         // Validate method arguments.
-        if ( ! is_array($services))
-        {
+        if (!is_array($services)) {
             throw new Exception('Invalid argument type $services: ' . $services);
         }
 
-        if ( ! is_numeric($provider_id))
-        {
+        if (!is_numeric($provider_id)) {
             throw new Exception('Invalid argument type $provider_id: ' . $provider_id);
         }
 
         // Save provider services in the database (delete old records and add new).
         $this->db->delete('services_providers', ['id_users' => $provider_id]);
 
-        foreach ($services as $service_id)
-        {
+        foreach ($services as $service_id) {
             $service_provider = [
                 'id_users' => $provider_id,
                 'id_services' => $service_id
@@ -403,24 +363,21 @@ class Providers_model extends EA_Model {
      *
      * @throws Exception When the update operation fails.
      */
-    protected function update($provider)
-    {
+    protected function update($provider) {
         // Store service and settings (must not be present on the $provider array).
         $services = $provider['services'];
         unset($provider['services']);
         $settings = $provider['settings'];
         unset($provider['settings']);
 
-        if (isset($settings['password']))
-        {
+        if (isset($settings['password'])) {
             $salt = $this->db->get_where('user_settings', ['id_users' => $provider['id']])->row()->salt;
             $settings['password'] = hash_password($salt, $settings['password']);
         }
 
         // Update provider record.
         $this->db->where('id', $provider['id']);
-        if ( ! $this->db->update('users', $provider))
-        {
+        if (!$this->db->update('users', $provider)) {
             throw new Exception('Could not update provider record.');
         }
 
@@ -440,16 +397,13 @@ class Providers_model extends EA_Model {
      *
      * @throws Exception When the provider id value is not int.
      */
-    public function delete($provider_id)
-    {
-        if ( ! is_numeric($provider_id))
-        {
+    public function delete($provider_id) {
+        if (!is_numeric($provider_id)) {
             throw new Exception('Invalid argument type $provider_id: ' . $provider_id);
         }
 
         $num_rows = $this->db->get_where('users', ['id' => $provider_id])->num_rows();
-        if ($num_rows === 0)
-        {
+        if ($num_rows === 0) {
             return FALSE; // Record does not exist in database.
         }
 
@@ -469,31 +423,26 @@ class Providers_model extends EA_Model {
      * @throws Exception When the provider record does not exist in the database.
      * @throws Exception When the selected field value is not present on database.
      */
-    public function get_value($field_name, $provider_id)
-    {
-        if ( ! is_numeric($provider_id))
-        {
+    public function get_value($field_name, $provider_id) {
+        if (!is_numeric($provider_id)) {
             throw new Exception('Invalid argument provided as $provider_id: ' . $provider_id);
         }
 
-        if ( ! is_string($field_name))
-        {
+        if (!is_string($field_name)) {
             throw new Exception('$field_name argument is not a string: ' . $field_name);
         }
 
         // Check whether the provider record exists in database.
         $result = $this->db->get_where('users', ['id' => $provider_id]);
 
-        if ($result->num_rows() == 0)
-        {
+        if ($result->num_rows() == 0) {
             throw new Exception('The record with the $provider_id argument does not exist in the database: '
                 . $provider_id);
         }
 
         $row_data = $result->row_array();
 
-        if ( ! isset($row_data[$field_name]))
-        {
+        if (!isset($row_data[$field_name])) {
             throw new Exception('The given $field_name argument does not exist in the database: ' . $field_name);
         }
 
@@ -514,33 +463,30 @@ class Providers_model extends EA_Model {
      *
      * @return array Returns the rows from the database.
      */
-    public function get_batch($where = NULL, $limit = NULL, $offset = NULL, $order_by = NULL)
-    {
+    public function get_batch($where = NULL, $limit = NULL, $offset = NULL, $order_by = NULL) {
         // CI db class may confuse two where clauses made in the same time, so get the role id first and then apply the
         // get_batch() where clause.
         $role_id = $this->get_providers_role_id();
 
-        if ($where !== NULL)
-        {
+        if ($where !== NULL) {
             $this->db->where($where);
         }
 
-        if ($order_by !== NULL)
-        {
+        if ($order_by !== NULL) {
             $this->db->order_by($order_by);
         }
 
         $batch = $this->db->get_where('users', ['id_roles' => $role_id], $limit, $offset)->result_array();
 
         // Include each provider services and settings.
-        foreach ($batch as &$provider)
-        {
+        foreach ($batch as &$provider) {
             // Services
-            $services = $this->db->get_where('services_providers',
-                ['id_users' => $provider['id']])->result_array();
+            $services = $this->db->get_where(
+                'services_providers',
+                ['id_users' => $provider['id']]
+            )->result_array();
             $provider['services'] = [];
-            foreach ($services as $service)
-            {
+            foreach ($services as $service) {
                 $provider['services'][] = $service['id_services'];
             }
 
@@ -560,8 +506,7 @@ class Providers_model extends EA_Model {
      *
      * @return array Returns an array with the providers data.
      */
-    public function get_available_providers()
-    {
+    public function get_available_providers() {
         // Get provider records from database.
         $this->db
             ->select('users.*')
@@ -573,14 +518,12 @@ class Providers_model extends EA_Model {
         $providers = $this->db->get()->result_array();
 
         // Include each provider services and settings.
-        foreach ($providers as &$provider)
-        {
+        foreach ($providers as &$provider) {
             // Services
             $services = $this->db->get_where('services_providers', ['id_users' => $provider['id']])->result_array();
 
             $provider['services'] = [];
-            foreach ($services as $service)
-            {
+            foreach ($services as $service) {
                 $provider['services'][] = $service['id_services'];
             }
 
@@ -605,8 +548,7 @@ class Providers_model extends EA_Model {
      *
      * @return string Returns the value of the selected user setting.
      */
-    public function get_setting($setting_name, $provider_id)
-    {
+    public function get_setting($setting_name, $provider_id) {
         $provider_settings = $this->db->get_where('user_settings', ['id_users' => $provider_id])->row_array();
 
         return $provider_settings[$setting_name];
@@ -622,16 +564,13 @@ class Providers_model extends EA_Model {
      *
      * @throws Exception When the selected record does not exist in database.
      */
-    public function get_row($provider_id)
-    {
-        if ( ! is_numeric($provider_id))
-        {
+    public function get_row($provider_id) {
+        if (!is_numeric($provider_id)) {
             throw new Exception('$provider_id argument is not a valid numeric value: ' . $provider_id);
         }
 
         // Check if selected record exists on database.
-        if ($this->db->get_where('users', ['id' => $provider_id])->num_rows() == 0)
-        {
+        if ($this->db->get_where('users', ['id' => $provider_id])->num_rows() == 0) {
             throw new Exception('Selected record does not exist in the database.');
         }
 
@@ -639,11 +578,9 @@ class Providers_model extends EA_Model {
         $provider = $this->db->get_where('users', ['id' => $provider_id])->row_array();
 
         // Include provider services.
-        $services = $this->db->get_where('services_providers',
-            ['id_users' => $provider_id])->result_array();
+        $services = $this->db->get_where('services_providers', ['id_users' => $provider_id])->result_array();
         $provider['services'] = [];
-        foreach ($services as $service)
-        {
+        foreach ($services as $service) {
             $provider['services'][] = $service['id_services'];
         }
 

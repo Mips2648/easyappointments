@@ -22,8 +22,7 @@ class Consents extends EA_Controller {
     /**
      * Consents constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->model('consents_model');
     }
@@ -31,10 +30,8 @@ class Consents extends EA_Controller {
     /**
      * Save the user's consent.
      */
-    public function ajax_save_consent()
-    {
-        try
-        {
+    public function ajax_save_consent() {
+        try {
             $consent = $this->input->post('consent');
 
             $consent['ip'] = $this->input->ip_address();
@@ -45,9 +42,7 @@ class Consents extends EA_Controller {
                 'success' => TRUE,
                 'id' => $consent['id']
             ];
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->output->set_status_header(500);
 
             $response = [

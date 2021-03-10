@@ -22,8 +22,7 @@ class Installation extends EA_Controller {
     /**
      * Installation constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->model('admins_model');
         $this->load->model('settings_model');
@@ -38,10 +37,8 @@ class Installation extends EA_Controller {
     /**
      * Display the installation page.
      */
-    public function index()
-    {
-        if (is_app_installed())
-        {
+    public function index() {
+        if (is_app_installed()) {
             redirect('appointments');
             return;
         }
@@ -54,20 +51,16 @@ class Installation extends EA_Controller {
     /**
      * Installs Easy!Appointments on the server.
      */
-    public function ajax_install()
-    {
-        try
-        {
-            if (is_app_installed())
-            {
+    public function ajax_install() {
+        try {
+            if (is_app_installed()) {
                 return;
             }
 
             $admin = $this->input->post('admin');
             $company = $this->input->post('company');
 
-            if ( ! $this->migration->current())
-            {
+            if (!$this->migration->current()) {
                 throw new Exception($this->migration->error_string());
             }
 
@@ -129,9 +122,7 @@ class Installation extends EA_Controller {
             ]);
 
             $response = AJAX_SUCCESS;
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->output->set_status_header(500);
 
             $response = [

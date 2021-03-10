@@ -20,8 +20,7 @@
  *
  * @link http://stackoverflow.com/a/8105844/1718162 [SOURCE]
  */
-function validate_mysql_datetime($datetime)
-{
+function validate_mysql_datetime($datetime) {
     $dt = DateTime::createFromFormat('Y-m-d H:i:s', $datetime);
 
     return $dt ? TRUE : FALSE;

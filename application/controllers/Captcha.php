@@ -20,8 +20,7 @@ class Captcha extends EA_Controller {
     /**
      * Make a request to this method to get a captcha image.
      */
-    public function index()
-    {
+    public function index() {
         header('Content-type: image/jpeg');
         $builder = new Gregwar\Captcha\CaptchaBuilder;
         $builder->build();

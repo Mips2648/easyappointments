@@ -61,8 +61,7 @@ class EA_Controller extends CI_Controller {
     /**
      * EA_Controller constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
 
         $this->configure_language();
@@ -71,10 +70,8 @@ class EA_Controller extends CI_Controller {
     /**
      * Configure the language.
      */
-    private function configure_language()
-    {
-        if ($this->session->has_userdata('language'))
-        {
+    private function configure_language() {
+        if ($this->session->has_userdata('language')) {
             $this->config->set_item('language', $this->session->userdata('language'));
         }
 

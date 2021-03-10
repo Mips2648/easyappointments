@@ -22,8 +22,7 @@ class User_model extends EA_Model {
     /**
      * User_Model constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->library('timezones');
         $this->load->helper('general');
@@ -37,8 +36,7 @@ class User_model extends EA_Model {
      *
      * @return array Returns an array with user data.
      */
-    public function get_user($user_id)
-    {
+    public function get_user($user_id) {
         $user = $this->db->get_where('users', ['id' => $user_id])->row_array();
         $user['settings'] = $this->db->get_where('user_settings', ['id_users' => $user_id])->row_array();
         unset($user['settings']['id_users']);
@@ -52,26 +50,22 @@ class User_model extends EA_Model {
      *
      * @return bool Returns the operation result.
      */
-    public function save_user($user)
-    {
+    public function save_user($user) {
         $user_settings = $user['settings'];
         $user_settings['id_users'] = $user['id'];
         unset($user['settings']);
 
         // Prepare user password (hash).
-        if (isset($user_settings['password']))
-        {
+        if (isset($user_settings['password'])) {
             $salt = $this->db->get_where('user_settings', ['id_users' => $user['id']])->row()->salt;
             $user_settings['password'] = hash_password($salt, $user_settings['password']);
         }
 
-        if ( ! $this->db->update('users', $user, ['id' => $user['id']]))
-        {
+        if (!$this->db->update('users', $user, ['id' => $user['id']])) {
             return FALSE;
         }
 
-        if ( ! $this->db->update('user_settings', $user_settings, ['id_users' => $user['id']]))
-        {
+        if (!$this->db->update('user_settings', $user_settings, ['id_users' => $user['id']])) {
             return FALSE;
         }
 
@@ -86,8 +80,7 @@ class User_model extends EA_Model {
      *
      * @return array|null Returns the session data of the logged in user or null on failure.
      */
-    public function check_login($username, $password)
-    {
+    public function check_login($username, $password) {
         $salt = $this->get_salt($username);
         $password = hash_password($salt, $password);
 
@@ -96,22 +89,19 @@ class User_model extends EA_Model {
             'password' => $password
         ])->row_array();
 
-        if (empty($user_settings))
-        {
+        if (empty($user_settings)) {
             return NULL;
         }
 
         $user = $this->db->get_where('users', ['id' => $user_settings['id_users']])->row_array();
 
-        if (empty($user))
-        {
+        if (empty($user)) {
             return NULL;
         }
 
         $role = $this->db->get_where('roles', ['id' => $user['id_roles']])->row_array();
 
-        if (empty($role))
-        {
+        if (empty($role)) {
             return NULL;
         }
 
@@ -133,8 +123,7 @@ class User_model extends EA_Model {
      *
      * @return string Returns the salt db value.
      */
-    public function get_salt($username)
-    {
+    public function get_salt($username) {
         $user = $this->db->get_where('user_settings', ['username' => $username])->row_array();
         return ($user) ? $user['salt'] : '';
     }
@@ -148,11 +137,9 @@ class User_model extends EA_Model {
      *
      * @throws Exception If $user_id argument is invalid.
      */
-    public function get_user_display_name($user_id)
-    {
-        if ( ! is_numeric($user_id))
-        {
-            throw new Exception ('Invalid argument given: ' . $user_id);
+    public function get_user_display_name($user_id) {
+        if (!is_numeric($user_id)) {
+            throw new Exception('Invalid argument given: ' . $user_id);
         }
 
         $user = $this->db->get_where('users', ['id' => $user_id])->row_array();
@@ -169,8 +156,7 @@ class User_model extends EA_Model {
      *
      * @return string|bool Returns the new password on success or FALSE on failure.
      */
-    public function regenerate_password($username, $email)
-    {
+    public function regenerate_password($username, $email) {
         $result = $this->db
             ->select('users.id')
             ->from('users')
@@ -179,8 +165,7 @@ class User_model extends EA_Model {
             ->where('user_settings.username', $username)
             ->get();
 
-        if ($result->num_rows() == 0)
-        {
+        if ($result->num_rows() == 0) {
             return FALSE;
         }
 
@@ -202,8 +187,7 @@ class User_model extends EA_Model {
      *
      * @return string|null
      */
-    public function get_user_timezone($id)
-    {
+    public function get_user_timezone($id) {
         $row = $this->db->get_where('users', ['id' => $id])->row_array();
 
         return $row ? $row['timezone'] : NULL;

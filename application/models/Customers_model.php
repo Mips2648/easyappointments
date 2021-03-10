@@ -20,8 +20,7 @@ class Customers_model extends EA_Model {
     /**
      * Customers_Model constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->helper('data_validation');
     }
@@ -38,25 +37,20 @@ class Customers_model extends EA_Model {
      * @return int Returns the customer id.
      * @throws Exception
      */
-    public function add($customer)
-    {
+    public function add($customer) {
         // Validate the customer data before doing anything.
         $this->validate($customer);
 
         // Check if a customer already exists (by email).
-        if ($this->exists($customer) && ! isset($customer['id']))
-        {
+        if ($this->exists($customer) && !isset($customer['id'])) {
             // Find the customer id from the database.
             $customer['id'] = $this->find_record_id($customer);
         }
 
         // Insert or update the customer record.
-        if ( ! isset($customer['id']))
-        {
+        if (!isset($customer['id'])) {
             $customer['id'] = $this->insert($customer);
-        }
-        else
-        {
+        } else {
             $this->update($customer);
         }
 
@@ -72,15 +66,12 @@ class Customers_model extends EA_Model {
      *
      * @throws Exception If customer validation fails.
      */
-    public function validate($customer)
-    {
+    public function validate($customer) {
         // If a customer id is provided, check whether the record exist in the database.
-        if (isset($customer['id']))
-        {
+        if (isset($customer['id'])) {
             $num_rows = $this->db->get_where('users', ['id' => $customer['id']])->num_rows();
 
-            if ($num_rows === 0)
-            {
+            if ($num_rows === 0) {
                 throw new Exception('Provided customer id does not '
                     . 'exist in the database.');
             }
@@ -89,19 +80,19 @@ class Customers_model extends EA_Model {
         $phone_number_required = $this->db->get_where('settings', ['name' => 'require_phone_number'])->row()->value === '1';
 
         // Validate required fields
-        if ( ! isset(
+        if (
+            !isset(
                 $customer['first_name'],
                 $customer['last_name'],
                 $customer['email']
             )
-            || ( ! isset($customer['phone_number']) && $phone_number_required))
-        {
+            || (!isset($customer['phone_number']) && $phone_number_required)
+        ) {
             throw new Exception('Not all required fields are provided: ' . print_r($customer, TRUE));
         }
 
         // Validate email address
-        if ( ! filter_var($customer['email'], FILTER_VALIDATE_EMAIL))
-        {
+        if (!filter_var($customer['email'], FILTER_VALIDATE_EMAIL)) {
             throw new Exception('Invalid email address provided: ' . $customer['email']);
         }
 
@@ -118,8 +109,7 @@ class Customers_model extends EA_Model {
             ->get()
             ->num_rows();
 
-        if ($num_rows > 0)
-        {
+        if ($num_rows > 0) {
             throw new Exception('Given email address belongs to another customer record. '
                 . 'Please use a different email.');
         }
@@ -140,10 +130,8 @@ class Customers_model extends EA_Model {
      *
      * @throws Exception If customer email property is missing.
      */
-    public function exists($customer)
-    {
-        if (empty($customer['email']))
-        {
+    public function exists($customer) {
+        if (empty($customer['email'])) {
             throw new Exception('Customer\'s email is not provided.');
         }
 
@@ -173,10 +161,8 @@ class Customers_model extends EA_Model {
      *
      * @throws Exception If customer record does not exist.
      */
-    public function find_record_id($customer)
-    {
-        if (empty($customer['email']))
-        {
+    public function find_record_id($customer) {
+        if (empty($customer['email'])) {
             throw new Exception('Customer\'s email was not provided: '
                 . print_r($customer, TRUE));
         }
@@ -190,8 +176,7 @@ class Customers_model extends EA_Model {
             ->where('roles.slug', DB_SLUG_CUSTOMER)
             ->get();
 
-        if ($result->num_rows() == 0)
-        {
+        if ($result->num_rows() == 0) {
             throw new Exception('Could not find customer record id.');
         }
 
@@ -208,8 +193,7 @@ class Customers_model extends EA_Model {
      *
      * @throws Exception If customer record could not be inserted.
      */
-    protected function insert($customer)
-    {
+    protected function insert($customer) {
         // Before inserting the customer we need to get the customer's role id
         // from the database and assign it to the new record as a foreign key.
         $customer_role_id = $this->db
@@ -220,8 +204,7 @@ class Customers_model extends EA_Model {
 
         $customer['id_roles'] = $customer_role_id;
 
-        if ( ! $this->db->insert('users', $customer))
-        {
+        if (!$this->db->insert('users', $customer)) {
             throw new Exception('Could not insert customer to the database.');
         }
 
@@ -240,12 +223,10 @@ class Customers_model extends EA_Model {
      *
      * @throws Exception If customer record could not be updated.
      */
-    protected function update($customer)
-    {
+    protected function update($customer) {
         $this->db->where('id', $customer['id']);
 
-        if ( ! $this->db->update('users', $customer))
-        {
+        if (!$this->db->update('users', $customer)) {
             throw new Exception('Could not update customer to the database.');
         }
 
@@ -261,16 +242,13 @@ class Customers_model extends EA_Model {
      *
      * @throws Exception If $customer_id argument is invalid.
      */
-    public function delete($customer_id)
-    {
-        if ( ! is_numeric($customer_id))
-        {
+    public function delete($customer_id) {
+        if (!is_numeric($customer_id)) {
             throw new Exception('Invalid argument type $customer_id: ' . $customer_id);
         }
 
         $num_rows = $this->db->get_where('users', ['id' => $customer_id])->num_rows();
-        if ($num_rows == 0)
-        {
+        if ($num_rows == 0) {
             return FALSE;
         }
 
@@ -287,10 +265,8 @@ class Customers_model extends EA_Model {
      *
      * @throws Exception If $customer_id argumnet is invalid.
      */
-    public function get_row($customer_id)
-    {
-        if ( ! is_numeric($customer_id))
-        {
+    public function get_row($customer_id) {
+        if (!is_numeric($customer_id)) {
             throw new Exception('Invalid argument provided as $customer_id : ' . $customer_id);
         }
         return $this->db->get_where('users', ['id' => $customer_id])->row_array();
@@ -309,30 +285,25 @@ class Customers_model extends EA_Model {
      * @throws Exception If requested customer record does not exist in the database.
      * @throws Exception If requested field name does not exist in the database.
      */
-    public function get_value($field_name, $customer_id)
-    {
-        if ( ! is_numeric($customer_id))
-        {
+    public function get_value($field_name, $customer_id) {
+        if (!is_numeric($customer_id)) {
             throw new Exception('Invalid argument provided as $customer_id: '
                 . $customer_id);
         }
 
-        if ( ! is_string($field_name))
-        {
+        if (!is_string($field_name)) {
             throw new Exception('$field_name argument is not a string: '
                 . $field_name);
         }
 
-        if ($this->db->get_where('users', ['id' => $customer_id])->num_rows() == 0)
-        {
+        if ($this->db->get_where('users', ['id' => $customer_id])->num_rows() == 0) {
             throw new Exception('The record with the $customer_id argument '
                 . 'does not exist in the database: ' . $customer_id);
         }
 
         $row_data = $this->db->get_where('users', ['id' => $customer_id])->row_array();
 
-        if ( ! array_key_exists($field_name, $row_data))
-        {
+        if (!array_key_exists($field_name, $row_data)) {
             throw new Exception('The given $field_name argument does not exist in the database: '
                 . $field_name);
         }
@@ -356,17 +327,14 @@ class Customers_model extends EA_Model {
      *
      * @return array Returns the rows from the database.
      */
-    public function get_batch($where = NULL, $limit = NULL, $offset = NULL, $order_by = NULL)
-    {
+    public function get_batch($where = NULL, $limit = NULL, $offset = NULL, $order_by = NULL) {
         $role_id = $this->get_customers_role_id();
 
-        if ($where !== NULL)
-        {
+        if ($where !== NULL) {
             $this->db->where($where);
         }
 
-        if ($order_by !== NULL)
-        {
+        if ($order_by !== NULL) {
             $this->db->order_by($order_by);
         }
 
@@ -378,8 +346,7 @@ class Customers_model extends EA_Model {
      *
      * @return int Returns the role id for the customer records.
      */
-    public function get_customers_role_id()
-    {
+    public function get_customers_role_id() {
         return $this->db->get_where('roles', ['slug' => DB_SLUG_CUSTOMER])->row()->id;
     }
 }

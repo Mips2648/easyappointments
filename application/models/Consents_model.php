@@ -28,16 +28,12 @@ class Consents_model extends EA_Model {
      *
      * @throws Exception
      */
-    public function add($consent)
-    {
+    public function add($consent) {
         $this->validate($consent);
 
-        if ( ! isset($consent['id']))
-        {
+        if (!isset($consent['id'])) {
             $consent['id'] = $this->insert($consent);
-        }
-        else
-        {
+        } else {
             $this->update($consent);
         }
 
@@ -52,14 +48,14 @@ class Consents_model extends EA_Model {
      *
      * @throws Exception If customer validation fails.
      */
-    public function validate($consent)
-    {
-        if ( ! isset($consent['first_name'])
-            || ! isset($consent['last_name'])
-            || ! isset($consent['email'])
-            || ! isset($consent['ip'])
-            || ! isset($consent['type']))
-        {
+    public function validate($consent) {
+        if (
+            !isset($consent['first_name'])
+            || !isset($consent['last_name'])
+            || !isset($consent['email'])
+            || !isset($consent['ip'])
+            || !isset($consent['type'])
+        ) {
             throw new Exception('Not all required fields are provided: '
                 . print_r($consent, TRUE));
         }
@@ -74,13 +70,11 @@ class Consents_model extends EA_Model {
      *
      * @throws Exception If consent record could not be inserted.
      */
-    protected function insert($consent)
-    {
+    protected function insert($consent) {
         $consent['created'] = date('Y-m-d H:i:s');
         $consent['modified'] = date('Y-m-d H:i:s');
 
-        if ( ! $this->db->insert('consents', $consent))
-        {
+        if (!$this->db->insert('consents', $consent)) {
             throw new Exception('Could not insert consent to the database.');
         }
 
@@ -98,12 +92,10 @@ class Consents_model extends EA_Model {
      *
      * @throws Exception If consent record could not be updated.
      */
-    protected function update($consent)
-    {
+    protected function update($consent) {
         $consent['modified'] = date('Y-m-d H:i:s');
 
-        if ( ! $this->db->update('consents', $consent, ['id' => $consent['id']]))
-        {
+        if (!$this->db->update('consents', $consent, ['id' => $consent['id']])) {
             throw new Exception('Could not update consent to the database.');
         }
 

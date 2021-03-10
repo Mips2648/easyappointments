@@ -22,10 +22,8 @@ class Console extends EA_Controller {
     /**
      * Console constructor.
      */
-    public function __construct()
-    {
-        if ( ! is_cli())
-        {
+    public function __construct() {
+        if (!is_cli()) {
             exit('No direct script access allowed');
         }
 
@@ -50,8 +48,7 @@ class Console extends EA_Controller {
      *
      * php index.php console install
      */
-    public function install()
-    {
+    public function install() {
         $this->migrate('fresh');
         $this->seed();
         $this->output->set_output(PHP_EOL . '⇾ Installation completed, login with "administrator" / "administrator".' . PHP_EOL . PHP_EOL);
@@ -75,15 +72,12 @@ class Console extends EA_Controller {
      *
      * @param string $type
      */
-    public function migrate($type = '')
-    {
-        if ($type === 'fresh' && $this->migration->version(0) === FALSE)
-        {
+    public function migrate($type = '') {
+        if ($type === 'fresh' && $this->migration->version(0) === FALSE) {
             show_error($this->migration->error_string());
         }
 
-        if ($this->migration->current() === FALSE)
-        {
+        if ($this->migration->current() === FALSE) {
             show_error($this->migration->error_string());
         }
     }
@@ -97,8 +91,7 @@ class Console extends EA_Controller {
      *
      * php index.php console seed
      */
-    public function seed()
-    {
+    public function seed() {
         // Settings
         $this->settings_model->set_setting('company_name', 'Company Name');
         $this->settings_model->set_setting('company_email', 'info@example.org');
@@ -169,17 +162,14 @@ class Console extends EA_Controller {
      *
      * @throws Exception
      */
-    public function backup()
-    {
+    public function backup() {
         $path = isset($GLOBALS['argv'][3]) ? $GLOBALS['argv'][3] : APPPATH . '/../storage/backups';
 
-        if ( ! file_exists($path))
-        {
+        if (!file_exists($path)) {
             throw new Exception('The backup path does not exist™: ' . $path);
         }
 
-        if ( ! is_writable($path))
-        {
+        if (!is_writable($path)) {
             throw new Exception('The backup path is not writable: ' . $path);
         }
 
@@ -203,14 +193,11 @@ class Console extends EA_Controller {
      *
      * php index.php console sync
      */
-    public function sync()
-    {
+    public function sync() {
         $providers = $this->providers_model->get_batch();
 
-        foreach ($providers as $provider)
-        {
-            if ( ! filter_var($provider['settings']['google_sync'], FILTER_VALIDATE_BOOLEAN))
-            {
+        foreach ($providers as $provider) {
+            if (!filter_var($provider['settings']['google_sync'], FILTER_VALIDATE_BOOLEAN)) {
                 continue;
             }
 
@@ -228,8 +215,7 @@ class Console extends EA_Controller {
      *
      * php index.php console help
      */
-    public function help()
-    {
+    public function help() {
         $help = [
             '',
             'Easy!Appointments ' . config('version'),
