@@ -101,8 +101,8 @@
                 <?php $active = ($active_menu == PRIV_LOGS_VIEWER) ? 'active' : '' ?>
                 <li class="nav-item <?= $active . $hidden ?>">
                     <a href="<?= site_url('backend/logs') ?>" class="nav-link" data-tippy-content="<?= lang('settings_hint') ?>">
-                        <i class="far fa-file mr-2"></i>
-                        <?= lang('settings') ?>
+                        <i class="fas fa-file mr-2"></i>
+                        <?= lang('logsviewer') ?>
                     </a>
                 </li>
 
