@@ -37,7 +37,6 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-gd": "*",
-        "gregwar/captcha": "^1.1",
         "phpmailer/phpmailer": "^6.1",
         "codeigniter/framework": "^3.1.6",
         "jsvrcek/ics": "^0.8",
