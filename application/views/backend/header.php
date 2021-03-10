@@ -100,7 +100,7 @@
                 <?php $hidden = ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE) ? '' : 'd-none' ?>
                 <?php $active = ($active_menu == PRIV_LOGS_VIEWER) ? 'active' : '' ?>
                 <li class="nav-item <?= $active . $hidden ?>">
-                    <a href="<?= site_url('backend/logs') ?>" class="nav-link" data-tippy-content="<?= lang('settings_hint') ?>">
+                    <a href="<?= site_url('backend/logs') ?>" class="nav-link">
                         <i class="fas fa-file mr-2"></i>
                         <?= lang('logsviewer') ?>
                     </a>
