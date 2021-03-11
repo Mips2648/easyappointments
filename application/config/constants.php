@@ -70,6 +70,7 @@ define('PRIV_SERVICES', 'services');
 define('PRIV_USERS', 'users');
 define('PRIV_SYSTEM_SETTINGS', 'system_settings');
 define('PRIV_USER_SETTINGS', 'user_settings');
+define('PRIV_BUSINESS_SETTINGS', 'business_settings');
 define('PRIV_LOGS_VIEWER', 'logs_viewer');
 
 define('DATE_FORMAT_DMY', 'DMY');

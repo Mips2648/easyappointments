@@ -33,19 +33,24 @@
 
 <div id="settings-page" class="container-fluid backend-page">
     <ul class="nav nav-pills">
-        <?php if ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE) : ?>
+        <?php if ($privileges[PRIV_BUSINESS_SETTINGS]['view'] == TRUE) : ?>
             <li class="nav-item">
                 <a class="nav-link" href="#general" data-toggle="tab"><?= lang('general') ?></a>
             </li>
         <?php endif ?>
-        <?php if ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE) : ?>
+        <?php if ($privileges[PRIV_BUSINESS_SETTINGS]['view'] == TRUE) : ?>
             <li class="nav-item">
                 <a class="nav-link" href="#business-logic" data-toggle="tab"><?= lang('business_logic') ?></a>
             </li>
         <?php endif ?>
-        <?php if ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE) : ?>
+        <?php if ($privileges[PRIV_BUSINESS_SETTINGS]['view'] == TRUE) : ?>
             <li class="nav-item">
                 <a class="nav-link" href="#legal-contents" data-toggle="tab"><?= lang('legal_contents') ?></a>
+            </li>
+        <?php endif ?>
+        <?php if ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE) : ?>
+            <li class="nav-item">
+                <a class="nav-link" href="#technical" data-toggle="tab"><?= lang('technical') ?></a>
             </li>
         <?php endif ?>
         <?php if ($privileges[PRIV_USER_SETTINGS]['view'] == TRUE) : ?>
@@ -59,13 +64,13 @@
 
         <!-- GENERAL TAB -->
 
-        <?php $hidden = ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE) ? '' : 'd-none' ?>
+        <?php $hidden = ($privileges[PRIV_BUSINESS_SETTINGS]['view'] == TRUE) ? '' : 'd-none' ?>
         <div class="tab-pane active <?= $hidden ?>" id="general">
             <form>
                 <fieldset>
                     <legend class="border-bottom mb-4">
                         <?= lang('general_settings') ?>
-                        <?php if ($privileges[PRIV_SYSTEM_SETTINGS]['edit'] == TRUE) : ?>
+                        <?php if ($privileges[PRIV_BUSINESS_SETTINGS]['edit'] == TRUE) : ?>
                             <button type="button" class="save-settings btn btn-primary btn-sm mb-2" data-tippy-content="<?= lang('save') ?>">
                                 <i class="fas fa-check-square mr-2"></i>
                                 <?= lang('save') ?>
@@ -98,91 +103,8 @@
                                     <?= lang('company_link_hint') ?>
                                 </span>
                             </div>
-                            <div class="form-group">
-                                <label for="date-format">
-                                    <?= lang('date_format') ?>
-                                </label>
-                                <select class="form-control" id="date-format" data-field="date_format">
-                                    <option value="DMY">DMY</option>
-                                    <option value="MDY">MDY</option>
-                                    <option value="YMD">YMD</option>
-                                </select>
-                                <span class="form-text text-muted">
-                                    <?= lang('date_format_hint') ?>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <label for="time-format">
-                                    <?= lang('time_format') ?>
-                                </label>
-                                <select class="form-control" id="time-format" data-field="time_format">
-                                    <option value="<?= TIME_FORMAT_REGULAR ?>">H:MM AM/PM</option>
-                                    <option value="<?= TIME_FORMAT_MILITARY ?>">HH:MM</option>
-                                </select>
-                                <span class="form-text text-muted">
-                                    <?= lang('time_format_hint') ?>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <label for="first-weekday">
-                                    <?= lang('first_weekday') ?>
-                                </label>
-                                <select class="form-control" id="first-weekday" data-field="first_weekday">
-                                    <option value="sunday"><?= lang('sunday') ?></option>
-                                    <option value="monday"><?= lang('monday') ?></option>
-                                    <option value="tuesday"><?= lang('tuesday') ?></option>
-                                    <option value="wednesday"><?= lang('wednesday') ?></option>
-                                    <option value="thursday"><?= lang('thursday') ?></option>
-                                    <option value="friday"><?= lang('friday') ?></option>
-                                    <option value="saturday"><?= lang('saturday') ?></option>
-                                </select>
-                                <span class="help-block">
-                                    <?= lang('first_weekday_hint') ?>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <label for="default-timezone"><?= lang('timezone') ?></label>
-                                <?= render_timezone_dropdown('data-field="default_timezone" id="default-timezone" class="form-control"') ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="default-language">
-                                    <?= lang('language') ?>
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <select id="default-language" data-field="default_language" class="form-control required"></select>
-                            </div>
                         </div>
                         <div class="col-12 col-sm-6">
-                            <div class="form-group">
-                                <label for="api-token">API Token</label>
-                                <input id="api-token" data-field="api_token" class="form-control">
-                                <span class="help-block">
-                                    <?= lang('api_token_hint') ?>
-                                </span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="captcha-site-key">reCAPTCHA v3 Site Key</label>
-                                <input id="captcha-site-key" data-field="captcha_site_key" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="captcha-secret-key">reCAPTCHA v3 Secret Key</label>
-                                <input id="captcha-secret-key" data-field="captcha_secret_key" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="require-captcha">
-                                    <label class="custom-control-label" for="require-captcha">
-                                        reCAPTCHA
-                                    </label>
-                                </div>
-                                <span class="form-text text-muted">
-                                    <?= lang('require_captcha_hint') ?>
-                                </span>
-                            </div>
-
                             <div class="form-group">
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="customer-notifications">
@@ -201,7 +123,7 @@
                                         <?= lang('phone_number') ?>
                                     </label>
                                 </div>
-                                <span class="help-block">
+                                <span class="form-text text-muted">
                                     <?= lang('require_phone_number_hint') ?>
                                 </span>
                             </div>
@@ -212,17 +134,9 @@
                                         <?= lang('any_provider') ?>
                                     </label>
                                 </div>
-                                <span class="help-block">
+                                <span class="form-text text-muted">
                                     <?= lang('display_any_provider_hint') ?>
                                 </span>
-                            </div>
-                            <div class="form-group">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="display-timezone">
-                                    <label class="custom-control-label" for="display-timezone">
-                                        <?= lang('display_timezone') ?>
-                                    </label>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -232,13 +146,13 @@
 
         <!-- BUSINESS LOGIC TAB -->
 
-        <?php $hidden = ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE) ? '' : 'd-none' ?>
+        <?php $hidden = ($privileges[PRIV_BUSINESS_SETTINGS]['view'] == TRUE) ? '' : 'd-none' ?>
         <div class="tab-pane <?= $hidden ?>" id="business-logic">
             <form>
                 <fieldset>
                     <legend class="border-bottom mb-4">
                         <?= lang('business_logic') ?>
-                        <?php if ($privileges[PRIV_SYSTEM_SETTINGS]['edit'] == TRUE) : ?>
+                        <?php if ($privileges[PRIV_BUSINESS_SETTINGS]['edit'] == TRUE) : ?>
                             <button type="button" class="save-settings btn btn-primary btn-sm mb-2" data-tippy-content="<?= lang('save') ?>">
                                 <i class="fas fa-check-square mr-2"></i>
                                 <?= lang('save') ?>
@@ -321,13 +235,13 @@
 
         <!-- LEGAL CONTENTS TAB -->
 
-        <?php $hidden = ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE) ? '' : 'd-none' ?>
+        <?php $hidden = ($privileges[PRIV_BUSINESS_SETTINGS]['view'] == TRUE) ? '' : 'd-none' ?>
         <div class="tab-pane <?= $hidden ?>" id="legal-contents">
             <form>
                 <fieldset>
                     <legend class="border-bottom mb-4">
                         <?= lang('legal_contents') ?>
-                        <?php if ($privileges[PRIV_SYSTEM_SETTINGS]['edit'] == TRUE) : ?>
+                        <?php if ($privileges[PRIV_BUSINESS_SETTINGS]['edit'] == TRUE) : ?>
                             <button type="button" class="save-settings btn btn-primary btn-sm mb-2" data-tippy-content="<?= lang('save') ?>">
                                 <i class="fas fa-check-square mr-2"></i>
                                 <?= lang('save') ?>
@@ -389,6 +303,123 @@
                             <div class="form-group">
                                 <label><?= lang('privacy_policy_content') ?></label>
                                 <textarea id="privacy-policy-content" cols="30" rows="10" class="form-group"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <!-- TECHNICAL TAB -->
+
+        <?php $hidden = ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE) ? '' : 'd-none' ?>
+        <div class="tab-pane <?= $hidden ?>" id="technical">
+            <form>
+                <fieldset>
+                    <legend class="border-bottom mb-4">
+                        <?= lang('technical_settings') ?>
+                        <?php if ($privileges[PRIV_SYSTEM_SETTINGS]['edit'] == TRUE) : ?>
+                            <button type="button" class="save-settings btn btn-primary btn-sm mb-2" data-tippy-content="<?= lang('save') ?>">
+                                <i class="fas fa-check-square mr-2"></i>
+                                <?= lang('save') ?>
+                            </button>
+                        <?php endif ?>
+                    </legend>
+
+                    <div class="wrapper row">
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label for="date-format">
+                                    <?= lang('date_format') ?>
+                                </label>
+                                <select class="form-control" id="date-format" data-field="date_format">
+                                    <option value="DMY">DMY</option>
+                                    <option value="MDY">MDY</option>
+                                    <option value="YMD">YMD</option>
+                                </select>
+                                <span class="form-text text-muted">
+                                    <?= lang('date_format_hint') ?>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="time-format">
+                                    <?= lang('time_format') ?>
+                                </label>
+                                <select class="form-control" id="time-format" data-field="time_format">
+                                    <option value="<?= TIME_FORMAT_REGULAR ?>">H:MM AM/PM</option>
+                                    <option value="<?= TIME_FORMAT_MILITARY ?>">HH:MM</option>
+                                </select>
+                                <span class="form-text text-muted">
+                                    <?= lang('time_format_hint') ?>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="first-weekday">
+                                    <?= lang('first_weekday') ?>
+                                </label>
+                                <select class="form-control" id="first-weekday" data-field="first_weekday">
+                                    <option value="sunday"><?= lang('sunday') ?></option>
+                                    <option value="monday"><?= lang('monday') ?></option>
+                                    <option value="tuesday"><?= lang('tuesday') ?></option>
+                                    <option value="wednesday"><?= lang('wednesday') ?></option>
+                                    <option value="thursday"><?= lang('thursday') ?></option>
+                                    <option value="friday"><?= lang('friday') ?></option>
+                                    <option value="saturday"><?= lang('saturday') ?></option>
+                                </select>
+                                <span class="form-text text-muted">
+                                    <?= lang('first_weekday_hint') ?>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="default-timezone"><?= lang('timezone') ?></label>
+                                <?= render_timezone_dropdown('data-field="default_timezone" id="default-timezone" class="form-control"') ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="default-language">
+                                    <?= lang('language') ?>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select id="default-language" data-field="default_language" class="form-control required"></select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label for="api-token">API Token</label>
+                                <input id="api-token" data-field="api_token" class="form-control">
+                                <span class="form-text text-muted">
+                                    <?= lang('api_token_hint') ?>
+                                </span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="captcha-site-key">reCAPTCHA v3 Site Key</label>
+                                <input id="captcha-site-key" data-field="captcha_site_key" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="captcha-secret-key">reCAPTCHA v3 Secret Key</label>
+                                <input id="captcha-secret-key" data-field="captcha_secret_key" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="require-captcha">
+                                    <label class="custom-control-label" for="require-captcha">
+                                        reCAPTCHA
+                                    </label>
+                                </div>
+                                <span class="form-text text-muted">
+                                    <?= lang('require_captcha_hint') ?>
+                                </span>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="display-timezone">
+                                    <label class="custom-control-label" for="display-timezone">
+                                        <?= lang('display_timezone') ?>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>

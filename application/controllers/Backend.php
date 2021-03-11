@@ -308,7 +308,7 @@ class Backend extends EA_Controller {
      */
     public function settings() {
         $this->session->set_userdata('dest_url', site_url('backend/settings'));
-        if (!$this->has_privileges(PRIV_SYSTEM_SETTINGS, FALSE) && !$this->has_privileges(PRIV_USER_SETTINGS)) {
+        if (!$this->has_privileges(PRIV_SYSTEM_SETTINGS, FALSE) && !$this->has_privileges(PRIV_BUSINESS_SETTINGS, FALSE) && !$this->has_privileges(PRIV_USER_SETTINGS)) {
             return;
         }
 

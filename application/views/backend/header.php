@@ -87,7 +87,8 @@
                     </a>
                 </li>
 
-                <?php $hidden = ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE
+                <?php $hidden = ($privileges[PRIV_BUSINESS_SETTINGS]['view'] == TRUE
+                    || $privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE
                     || $privileges[PRIV_USER_SETTINGS]['view'] == TRUE) ? '' : 'd-none' ?>
                 <?php $active = ($active_menu == PRIV_SYSTEM_SETTINGS) ? 'active' : '' ?>
                 <li class="nav-item <?= $active . $hidden ?>">

@@ -63,6 +63,7 @@ window.Backend = window.Backend || {};
     exports.PRIV_SERVICES = 'services';
     exports.PRIV_USERS = 'users';
     exports.PRIV_SYSTEM_SETTINGS = 'system_settings';
+    exports.PRIV_BUSINESS_SETTINGS = 'business_settings';
     exports.PRIV_USER_SETTINGS = 'user_settings';
 
     /**
