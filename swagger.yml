@@ -881,8 +881,6 @@ definitions:
                 type: integer
             serviceId:
                 type: integer
-            googleCalendarId:
-                type: string
 
     Unavailability:
         type: object
@@ -1030,16 +1028,6 @@ definitions:
                     notifications:
                         type: boolean
                     calendarView:
-                        type: string
-                    googleSync:
-                        type: boolean
-                    googleCalendar:
-                        type: string
-                    googleToken:
-                        type: string
-                    syncFutureDays:
-                        type: string
-                    syncPastDays:
                         type: string
                     workingPlan:
                         type: string

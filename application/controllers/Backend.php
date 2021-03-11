@@ -561,7 +561,7 @@ class Backend extends EA_Controller {
         $this->fullLogFilePath = $this->logFolderPath . "/" . $this->logFilePattern;
 
         $this->session->set_userdata('dest_url', site_url('backend/logs'));
-        if (!$this->has_privileges(PRIV_SYSTEM_SETTINGS, FALSE)) {
+        if (!$this->has_privileges(PRIV_SYSTEM_SETTINGS)) {
             return;
         }
 

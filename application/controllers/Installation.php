@@ -106,9 +106,6 @@ class Installation extends EA_Controller {
                     'username' => 'janedoe',
                     'password' => 'janedoe',
                     'notifications' => TRUE,
-                    'google_sync' => FALSE,
-                    'sync_past_days' => 30,
-                    'sync_future_days' => 90,
                     'calendar_view' => CALENDAR_VIEW_DEFAULT
                 ],
             ]);

@@ -445,23 +445,6 @@ class Appointments_model extends EA_Model {
     }
 
     /**
-     * Clear google sync IDs from appointment record.
-     *
-     * @param int $provider_id The appointment provider record id.
-     *
-     * @throws Exception If $provider_id argument is invalid.
-     */
-    public function clear_google_sync_ids($provider_id) {
-        if (!is_numeric($provider_id)) {
-            throw new Exception('Invalid argument type $provider_id: ' . $provider_id);
-        }
-
-        $this->db->update('appointments', ['id_google_calendar' => NULL], [
-            'id_users_provider' => $provider_id
-        ]);
-    }
-
-    /**
      * Get appointment count for the provided start datetime.
      *
      * @param int $service_id Selected service ID.

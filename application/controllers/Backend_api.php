@@ -44,10 +44,8 @@ class Backend_api extends EA_Controller {
         $this->load->model('services_model');
         $this->load->model('settings_model');
         $this->load->model('user_model');
-        $this->load->library('google_sync');
         $this->load->library('ics_file');
         $this->load->library('notifications');
-        $this->load->library('synchronization');
         $this->load->library('timezones');
 
         if ($this->session->userdata('role_slug')) {
@@ -267,7 +265,6 @@ class Backend_api extends EA_Controller {
                 'time_format' => $this->settings_model->get_setting('time_format')
             ];
 
-            $this->synchronization->sync_appointment_saved($appointment, $service, $provider, $customer, $settings, $manage_mode);
             $this->notifications->notify_appointment_saved($appointment, $service, $provider, $customer, $settings, $manage_mode);
 
             $response = AJAX_SUCCESS;
@@ -289,8 +286,7 @@ class Backend_api extends EA_Controller {
      * Delete appointment from the database.
      *
      * This method deletes an existing appointment from the database. Once this action is finished it cannot be undone.
-     * Notification emails are send to both provider and customer and the delete action is executed to the Google
-     * Calendar account of the provider, if the "google_sync" setting is enabled.
+     * Notification emails are send to both provider and customer.
      */
     public function ajax_delete_appointment() {
         try {
@@ -318,25 +314,6 @@ class Backend_api extends EA_Controller {
 
             // Delete appointment record from the database.
             $this->appointments_model->delete($this->input->post('appointment_id'));
-
-            // Sync removal with Google Calendar.
-            if ($appointment['id_google_calendar'] != NULL) {
-                try {
-                    $google_sync = $this->providers_model->get_setting('google_sync', $provider['id']);
-
-                    if ($google_sync == TRUE) {
-                        $google_token = json_decode($this->providers_model
-                            ->get_setting('google_token', $provider['id']));
-                        $this->google_sync->refresh_token($google_token->refresh_token);
-                        $this->google_sync->delete_appointment($provider, $appointment['id_google_calendar']);
-                    }
-                } catch (Exception $exception) {
-                    $warnings[] = [
-                        'message' => $exception->getMessage(),
-                        'trace' => config('debug') ? $exception->getTrace() : []
-                    ];
-                }
-            }
 
             // Send notification emails to provider and customer.
             try {
@@ -441,44 +418,6 @@ class Backend_api extends EA_Controller {
     }
 
     /**
-     * Disable a providers sync setting.
-     *
-     * This method deletes the "google_sync" and "google_token" settings from the database. After that the provider's
-     * appointments will be no longer synced with google calendar.
-     */
-    public function ajax_disable_provider_sync() {
-        try {
-            if (!$this->input->post('provider_id')) {
-                throw new Exception('Provider id not specified.');
-            }
-
-            if (
-                $this->privileges[PRIV_USERS]['edit'] == FALSE
-                && $this->session->userdata('user_id') != $this->input->post('provider_id')
-            ) {
-                throw new Exception('You do not have the required privileges for this task.');
-            }
-
-            $this->providers_model->set_setting('google_sync', FALSE, $this->input->post('provider_id'));
-            $this->providers_model->set_setting('google_token', NULL, $this->input->post('provider_id'));
-            $this->appointments_model->clear_google_sync_ids($this->input->post('provider_id'));
-
-            $response = AJAX_SUCCESS;
-        } catch (Exception $exception) {
-            $this->output->set_status_header(500);
-
-            $response = [
-                'message' => $exception->getMessage(),
-                'trace' => config('debug') ? $exception->getTrace() : []
-            ];
-        }
-
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($response));
-    }
-
-    /**
      * Filter the customer records with the given key string.
      *
      * Outputs the search results.
@@ -559,33 +498,6 @@ class Backend_api extends EA_Controller {
             $unavailable['id'] = $this->appointments_model->add_unavailable($unavailable);
             $unavailable = $this->appointments_model->get_row($unavailable['id']); // fetch all inserted data
 
-            // Google Sync
-            try {
-                $google_sync = $this->providers_model->get_setting(
-                    'google_sync',
-                    $unavailable['id_users_provider']
-                );
-
-                if ($google_sync) {
-                    $google_token = json_decode($this->providers_model->get_setting(
-                        'google_token',
-                        $unavailable['id_users_provider']
-                    ));
-
-                    $this->google_sync->refresh_token($google_token->refresh_token);
-
-                    if ($unavailable['id_google_calendar'] == NULL) {
-                        $google_event = $this->google_sync->add_unavailable($provider, $unavailable);
-                        $unavailable['id_google_calendar'] = $google_event->id;
-                        $this->appointments_model->add_unavailable($unavailable);
-                    } else {
-                        $this->google_sync->update_unavailable($provider, $unavailable);
-                    }
-                }
-            } catch (Exception $exception) {
-                $warnings[] = $exception;
-            }
-
             if (isset($warnings)) {
                 $this->output
                     ->set_content_type('application/json')
@@ -621,28 +533,11 @@ class Backend_api extends EA_Controller {
             }
 
             $unavailable = $this->appointments_model->get_row($this->input->post('unavailable_id'));
-            $provider = $this->providers_model->get_row($unavailable['id_users_provider']);
 
             // Delete unavailable
             $this->appointments_model->delete_unavailable($unavailable['id']);
 
-            // Google Sync
-            try {
-                $google_sync = $this->providers_model->get_setting('google_sync', $provider['id']);
-                if ($google_sync == TRUE) {
-                    $google_token = json_decode($this->providers_model->get_setting('google_token', $provider['id']));
-                    $this->google_sync->refresh_token($google_token->refresh_token);
-                    $this->google_sync->delete_unavailable($provider, $unavailable['id_google_calendar']);
-                }
-            } catch (Exception $exception) {
-                $warnings[] = $exception;
-            }
-
-            if (empty($warnings)) {
-                $response = AJAX_SUCCESS;
-            } else {
-                $response = ['warnings' => $warnings];
-            }
+            $response = AJAX_SUCCESS;
         } catch (Exception $exception) {
             $this->output->set_status_header(500);
 
@@ -1272,83 +1167,6 @@ class Backend_api extends EA_Controller {
             $this->config->set_item('language', $this->input->post('language'));
 
             $response = AJAX_SUCCESS;
-        } catch (Exception $exception) {
-            $this->output->set_status_header(500);
-
-            $response = [
-                'message' => $exception->getMessage(),
-                'trace' => config('debug') ? $exception->getTrace() : []
-            ];
-        }
-
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($response));
-    }
-
-    /**
-     * This method will return a list of the available google calendars.
-     *
-     * The user will need to select a specific calendar from this list to sync his appointments with. Google access must
-     * be already granted for the specific provider.
-     */
-    public function ajax_get_google_calendars() {
-        try {
-            if (!$this->input->post('provider_id')) {
-                throw new Exception('Provider id is required in order to fetch the google calendars.');
-            }
-
-            // Check if selected provider has sync enabled.
-            $google_sync = $this->providers_model->get_setting('google_sync', $this->input->post('provider_id'));
-
-            if ($google_sync) {
-                $google_token = json_decode($this->providers_model->get_setting(
-                    'google_token',
-                    $this->input->post('provider_id')
-                ));
-                $this->google_sync->refresh_token($google_token->refresh_token);
-
-                $calendars = $this->google_sync->get_google_calendars();
-
-                $response = $calendars;
-            } else {
-                $response = AJAX_FAILURE;
-            }
-        } catch (Exception $exception) {
-            $this->output->set_status_header(500);
-
-            $response = [
-                'message' => $exception->getMessage(),
-                'trace' => config('debug') ? $exception->getTrace() : []
-            ];
-        }
-
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($response));
-    }
-
-    /**
-     * Select a specific google calendar for a provider.
-     *
-     * All the appointments will be synced with this particular calendar.
-     */
-    public function ajax_select_google_calendar() {
-        try {
-            if (
-                $this->privileges[PRIV_USERS]['edit'] == FALSE
-                && $this->session->userdata('user_id') != $this->input->post('provider_id')
-            ) {
-                throw new Exception('You do not have the required privileges for this task.');
-            }
-
-            $result = $this->providers_model->set_setting(
-                'google_calendar',
-                $this->input->post('calendar_id'),
-                $this->input->post('provider_id')
-            );
-
-            $response = $result ? AJAX_SUCCESS : AJAX_FAILURE;
         } catch (Exception $exception) {
             $this->output->set_status_header(500);
 

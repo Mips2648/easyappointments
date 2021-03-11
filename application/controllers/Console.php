@@ -11,8 +11,6 @@
  * @since       v1.3.2
  * ---------------------------------------------------------------------------- */
 
-require_once __DIR__ . '/Google.php';
-
 /**
  * Class Console
  *
@@ -133,9 +131,6 @@ class Console extends EA_Controller {
                 'username' => 'janedoe',
                 'password' => 'janedoe',
                 'notifications' => TRUE,
-                'google_sync' => FALSE,
-                'sync_past_days' => 30,
-                'sync_future_days' => 90,
                 'calendar_view' => CALENDAR_VIEW_DEFAULT
             ],
         ]);
@@ -181,32 +176,6 @@ class Console extends EA_Controller {
     }
 
     /**
-     * Trigger the synchronization of all provider calendars with Google Calendar.
-     *
-     * Use this method in a cronjob to automatically sync events between Easy!Appointments and Google Calendar.
-     *
-     * Notice:
-     *
-     * Google syncing must first be enabled for each individual provider from inside the backend calendar page.
-     *
-     * Usage:
-     *
-     * php index.php console sync
-     */
-    public function sync() {
-        $providers = $this->providers_model->get_batch();
-
-        foreach ($providers as $provider) {
-            if (!filter_var($provider['settings']['google_sync'], FILTER_VALIDATE_BOOLEAN)) {
-                continue;
-            }
-
-            Google::sync($provider['id']);
-        }
-    }
-
-
-    /**
      * Show help information about the console capabilities.
      *
      * Use this method to see the available commands.
@@ -231,7 +200,6 @@ class Console extends EA_Controller {
             '⇾ php index.php console seed',
             '⇾ php index.php console install',
             '⇾ php index.php console backup',
-            '⇾ php index.php console sync',
             '',
             '',
         ];

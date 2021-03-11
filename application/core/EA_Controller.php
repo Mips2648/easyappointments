@@ -51,10 +51,8 @@
  * @property User_model $user_model
  *
  * @property Availability $availability
- * @property Google_Sync $google_sync
  * @property Ics_file $ics_file
  * @property Notifications $notifications
- * @property Synchronization $synchronization
  * @property Timezones $timezones
  */
 class EA_Controller extends CI_Controller {

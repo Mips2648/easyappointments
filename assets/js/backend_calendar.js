@@ -112,7 +112,6 @@ window.BackendCalendar = window.BackendCalendar || {};
      * @param {String} view Optional (default), the calendar view to be loaded.
      */
     exports.initialize = function (view) {
-        BackendCalendarGoogleSync.initialize();
         BackendCalendarAppointmentsModal.initialize();
         BackendCalendarUnavailabilityEventsModal.initialize();
 
