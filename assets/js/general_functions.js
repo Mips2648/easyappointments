@@ -143,29 +143,6 @@ window.GeneralFunctions = window.GeneralFunctions || {};
     };
 
     /**
-     * Convert date to ISO date string.
-     *
-     * This function creates a RFC 3339 date string. This string is needed by the Google Calendar API
-     * in order to pass dates as parameters.
-     *
-     * @param {Date} date The given date that will be transformed.
-
-     * @return {String} Returns the transformed string.
-     */
-    exports.ISODateString = function (date) {
-        function pad(n) {
-            return n < 10 ? '0' + n : n;
-        }
-
-        return date.getUTCFullYear() + '-'
-            + pad(date.getUTCMonth() + 1) + '-'
-            + pad(date.getUTCDate()) + 'T'
-            + pad(date.getUTCHours()) + ':'
-            + pad(date.getUTCMinutes()) + ':'
-            + pad(date.getUTCSeconds()) + 'Z';
-    };
-
-    /**
      * Clone JS Object
      *
      * This method creates and returns an exact copy of the provided object. It is very useful whenever changes need to
@@ -320,7 +297,7 @@ window.GeneralFunctions = window.GeneralFunctions || {};
         try {
             response = JSON.parse(jqXHR.responseText); // JSON response
         } catch (error) {
-            response = {message: jqXHR.responseText}; // String response
+            response = { message: jqXHR.responseText }; // String response
         }
 
         if (!response) {

@@ -26,8 +26,7 @@ class Unavailabilities implements ParsersInterface {
      *
      * @param array &$response The response to be encoded.
      */
-    public function encode(array &$response)
-    {
+    public function encode(array &$response) {
         $encoded_response = [
             'id' => array_key_exists('id', $response) ? (int)$response['id'] : NULL,
             'book' => $response['book_datetime'],
@@ -36,9 +35,6 @@ class Unavailabilities implements ParsersInterface {
             'notes' => $response['notes'],
             'providerId' => array_key_exists('id_users_provider', $response)
                 ? (int)$response['id_users_provider']
-                : NULL,
-            'googleCalendarId' => array_key_exists('id_google_calendar', $response)
-                ? (int)$response['id_google_calendar']
                 : NULL
         ];
 
@@ -51,43 +47,31 @@ class Unavailabilities implements ParsersInterface {
      * @param array &$request The request to be decoded.
      * @param array $base Optional (null), if provided it will be used as a base array.
      */
-    public function decode(array &$request, array $base = NULL)
-    {
+    public function decode(array &$request, array $base = NULL) {
         $decodedRequest = $base ?: [];
 
-        if (array_key_exists('id', $request))
-        {
+        if (array_key_exists('id', $request)) {
             $decodedRequest['id'] = $request['id'];
         }
 
-        if (array_key_exists('book', $request))
-        {
+        if (array_key_exists('book', $request)) {
             $decodedRequest['book_datetime'] = $request['book'];
         }
 
-        if (array_key_exists('start', $request))
-        {
+        if (array_key_exists('start', $request)) {
             $decodedRequest['start_datetime'] = $request['start'];
         }
 
-        if (array_key_exists('end', $request))
-        {
+        if (array_key_exists('end', $request)) {
             $decodedRequest['end_datetime'] = $request['end'];
         }
 
-        if (array_key_exists('notes', $request))
-        {
+        if (array_key_exists('notes', $request)) {
             $decodedRequest['notes'] = $request['notes'];
         }
 
-        if (array_key_exists('providerId', $request))
-        {
+        if (array_key_exists('providerId', $request)) {
             $decodedRequest['id_users_provider'] = $request['providerId'];
-        }
-
-        if (array_key_exists('googleCalendarId', $request))
-        {
-            $decodedRequest['id_google_calendar'] = $request['googleCalendarId'];
         }
 
         $decodedRequest['is_unavailable'] = TRUE;
