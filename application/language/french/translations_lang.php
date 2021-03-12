@@ -198,6 +198,7 @@ $lang['new_password_sent_with_email'] = 'Votre nouveau mot de passe vous a été
 $lang['new_account_password'] = 'Nouveau mot de passe du compte';
 $lang['new_password_is'] = 'Votre nouveau mot de passe est $password. Conservez cet email afin de pouvoir retrouver votre mot de passe si nécessaire. Vous pouvez aussi modifier ce mot de passe par un nouveau dans la page des paramètres.';
 $lang['delete_record_prompt'] = 'Êtes-vous sûr de vouloir supprimer cet enregistrement ? Cette action est irréversible .';
+$lang['delete_appointment_prompt'] = 'Êtes-vous sûr de vouloir annuler ce rendez-vous?';
 $lang['delete_admin'] = 'Supprimer l\'administrateur';
 $lang['delete_customer'] = 'Supprimer le patient';
 $lang['delete_service'] = 'Supprimer la prestation';

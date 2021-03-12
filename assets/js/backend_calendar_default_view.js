@@ -167,7 +167,7 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
             ];
 
             GeneralFunctions.displayMessageBox(EALang.delete_appointment_title,
-                EALang.delete_record_prompt, buttons);
+                EALang.delete_appointment_prompt, buttons);
         });
 
         /**

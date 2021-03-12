@@ -324,8 +324,7 @@ class Backend_api extends EA_Controller {
 
                     $email = new EmailClient($this, $this->config->config);
 
-                    $send_provider = $this->providers_model
-                        ->get_setting('notifications', $provider['id']);
+                    $send_provider = $this->providers_model->get_setting('notifications', $provider['id']);
 
                     if ((bool)$send_provider === TRUE) {
                         $email->send_delete_appointment(
@@ -355,11 +354,11 @@ class Backend_api extends EA_Controller {
                     $secretaries = $this->secretaries_model->get_batch();
 
                     foreach ($secretaries as $secretary) {
-                        if (!$secretary['settings']['notifications'] === '0') {
+                        if ($secretary['settings']['notifications'] === '0') {
                             continue;
                         }
 
-                        if (in_array($provider['id'], $secretary['providers'])) {
+                        if (!in_array($provider['id'], $secretary['providers'])) {
                             continue;
                         }
 

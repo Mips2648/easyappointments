@@ -381,7 +381,7 @@ window.FrontendBook = window.FrontendBook || {};
                 ];
 
                 GeneralFunctions.displayMessageBox(EALang.cancel_appointment_title,
-                    EALang.write_appointment_removal_reason, buttons);
+                    EALang.delete_appointment_prompt, buttons);
 
                 return false;
             });
