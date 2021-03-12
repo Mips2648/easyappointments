@@ -136,63 +136,38 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
             var url;
             var data;
 
-            if (lastFocusedEventData.extendedProps.data.is_unavailable === '0') {
-                var buttons = [
-                    {
-                        text: EALang.cancel,
-                        click: function () {
-                            $('#message-box').dialog('close');
-                        }
-                    },
-                    {
-                        text: 'OK',
-                        click: function () {
-                            url = GlobalVariables.baseUrl + '/index.php/backend_api/ajax_delete_appointment';
-
-                            data = {
-                                csrfToken: GlobalVariables.csrfToken,
-                                appointment_id: lastFocusedEventData.extendedProps.data.id,
-                                delete_reason: $('#delete-reason').val()
-                            };
-
-                            $.post(url, data)
-                                .done(function () {
-                                    $('#message-box').dialog('close');
-
-                                    // Refresh calendar event items.
-                                    $('#select-filter-item').trigger('change');
-                                });
-                        }
-                    }
-                ];
-
-                GeneralFunctions.displayMessageBox(EALang.delete_appointment_title,
-                    EALang.write_appointment_removal_reason, buttons);
-
-                $('<textarea/>', {
-                    'class': 'form-control w-100',
-                    'id': 'delete-reason',
-                    'rows': '3'
-                })
-                    .appendTo('#message-box');
-            } else {
-                // Do not display confirmation prompt.
-                url = GlobalVariables.baseUrl + '/index.php/backend_api/ajax_delete_unavailable';
-
-                data = {
-                    csrfToken: GlobalVariables.csrfToken,
-                    unavailable_id: lastFocusedEventData.extendedProps.data.id
-                };
-
-                $.post(url, data)
-                    .done(function () {
+            var buttons = [
+                {
+                    text: EALang.cancel,
+                    click: function () {
                         $('#message-box').dialog('close');
+                        lastFocusedEventData = null;
+                    }
+                },
+                {
+                    text: 'OK',
+                    click: function () {
+                        url = GlobalVariables.baseUrl + '/index.php/backend_api/ajax_delete_appointment';
 
-                        // Refresh calendar event items.
-                        $('#select-filter-item').trigger('change');
-                    });
-            }
-            lastFocusedEventData = null;
+                        data = {
+                            csrfToken: GlobalVariables.csrfToken,
+                            appointment_id: lastFocusedEventData.extendedProps.data.id
+                        };
+
+                        $.post(url, data)
+                            .done(function () {
+                                $('#message-box').dialog('close');
+
+                                // Refresh calendar event items.
+                                $('#select-filter-item').trigger('change');
+                            });
+                        lastFocusedEventData = null;
+                    }
+                }
+            ];
+
+            GeneralFunctions.displayMessageBox(EALang.delete_appointment_title,
+                EALang.delete_record_prompt, buttons);
         });
 
         /**
@@ -265,13 +240,21 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
             var difference_in_minutes = difference_in_millisecondes / (1000 * 60);
             if (difference_in_minutes == GlobalVariables.calendarTimeslot) {
                 // is simple click => create appointment
-                createAppointment(selectionInfo.start, selectionInfo.end);
+                createAppointment(selectionInfo);
+            } else {
+                $('#insert-unavailable').trigger('click');
+                $('#unavailable-start').datepicker('setDate', selectionInfo.start);
+                $('#unavailable-end').datepicker('setDate', selectionInfo.end);
+
             }
         }
     }
 
-    function createAppointment(start, end) {
+    function createAppointment(selectionInfo) {
         $('#insert-appointment').trigger('click');
+
+        // Preselect time
+        $('#start-datetime').datepicker('setDate', selectionInfo.start);
 
         // Preselect service & provider.
         var service;
@@ -311,11 +294,6 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
 
             $('#select-provider').trigger('change');
         }
-
-        // Preselect time
-        // TODO: preselect end time depending service duration
-        $('#start-datetime').datepicker('setDate', start);
-        $('#end-datetime').datepicker('setDate', end);
 
         return;
     }

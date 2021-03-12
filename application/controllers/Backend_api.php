@@ -300,108 +300,88 @@ class Backend_api extends EA_Controller {
 
             // Store appointment data for later use in this method.
             $appointment = $this->appointments_model->get_row($this->input->post('appointment_id'));
-            $provider = $this->providers_model->get_row($appointment['id_users_provider']);
-            $customer = $this->customers_model->get_row($appointment['id_users_customer']);
-            $service = $this->services_model->get_row($appointment['id_services']);
-
-            $settings = [
-                'company_name' => $this->settings_model->get_setting('company_name'),
-                'company_email' => $this->settings_model->get_setting('company_email'),
-                'company_link' => $this->settings_model->get_setting('company_link'),
-                'date_format' => $this->settings_model->get_setting('date_format'),
-                'time_format' => $this->settings_model->get_setting('time_format')
-            ];
 
             // Delete appointment record from the database.
-            $this->appointments_model->delete($this->input->post('appointment_id'));
+            $this->appointments_model->delete($appointment['id']);
+            $response = AJAX_SUCCESS;
 
-            // Send notification emails to provider and customer.
-            try {
-                $this->config->load('email');
+            if ($appointment['is_unavailable'] == FALSE) {
+                $provider = $this->providers_model->get_row($appointment['id_users_provider']);
+                $customer = $this->customers_model->get_row($appointment['id_users_customer']);
+                $service = $this->services_model->get_row($appointment['id_services']);
 
-                $email = new EmailClient($this, $this->config->config);
-
-                $send_provider = $this->providers_model
-                    ->get_setting('notifications', $provider['id']);
-
-                if ((bool)$send_provider === TRUE) {
-                    $email->send_delete_appointment(
-                        $appointment,
-                        $provider,
-                        $service,
-                        $customer,
-                        $settings,
-                        new Email($provider['email']),
-                        new Text($this->input->post('delete_reason'))
-                    );
-                }
-
-                $send_customer = $this->settings_model->get_setting('customer_notifications');
-
-                if ((bool)$send_customer === TRUE) {
-                    $email->send_delete_appointment(
-                        $appointment,
-                        $provider,
-                        $service,
-                        $customer,
-                        $settings,
-                        new Email($customer['email']),
-                        new Text($this->input->post('delete_reason'))
-                    );
-                }
-
-                // Notify admins
-                $admins = $this->admins_model->get_batch();
-
-                foreach ($admins as $admin) {
-                    if (!$admin['settings']['notifications'] === '0') {
-                        continue;
-                    }
-
-                    $email->send_delete_appointment(
-                        $appointment,
-                        $provider,
-                        $service,
-                        $customer,
-                        $settings,
-                        new Email($admin['email']),
-                        new Text($this->input->post('cancel_reason'))
-                    );
-                }
-
-                // Notify secretaries
-                $secretaries = $this->secretaries_model->get_batch();
-
-                foreach ($secretaries as $secretary) {
-                    if (!$secretary['settings']['notifications'] === '0') {
-                        continue;
-                    }
-
-                    if (in_array($provider['id'], $secretary['providers'])) {
-                        continue;
-                    }
-
-                    $email->send_delete_appointment(
-                        $appointment,
-                        $provider,
-                        $service,
-                        $customer,
-                        $settings,
-                        new Email($secretary['email']),
-                        new Text($this->input->post('cancel_reason'))
-                    );
-                }
-            } catch (Exception $exception) {
-                $warnings[] = [
-                    'message' => $exception->getMessage(),
-                    'trace' => config('debug') ? $exception->getTrace() : []
+                $settings = [
+                    'company_name' => $this->settings_model->get_setting('company_name'),
+                    'company_email' => $this->settings_model->get_setting('company_email'),
+                    'company_link' => $this->settings_model->get_setting('company_link'),
+                    'date_format' => $this->settings_model->get_setting('date_format'),
+                    'time_format' => $this->settings_model->get_setting('time_format')
                 ];
-            }
 
-            if (empty($warnings)) {
-                $response = AJAX_SUCCESS;
-            } else {
-                $response = ['warnings' => $warnings];
+                // Send notification emails to provider and customer.
+                try {
+                    $this->config->load('email');
+
+                    $email = new EmailClient($this, $this->config->config);
+
+                    $send_provider = $this->providers_model
+                        ->get_setting('notifications', $provider['id']);
+
+                    if ((bool)$send_provider === TRUE) {
+                        $email->send_delete_appointment(
+                            $appointment,
+                            $provider,
+                            $service,
+                            $customer,
+                            $settings,
+                            new Email($provider['email'])
+                        );
+                    }
+
+                    $send_customer = $this->settings_model->get_setting('customer_notifications');
+
+                    if ((bool)$send_customer === TRUE) {
+                        $email->send_delete_appointment(
+                            $appointment,
+                            $provider,
+                            $service,
+                            $customer,
+                            $settings,
+                            new Email($customer['email'])
+                        );
+                    }
+
+                    // Notify secretaries
+                    $secretaries = $this->secretaries_model->get_batch();
+
+                    foreach ($secretaries as $secretary) {
+                        if (!$secretary['settings']['notifications'] === '0') {
+                            continue;
+                        }
+
+                        if (in_array($provider['id'], $secretary['providers'])) {
+                            continue;
+                        }
+
+                        $email->send_delete_appointment(
+                            $appointment,
+                            $provider,
+                            $service,
+                            $customer,
+                            $settings,
+                            new Email($secretary['email'])
+                        );
+                    }
+                } catch (Exception $exception) {
+                    $warnings[] = [
+                        'message' => $exception->getMessage(),
+                        'trace' => config('debug') ? $exception->getTrace() : []
+                    ];
+                }
+
+                if (!empty($warnings)) {
+                    $response = ['warnings' => $warnings];
+                }
             }
         } catch (Exception $exception) {
             $this->output->set_status_header(500);
@@ -507,35 +487,6 @@ class Backend_api extends EA_Controller {
                     ->set_content_type('application/json')
                     ->set_output(json_encode(AJAX_SUCCESS));
             }
-
-            $response = AJAX_SUCCESS;
-        } catch (Exception $exception) {
-            $this->output->set_status_header(500);
-
-            $response = [
-                'message' => $exception->getMessage(),
-                'trace' => config('debug') ? $exception->getTrace() : []
-            ];
-        }
-
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($response));
-    }
-
-    /**
-     * Delete an unavailable time period from database.
-     */
-    public function ajax_delete_unavailable() {
-        try {
-            if ($this->privileges[PRIV_APPOINTMENTS]['delete'] == FALSE) {
-                throw new Exception('You do not have the required privileges for this task.');
-            }
-
-            $unavailable = $this->appointments_model->get_row($this->input->post('unavailable_id'));
-
-            // Delete unavailable
-            $this->appointments_model->delete_unavailable($unavailable['id']);
 
             $response = AJAX_SUCCESS;
         } catch (Exception $exception) {

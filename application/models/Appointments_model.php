@@ -420,31 +420,6 @@ class Appointments_model extends EA_Model {
     }
 
     /**
-     * Delete an unavailable period.
-     *
-     * @param int $unavailable_id Record id to be deleted.
-     *
-     * @return bool Returns the delete operation result.
-     *
-     * @throws Exception If $unavailable_id argument is invalid.
-     */
-    public function delete_unavailable($unavailable_id) {
-        if (!is_numeric($unavailable_id)) {
-            throw new Exception('Invalid argument type $unavailable_id: ' . $unavailable_id);
-        }
-
-        $num_rows = $this->db->get_where('appointments', ['id' => $unavailable_id])->num_rows();
-
-        if ($num_rows === 0) {
-            return FALSE; // Record does not exist.
-        }
-
-        $this->db->where('id', $unavailable_id);
-
-        return $this->db->delete('appointments');
-    }
-
-    /**
      * Get appointment count for the provided start datetime.
      *
      * @param int $service_id Selected service ID.

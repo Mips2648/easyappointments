@@ -375,11 +375,6 @@ window.FrontendBook = window.FrontendBook || {};
                     {
                         text: 'OK',
                         click: function () {
-                            if ($('#cancel-reason').val() === '') {
-                                $('#cancel-reason').css('border', '2px solid #DC3545');
-                                return;
-                            }
-                            $('#cancel-appointment-form textarea').val($('#cancel-reason').val());
                             $('#cancel-appointment-form').submit();
                         }
                     }
@@ -387,16 +382,6 @@ window.FrontendBook = window.FrontendBook || {};
 
                 GeneralFunctions.displayMessageBox(EALang.cancel_appointment_title,
                     EALang.write_appointment_removal_reason, buttons);
-
-                $('<textarea/>', {
-                    'class': 'form-control',
-                    'id': 'cancel-reason',
-                    'rows': '3',
-                    'css': {
-                        'width': '100%'
-                    }
-                })
-                    .appendTo('#message-box');
 
                 return false;
             });

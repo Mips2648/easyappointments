@@ -33,8 +33,7 @@ class Unavailabilities extends API_V1_Controller {
     /**
      * Class Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->model('appointments_model');
         $this->parser = new \EA\Engine\Api\V1\Parsers\Unavailabilities;
@@ -45,16 +44,13 @@ class Unavailabilities extends API_V1_Controller {
      *
      * @param int $id Optional (null), the record ID to be returned.
      */
-    public function get($id = NULL)
-    {
-        try
-        {
+    public function get($id = NULL) {
+        try {
             $where = $id !== NULL ? ['id' => $id] : ['is_unavailable' => TRUE];
 
             $unavailabilities = $this->appointments_model->get_batch($where);
 
-            if ($id !== NULL && count($unavailabilities) === 0)
-            {
+            if ($id !== NULL && count($unavailabilities) === 0) {
                 $this->throw_record_not_found();
             }
 
@@ -67,10 +63,7 @@ class Unavailabilities extends API_V1_Controller {
                 ->minimize()
                 ->singleEntry($id)
                 ->output();
-
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->handle_exception($exception);
         }
     }
@@ -78,17 +71,14 @@ class Unavailabilities extends API_V1_Controller {
     /**
      * POST API Method
      */
-    public function post()
-    {
-        try
-        {
+    public function post() {
+        try {
             // Insert the appointment to the database.
             $request = new Request();
             $unavailability = $request->get_body();
             $this->parser->decode($unavailability);
 
-            if (isset($unavailability['id']))
-            {
+            if (isset($unavailability['id'])) {
                 unset($unavailability['id']);
             }
 
@@ -99,9 +89,7 @@ class Unavailabilities extends API_V1_Controller {
             $response = new Response($batch);
             $status = new NonEmptyText('201 Created');
             $response->encode($this->parser)->singleEntry(TRUE)->output($status);
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->handle_exception($exception);
         }
     }
@@ -111,15 +99,12 @@ class Unavailabilities extends API_V1_Controller {
      *
      * @param int $id The record ID to be updated.
      */
-    public function put($id)
-    {
-        try
-        {
+    public function put($id) {
+        try {
             // Update the appointment record.
             $batch = $this->appointments_model->get_batch(['id' => $id]);
 
-            if ($id !== NULL && count($batch) === 0)
-            {
+            if ($id !== NULL && count($batch) === 0) {
                 $this->throw_record_not_found();
             }
 
@@ -134,9 +119,7 @@ class Unavailabilities extends API_V1_Controller {
             $batch = $this->appointments_model->get_batch(['id' => $id]);
             $response = new Response($batch);
             $response->encode($this->parser)->singleEntry($id)->output();
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->handle_exception($exception);
         }
     }
@@ -146,11 +129,9 @@ class Unavailabilities extends API_V1_Controller {
      *
      * @param int $id The record ID to be deleted.
      */
-    public function delete($id)
-    {
-        try
-        {
-            $result = $this->appointments_model->delete_unavailable($id);
+    public function delete($id) {
+        try {
+            $result = $this->appointments_model->delete($id);
 
             $response = new Response([
                 'code' => 200,
@@ -158,9 +139,7 @@ class Unavailabilities extends API_V1_Controller {
             ]);
 
             $response->output();
-        }
-        catch (Exception $exception)
-        {
+        } catch (Exception $exception) {
             $this->handle_exception($exception);
         }
     }
