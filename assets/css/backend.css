@@ -30,6 +30,7 @@ root {
 #header #header-logo {
     padding: 5px;
     line-height: 0;
+    font-size: 11px;
 }
 
 #header #header-logo small {
@@ -833,10 +834,6 @@ body .form-horizontal .controls {
 #settings-page #require-phone-number.active,
 #settings-page #require-captcha.active {
     background: #B6DCFF;
-}
-
-#settings-page #general fieldset .wrapper {
-    max-width: 1024px;
 }
 
 #settings-page .working-plan-wrapper {
