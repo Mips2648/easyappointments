@@ -43,7 +43,8 @@
             settings: {
                 username: $('#username').val(),
                 notifications: $('#user-notifications').prop('checked'),
-                calendar_view: $('#calendar-view').val()
+                calendar_view: $('#calendar-view').val(),
+                calendar_timeslot: $('#calendar-timeslot').val()
             }
         };
 

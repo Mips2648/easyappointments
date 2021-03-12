@@ -836,35 +836,6 @@ body .form-horizontal .controls {
     background: #B6DCFF;
 }
 
-#settings-page .working-plan-wrapper {
-    max-width: 600px;
-}
-
-#settings-page .breaks-wrapper {
-    max-width: 500px;
-}
-
-#settings-page .personal-info-wrapper {
-    max-width: 450px;
-    margin-bottom: 20px;
-}
-
-#settings-page .miscellaneous-wrapper {
-    max-width: 450px;
-    margin-bottom: 20px;
-}
-
-#settings-page #about {
-    max-width: 720px;
-}
-
-#settings-page #about .current-version {
-    padding: 15px;
-    background: #F4F4F4;
-    font-size: 12px;
-    color: #444;
-}
-
 #settings-page #update-ea {
     margin-left: 12px;
 }

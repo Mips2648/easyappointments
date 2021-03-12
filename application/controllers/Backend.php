@@ -107,6 +107,7 @@ class Backend extends EA_Controller {
         $view['available_services'] = $this->services_model->get_available_services();
         $view['customers'] = $this->customers_model->get_batch();
         $view['calendar_view'] = !empty($calendar_view_query_param) ? $calendar_view_query_param : $user['settings']['calendar_view'];
+        $view['calendar_timeslot'] = $user['settings']['calendar_timeslot'];
         $view['timezones'] = $this->timezones->to_array();
         $view['system_settings'] = $this->settings_model->get_settings();
         $this->set_user_data($view);

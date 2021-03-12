@@ -79,7 +79,7 @@
                     </legend>
 
                     <div class="wrapper row">
-                        <div class="col-12 col-sm-6">
+                        <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="company-name"><?= lang('company_name') ?> *</label>
                                 <input id="company-name" data-field="company_name" class="required form-control">
@@ -104,7 +104,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-6">
+                        <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="customer-notifications">
@@ -161,7 +161,7 @@
                     </legend>
 
                     <div class="row">
-                        <div class="col-12 col-sm-7 working-plan-wrapper">
+                        <div class="col-md-6 col-sm-12">
                             <h4><?= lang('working_plan') ?></h4>
                             <span class="form-text text-muted mb-4">
                                 <?= lang('edit_working_plan_hint') ?>
@@ -186,9 +186,8 @@
                                     <?= lang('apply_to_all_providers') ?>
                                 </button>
                             </div>
-
-                            <br>
-
+                        </div>
+                        <div class="col-md-6 col-sm-12">
                             <h4><?= lang('book_advance_timeout') ?></h4>
                             <div class="form-group">
                                 <label for="book-advance-timeout" class="control-label"><?= lang('timeout_minutes') ?></label>
@@ -197,8 +196,7 @@
                                     <?= lang('book_advance_timeout_hint') ?>
                                 </p>
                             </div>
-                        </div>
-                        <div class="col-12 col-sm-5 breaks-wrapper">
+                            <br />
                             <h4><?= lang('breaks') ?></h4>
 
                             <span class="form-text text-muted">
@@ -250,7 +248,7 @@
                     </legend>
 
                     <div class="row">
-                        <div class="col-12 col-sm-11 col-md-10 col-lg-9">
+                        <div class="col-12">
                             <h4><?= lang('cookie_notice') ?></h4>
 
                             <div class="form-group">
@@ -317,7 +315,7 @@
             <form>
                 <fieldset>
                     <legend class="border-bottom mb-4">
-                        <?= lang('technical_settings') ?>
+                        <?= lang('technical') ?>
                         <?php if ($privileges[PRIV_SYSTEM_SETTINGS]['edit'] == TRUE) : ?>
                             <button type="button" class="save-settings btn btn-primary btn-sm mb-2" data-tippy-content="<?= lang('save') ?>">
                                 <i class="fas fa-check-square mr-2"></i>
@@ -327,7 +325,7 @@
                     </legend>
 
                     <div class="wrapper row">
-                        <div class="col-12 col-sm-6">
+                        <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="date-format">
                                     <?= lang('date_format') ?>
@@ -382,7 +380,7 @@
                                 <select id="default-language" data-field="default_language" class="form-control required"></select>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-6">
+                        <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="api-token">API Token</label>
                                 <input id="api-token" data-field="api_token" class="form-control">
@@ -433,7 +431,7 @@
         <div class="tab-pane <?= $hidden ?>" id="current-user">
             <form>
                 <div class="row">
-                    <fieldset class="col-12 col-sm-6 personal-info-wrapper">
+                    <fieldset class="col-md-6 col-sm-12">
                         <legend class="border-bottom mb-4">
                             <?= lang('personal_information') ?>
                             <?php if ($privileges[PRIV_USER_SETTINGS]['edit'] == TRUE) : ?>
@@ -497,7 +495,7 @@
                         </div>
                     </fieldset>
 
-                    <fieldset class="col-12 col-sm-6 miscellaneous-wrapper">
+                    <fieldset class="col-md-6 col-sm-12">
                         <legend class="border-bottom mb-4"><?= lang('system_login') ?></legend>
 
                         <div class="form-group">
@@ -522,6 +520,14 @@
                                 <option value="table">Table</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="calendar-timeslot" class="control-label"><?= lang('calendar_timeslot') ?></label>
+                            <input id="calendar-timeslot" class="form-control" type="number" min="5" max="60">
+                            <p class="form-text text-muted">
+                                <?= lang('calendar_timeslot_hint') ?>
+                            </p>
+                        </div>
+
 
                         <div class="form-group">
                             <label for="timezone"><?= lang('timezone') ?></label>

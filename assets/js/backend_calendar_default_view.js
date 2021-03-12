@@ -29,6 +29,7 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
     var lastFocusedEventData = null; // Contains event data for later use.
 
     var fullcalendar; //Containes fullcalendar
+    var workingPlan = {};
 
     /**
      * Bind event handlers for the calendar view.
@@ -201,13 +202,13 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
          */
         $('#select-filter-item').on('change', function () {
             refreshCalendarAppointments();
-            // If current value is service, then the sync buttons must be disabled.
+            // If current value is service, then buttons must be disabled.
             if ($('#select-filter-item option:selected').attr('type') === FILTER_TYPE_SERVICE) {
-                $('#google-sync, #enable-sync, #insert-appointment, #insert-dropdown').prop('disabled', true);
+                $('#insert-appointment, #insert-dropdown').prop('disabled', true);
                 fullcalendar.setOption('selectable', false);
                 fullcalendar.setOption('editable', false);
             } else {
-                $('#google-sync, #enable-sync, #insert-appointment, #insert-dropdown').prop('disabled', false);
+                $('#insert-appointment, #insert-dropdown').prop('disabled', false);
                 fullcalendar.setOption('selectable', true);
                 fullcalendar.setOption('editable', true);
 
@@ -219,17 +220,6 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
 
                 if (provider && provider.timezone) {
                     $('.provider-timezone').text(GlobalVariables.timezones[provider.timezone]);
-                }
-
-                // If the user has already the sync enabled then apply the proper style changes.
-                if ($('#select-filter-item option:selected').attr('google-sync') === 'true') {
-                    $('#enable-sync').removeClass('btn-light').addClass('btn-secondary enabled');
-                    $('#enable-sync span').text(EALang.disable_sync);
-                    $('#google-sync').prop('disabled', false);
-                } else {
-                    $('#enable-sync').removeClass('btn-secondary enabled').addClass('btn-light');
-                    $('#enable-sync span').text(EALang.enable_sync);
-                    $('#google-sync').prop('disabled', true);
                 }
             }
         });
@@ -254,7 +244,7 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
      *
      * @param {Event} event
      */
-    function getEventNotesExcerpt(notes, maxLenght=100, def='') {
+    function getEventNotesExcerpt(notes, maxLenght = 100, def = '') {
         if (!notes) {
             return def;
         }
@@ -263,15 +253,24 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
     }
 
     function onCalendarSelect(selectionInfo) {
-        var start = selectionInfo.start;
-        var end = selectionInfo.end;
-
-        if(selectionInfo.view.type=='dayGridMonth') {
-            fullcalendar.changeView('timeGridWorkWeek');
-            fullcalendar.gotoDate(start);
-            return;
+        var difference_in_millisecondes = selectionInfo.end.getTime() - selectionInfo.start.getTime();
+        if (selectionInfo.view.type == 'dayGridMonth') {
+            var difference_in_days = difference_in_millisecondes / (1000 * 3600 * 24);
+            if (difference_in_days == 1) {
+                fullcalendar.changeView('timeGridWorkWeek');
+                fullcalendar.gotoDate(selectionInfo.start);
+                return;
+            }
+        } else {
+            var difference_in_minutes = difference_in_millisecondes / (1000 * 60);
+            if (difference_in_minutes == GlobalVariables.calendarTimeslot) {
+                // is simple click => create appointment
+                createAppointment(selectionInfo.start, selectionInfo.end);
+            }
         }
+    }
 
+    function createAppointment(start, end) {
         $('#insert-appointment').trigger('click');
 
         // Preselect service & provider.
@@ -314,18 +313,20 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
         }
 
         // Preselect time
-        $('#start-datetime').datepicker('setDate', new Date(start));
-        $('#end-datetime').datepicker('setDate', new Date(end));
+        // TODO: preselect end time depending service duration
+        $('#start-datetime').datepicker('setDate', start);
+        $('#end-datetime').datepicker('setDate', end);
 
-        return false;
+        return;
     }
 
-    function getEventPopupHtml(eventClickInfo, showActions) {
+    function getEventPopupHtml(eventInfo) {
         var $html;
         var displayEdit;
         var displayDelete;
 
-        var event = eventClickInfo.event;
+        var event = eventInfo.event;
+        var showActions = eventInfo.jsEvent.type === 'click';
 
         if (Boolean(Number(event.extendedProps.data.is_unavailable)) === true) {
             displayEdit = (GlobalVariables.user.privileges.appointments.edit === true && showActions === true) ? 'mr-2' : 'd-none';
@@ -360,7 +361,7 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
                     }),
                     $('<br/>'),
 
-                    showActions ? $('<hr/>'): '',
+                    showActions ? $('<hr/>') : '',
 
                     showActions ? $('<div/>', {
                         'class': 'd-flex justify-content-center',
@@ -533,30 +534,34 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
         return $html;
     }
 
-    function calendarEventHover(eventClickInfo) {
-        if (lastFocusedEventData!=null) {
-            return;
-        }
+    function displayEventPopup(eventInfo) {
         $('.popover').popover('dispose'); // Close all open popovers.
 
-        var event = eventClickInfo.event;
-        var jsEvent = eventClickInfo.jsEvent;
-
-        $(jsEvent.target).popover({
+        $(eventInfo.jsEvent.target).popover({
             placement: 'top',
-            title: event.title,
-            content: getEventPopupHtml(eventClickInfo, false),
+            title: eventInfo.event.title,
+            content: getEventPopupHtml(eventInfo),
             html: true,
             container: '#calendar',
-            trigger: 'hover'
+            trigger: eventInfo.jsEvent.type == 'mouseover' ? 'hover' : 'manual'
         });
 
-        $(jsEvent.target).popover('toggle');
+        $(eventInfo.jsEvent.target).popover('toggle');
 
         // Fix popover position.
         if ($('.popover').length > 0 && $('.popover').position().top < 200) {
             $('.popover').css('top', '200px');
         }
+    }
+
+    function calendarEventHover(eventInfo) {
+        if (lastFocusedEventData != null) {
+            return;
+        }
+        if (eventInfo.event.groupId == 'workingplan') {
+            return;
+        }
+        displayEventPopup(eventInfo);
     }
 
     /**
@@ -566,28 +571,8 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
      * above the calendar item.
      */
     function calendarEventClick(eventClickInfo) {
-        $('.popover').popover('dispose'); // Close all open popovers.
-
-        var event = eventClickInfo.event;
-        var jsEvent = eventClickInfo.jsEvent;
-
-        lastFocusedEventData = event;
-
-        $(jsEvent.target).popover({
-            placement: 'top',
-            title: event.title,
-            content: getEventPopupHtml(eventClickInfo, true),
-            html: true,
-            container: '#calendar',
-            trigger: 'manual'
-        });
-
-        $(jsEvent.target).popover('toggle');
-
-        // Fix popover position.
-        if ($('.popover').length > 0 && $('.popover').position().top < 200) {
-            $('.popover').css('top', '200px');
-        }
+        lastFocusedEventData = eventClickInfo.event;
+        displayEventPopup(eventClickInfo);
     }
 
     /**
@@ -924,18 +909,34 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
 
                 fullcalendar.removeAllEvents();
 
-                // Add appointments to calendar.
+
                 var appointmentEvents = [];
                 var notes;
 
+                // Add workingplan to calendar.
+                // TODO: define workinplan by day
+                var wpEvent = [
+                    {
+                        groupId: 'workingplan',
+                        startTime: workingPlan.monday.start,
+                        endTime: workingPlan.monday.end,
+                        display: 'inverse-background',
+                        color: 'grey',
+                        editable: false,
+                        selectable: false,
+                        daysOfWeek: [1, 2, 3, 4, 5]
+                    }
+                ];
+                fullcalendar.addEventSource(wpEvent);
+
+                // Add appointments to calendar.
                 response.appointments.forEach(function (appointment) {
                     notes = getEventNotesExcerpt(appointment.notes, 30);
                     notes = notes ? ' - ' + notes : '';
 
                     var appointmentEvent = {
                         id: appointment.id,
-                        title: appointment.customer.first_name + ' '
-                        + appointment.customer.last_name + notes,
+                        title: appointment.customer.first_name + ' ' + appointment.customer.last_name + notes,
                         start: appointment.start_datetime,
                         end: appointment.end_datetime,
                         allDay: false,
@@ -975,47 +976,23 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
             });
     }
 
+    function getHour(time) {
+        return parseInt(time.split(':')[0]);
+    }
+
 
     exports.initialize = function () {
-        // Dynamic date formats.
-        var columnFormat = {};
-
-        switch (GlobalVariables.dateFormat) {
-            case 'DMY':
-                columnFormat = 'ddd D/M';
-                break;
-
-            case 'MDY':
-            case 'YMD':
-                columnFormat = 'ddd M/D';
-                break;
-
-            default:
-                throw new Error('Invalid date format setting provided!', GlobalVariables.dateFormat);
-        }
-
-        // Time formats
-        var timeFormat = '';
-        var slotTimeFormat = '';
-
-        switch (GlobalVariables.timeFormat) {
-            case 'military':
-                timeFormat = 'H:mm';
-                slotTimeFormat = 'H(:mm)';
-                break;
-            case 'regular':
-                timeFormat = 'h:mm a';
-                slotTimeFormat = 'h(:mm) a';
-                break;
-            default:
-                throw new Error('Invalid time format setting provided!', GlobalVariables.timeFormat);
-        }
+        GlobalVariables.systemSettings.forEach(function (setting) {
+            if (setting.name === 'company_working_plan') {
+                workingPlan = $.parseJSON(setting.value);
+            }
+        });
 
         var defaultView = window.innerWidth < 600 ? 'listDay' : 'timeGridWorkWeek';
         var viewList = window.innerWidth < 600 ? 'listDay,timeGridDay,dayGridMonth' : 'timeGridWorkWeek,timeGridWeek,dayGridMonth';
 
-        var firstWeekday = GlobalVariables.firstWeekday;
-        var firstWeekdayNumber = GeneralFunctions.getWeekDayId(firstWeekday);
+        var slotStart = (getHour(workingPlan.monday.start) - 1) + ':00:00';
+        var slotEnd = (getHour(workingPlan.monday.end) + 1) + ':00:00';
 
         var calendarEl = document.getElementById('calendar');
         fullcalendar = new FullCalendar.Calendar(calendarEl, {
@@ -1024,18 +1001,15 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
             locale: 'fr', // the initial locale
             nowIndicator: true,
             allDaySlot: false,
-            slotDuration: '00:15:00',
-            slotMinTime: '06:00:00',
-            slotMaxTime: '21:00:00',
-            scrollTime: (new Date()).getHours()+':00:00',
+            slotDuration: '00:' + GlobalVariables.calendarTimeslot + ':00',
+            slotMinTime: slotStart,
+            slotMaxTime: slotEnd,
+            scrollTime: (new Date()).getHours() - 1 + ':00:00',
             editable: true,
             displayEventEnd: false,
             eventDisplay: 'block',
-            // firstDay: firstWeekdayNumber,
-            // // timeFormat: timeFormat,
-            // slotLabelFormat: slotTimeFormat,
-            // allDayText: EALang.all_day,
-            // // columnFormat: columnFormat,
+            weekNumbers: true,
+            weekNumberFormat: { week: 'numeric' },
             headerToolbar: {
                 start: 'prev,next today',
                 center: 'title',
@@ -1080,12 +1054,10 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
                 'label': EALang.providers,
                 'type': 'providers-group',
                 'html': GlobalVariables.availableProviders.map(function (availableProvider) {
-                    var hasGoogleSync = availableProvider.settings.google_sync === '1' ? 'true' : 'false';
 
                     return $('<option/>', {
                         'value': availableProvider.id,
                         'type': FILTER_TYPE_PROVIDER,
-                        'google-sync': hasGoogleSync,
                         'text': availableProvider.first_name + ' ' + availableProvider.last_name
                     })
                 })
@@ -1184,7 +1156,6 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
         }
 
         // Automatically refresh the calendar page every 10 seconds (without loading animation).
-
         setInterval(function () {
             refreshCalendarAppointments();
         }, 60000);

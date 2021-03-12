@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 // Italian
 $lang['page_title'] = 'Prenota un appuntamento con';
 $lang['service_and_provider'] = 'Seleziona servizio & fornitore';
@@ -63,7 +63,8 @@ $lang['disable_sync'] = 'Disabilita sincronizzazione';
 $lang['disable_sync_prompt'] = 'Are you sure that you want to disable the calendar synchronization?';
 $lang['reload'] = 'Reload';
 $lang['appointment'] = 'Appointment';
-$lang['unavailable'] = 'Non disponibile';
+$lang['unavailability'] = 'Unavailability';
+$lang['availability'] = 'Availability';
 $lang['week'] = 'Settimana';
 $lang['month'] = 'Mese';
 $lang['today'] = 'Giorno';

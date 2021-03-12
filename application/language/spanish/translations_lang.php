@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 // Spanish
 $lang['page_title'] = 'Agendar una cita con';
 $lang['service_and_provider'] = 'Seleccione Servicio y Proveedor';
@@ -63,7 +63,8 @@ $lang['disable_sync'] = 'Deshabilitar sincronización';
 $lang['disable_sync_prompt'] = 'Are you sure that you want to disable the calendar synchronization?';
 $lang['reload'] = 'Cargar nuevamente';
 $lang['appointment'] = 'Cita';
-$lang['unavailable'] = 'No disponible';
+$lang['unavailability'] = 'Unavailability';
+$lang['availability'] = 'Availability';
 $lang['week'] = 'Semana';
 $lang['month'] = 'Mes';
 $lang['today'] = 'Hoy';

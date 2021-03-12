@@ -23,6 +23,7 @@
         customers: <?= json_encode($customers) ?>,
         secretaryProviders: <?= json_encode($secretary_providers) ?>,
         calendarView: <?= json_encode($calendar_view) ?>,
+        calendarTimeslot: <?= json_encode($calendar_timeslot) ?>,
         timezones: <?= json_encode($timezones) ?>,
         systemSettings: <?= json_encode($system_settings) ?>,
         user: {
@@ -64,11 +65,11 @@
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="#" id="insert-unavailable">
                             <i class="fas fa-plus-square mr-2"></i>
-                            <?= lang('unavailable') ?>
+                            <?= lang('unavailability') ?>
                         </a>
-                        <a class="dropdown-item" href="#" id="insert-planning" <?= $this->session->userdata('role_slug') !== 'admin' ? 'hidden' : '' ?>>
+                        <a class="dropdown-item" href="#" id="insert-available" <?= $this->session->userdata('role_slug') !== 'admin' ? 'hidden' : '' ?>>
                             <i class="fas fa-plus-square mr-2"></i>
-                            <?= lang('planning') ?>
+                            <?= lang('availability') ?>
                         </a>
                     </div>
                 </div>
