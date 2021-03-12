@@ -75,9 +75,15 @@
     SystemSettings.prototype.get = function () {
         var settings = [];
 
-        // General Settings Tab
+        // General & technical Settings Tab
 
         $('#general').find('input, select').not('input:checkbox').each(function (index, field) {
+            settings.push({
+                name: $(field).attr('data-field'),
+                value: $(field).val()
+            });
+        });
+        $('#technical').find('input, select').not('input:checkbox').each(function (index, field) {
             settings.push({
                 name: $(field).attr('data-field'),
                 value: $(field).val()

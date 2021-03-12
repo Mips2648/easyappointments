@@ -179,6 +179,8 @@ window.BackendSettings = window.BackendSettings || {};
                 settings = new SystemSettings();
             } else if (href === '#legal-contents') {
                 settings = new SystemSettings();
+            } else if (href === '#technical') {
+                settings = new SystemSettings();
             } else if (href === '#current-user') {
                 settings = new UserSettings();
             }
