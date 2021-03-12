@@ -42,6 +42,10 @@
         <div id="header-logo" class="navbar-brand">
             <img src="<?= base_url('assets/img/logo.png') ?>">
             <h6>Îlot Santé - Rendez-vous</h6>
+            <span id="select-language" class="badge badge-secondary">
+                <i class="fas fa-language mr-2"></i>
+                <?= ucfirst(config('language')) ?>
+            </span>
         </div>
 
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#header-menu">

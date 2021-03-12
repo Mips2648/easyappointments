@@ -24,6 +24,7 @@
         secretaryProviders: <?= json_encode($secretary_providers) ?>,
         calendarView: <?= json_encode($calendar_view) ?>,
         timezones: <?= json_encode($timezones) ?>,
+        systemSettings: <?= json_encode($system_settings) ?>,
         user: {
             id: <?= $user_id ?>,
             email: <?= json_encode($user_email) ?>,

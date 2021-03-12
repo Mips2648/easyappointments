@@ -108,6 +108,7 @@ class Backend extends EA_Controller {
         $view['customers'] = $this->customers_model->get_batch();
         $view['calendar_view'] = !empty($calendar_view_query_param) ? $calendar_view_query_param : $user['settings']['calendar_view'];
         $view['timezones'] = $this->timezones->to_array();
+        $view['system_settings'] = $this->settings_model->get_settings();
         $this->set_user_data($view);
 
         if ($this->session->userdata('role_slug') === DB_SLUG_SECRETARY) {
@@ -571,14 +572,7 @@ class Backend extends EA_Controller {
         $view['page_title'] = lang('logsviewer');
         $view['user_display_name'] = $this->user_model->get_user_display_name($user_id);
         $view['active_menu'] = PRIV_LOGS_VIEWER;
-        $view['company_name'] = $this->settings_model->get_setting('company_name');
-        $view['date_format'] = $this->settings_model->get_setting('date_format');
-        $view['first_weekday'] = $this->settings_model->get_setting('first_weekday');
-        $view['time_format'] = $this->settings_model->get_setting('time_format');
         $view['role_slug'] = $this->session->userdata('role_slug');
-        $view['system_settings'] = $this->settings_model->get_settings();
-        $view['user_settings'] = $this->user_model->get_user($user_id);
-        $view['timezones'] = $this->timezones->to_array();
 
         $this->set_user_data($view);
 
