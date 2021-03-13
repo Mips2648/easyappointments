@@ -320,6 +320,7 @@ $lang['date'] = 'Date';
 $lang['visible'] = 'Visible';
 $lang['color'] = 'Color';
 $lang['display_timezone'] = 'Display timezone';
+$lang['display_location'] = 'Display location';
 $lang['logsviewer'] = 'Logs';
 $lang['calendar_timeslot'] = 'Calendar timeslot';
 $lang['calendar_timeslot_hint'] = 'Define calendar timeslot when displaying calendar in gridview';
