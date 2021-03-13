@@ -886,28 +886,29 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
             .done(function (response) {
 
                 fullcalendar.removeAllEvents();
-
-
                 var appointmentEvents = [];
-                var notes;
 
                 // Add workingplan to calendar.
-                // TODO: define workinplan by day
-                var wpEvent = [
-                    {
-                        groupId: 'workingplan',
-                        startTime: workingPlan.monday.start,
-                        endTime: workingPlan.monday.end,
-                        display: 'inverse-background',
-                        color: 'grey',
-                        editable: false,
-                        selectable: false,
-                        daysOfWeek: [1, 2, 3, 4, 5]
+                Object.keys(workingPlan).forEach(function (key) {
+                    if (workingPlan[key]) {
+                        var wpEvent = {
+                            groupId: 'workingplan',
+                            startTime: workingPlan[key].start,
+                            endTime: workingPlan[key].end,
+                            display: 'inverse-background',
+                            color: 'grey',
+                            editable: false,
+                            selectable: false,
+                            daysOfWeek: [GeneralFunctions.getWeekDayId(key)]
+                        };
+                        appointmentEvents.push(wpEvent);
                     }
-                ];
-                fullcalendar.addEventSource(wpEvent);
+                });
+                fullcalendar.addEventSource(appointmentEvents);
 
                 // Add appointments to calendar.
+                appointmentEvents = [];
+                var notes;
                 response.appointments.forEach(function (appointment) {
                     notes = getEventNotesExcerpt(appointment.notes, 30);
                     notes = notes ? ' - ' + notes : '';
@@ -922,7 +923,6 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
                         color: appointment.service.color,
                         data: appointment // Store appointment data for later use.
                     };
-
                     appointmentEvents.push(appointmentEvent);
                 });
                 fullcalendar.addEventSource(appointmentEvents);
@@ -943,10 +943,8 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
                         className: 'fc-unavailable fc-custom',
                         data: unavailable
                     };
-
                     unavailabilityEvents.push(unavailabilityEvent);
                 });
-
                 fullcalendar.addEventSource(unavailabilityEvents);
             })
             .always(function () {
@@ -958,7 +956,6 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
         return parseInt(time.split(':')[0]);
     }
 
-
     exports.initialize = function () {
         GlobalVariables.systemSettings.forEach(function (setting) {
             if (setting.name === 'company_working_plan') {
@@ -969,8 +966,12 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
         var defaultView = window.innerWidth < 600 ? 'listDay' : 'timeGridWorkWeek';
         var viewList = window.innerWidth < 600 ? 'listDay,timeGridDay,dayGridMonth' : 'timeGridWorkWeek,timeGridWeek,dayGridMonth';
 
-        var slotStart = (getHour(workingPlan.monday.start) - 1) + ':00:00';
-        var slotEnd = (getHour(workingPlan.monday.end) + 1) + ':00:00';
+        let arr = Object.values(workingPlan);
+        var minStart = arr.reduce((min, p) => p ? (p.start < min ? p.start : min) : min, arr[0].start);
+        var maxEnd = arr.reduce((max, p) => p ? (p.end > max ? p.end : max) : max, arr[0].end);
+
+        var slotStart = (getHour(minStart) - 1) + ':00:00';
+        var slotEnd = (getHour(maxEnd) + 1) + ':00:00';
 
         var calendarEl = document.getElementById('calendar');
         fullcalendar = new FullCalendar.Calendar(calendarEl, {
