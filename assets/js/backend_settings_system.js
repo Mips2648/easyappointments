@@ -115,6 +115,11 @@
             value: $('#display-timezone').prop('checked') ? '1' : '0'
         });
 
+        settings.push({
+            name: 'display_location',
+            value: $('#display-location').prop('checked') ? '1' : '0'
+        });
+
 
         // Business Logic Tab
 

@@ -87,6 +87,10 @@ window.BackendSettings = window.BackendSettings || {};
                 $('#display-timezone').prop('checked', Boolean(Number(setting.value)));
             }
 
+            if (setting.name === 'display_location') {
+                $('#display-location').prop('checked', Boolean(Number(setting.value)));
+            }
+
             if (setting.name === 'display_cookie_notice') {
                 $('#display-cookie-notice').prop('checked', Boolean(Number(setting.value)));
             }
