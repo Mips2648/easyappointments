@@ -99,13 +99,13 @@ window.BackendCalendarUnavailabilityEventsModal = window.BackendCalendarUnavaila
             var currentMin = parseInt(start.toString('mm'));
 
             if (currentMin > 0 && currentMin < 15) {
-                start.set({'minute': 15});
+                start.set({ 'minute': 15 });
             } else if (currentMin > 15 && currentMin < 30) {
-                start.set({'minute': 30});
+                start.set({ 'minute': 30 });
             } else if (currentMin > 30 && currentMin < 45) {
-                start.set({'minute': 45});
+                start.set({ 'minute': 45 });
             } else {
-                start.addHours(1).set({'minute': 0});
+                start.addHours(1).set({ 'minute': 0 });
             }
 
             if ($('.calendar-view').length === 0) {
@@ -158,17 +158,21 @@ window.BackendCalendarUnavailabilityEventsModal = window.BackendCalendarUnavaila
             timeFormat: GlobalVariables.timeFormat === 'regular' ? 'h:mm TT' : 'HH:mm',
 
             // Translation
-            dayNames: [EALang.sunday, EALang.monday, EALang.tuesday, EALang.wednesday,
+            dayNames: [
+                EALang.sunday, EALang.monday, EALang.tuesday, EALang.wednesday,
                 EALang.thursday, EALang.friday, EALang.saturday],
-            dayNamesShort: [EALang.sunday.substr(0, 3), EALang.monday.substr(0, 3),
+            dayNamesShort: [
+                EALang.sunday.substr(0, 3), EALang.monday.substr(0, 3),
                 EALang.tuesday.substr(0, 3), EALang.wednesday.substr(0, 3),
                 EALang.thursday.substr(0, 3), EALang.friday.substr(0, 3),
                 EALang.saturday.substr(0, 3)],
-            dayNamesMin: [EALang.sunday.substr(0, 2), EALang.monday.substr(0, 2),
+            dayNamesMin: [
+                EALang.sunday.substr(0, 2), EALang.monday.substr(0, 2),
                 EALang.tuesday.substr(0, 2), EALang.wednesday.substr(0, 2),
                 EALang.thursday.substr(0, 2), EALang.friday.substr(0, 2),
                 EALang.saturday.substr(0, 2)],
-            monthNames: [EALang.january, EALang.february, EALang.march, EALang.april,
+            monthNames: [
+                EALang.january, EALang.february, EALang.march, EALang.april,
                 EALang.may, EALang.june, EALang.july, EALang.august, EALang.september,
                 EALang.october, EALang.november, EALang.december],
             prevText: EALang.previous,
@@ -188,17 +192,21 @@ window.BackendCalendarUnavailabilityEventsModal = window.BackendCalendarUnavaila
             timeFormat: GlobalVariables.timeFormat === 'regular' ? 'h:mm TT' : 'HH:mm',
 
             // Translation
-            dayNames: [EALang.sunday, EALang.monday, EALang.tuesday, EALang.wednesday,
+            dayNames: [
+                EALang.sunday, EALang.monday, EALang.tuesday, EALang.wednesday,
                 EALang.thursday, EALang.friday, EALang.saturday],
-            dayNamesShort: [EALang.sunday.substr(0, 3), EALang.monday.substr(0, 3),
+            dayNamesShort: [
+                EALang.sunday.substr(0, 3), EALang.monday.substr(0, 3),
                 EALang.tuesday.substr(0, 3), EALang.wednesday.substr(0, 3),
                 EALang.thursday.substr(0, 3), EALang.friday.substr(0, 3),
                 EALang.saturday.substr(0, 3)],
-            dayNamesMin: [EALang.sunday.substr(0, 2), EALang.monday.substr(0, 2),
+            dayNamesMin: [
+                EALang.sunday.substr(0, 2), EALang.monday.substr(0, 2),
                 EALang.tuesday.substr(0, 2), EALang.wednesday.substr(0, 2),
                 EALang.thursday.substr(0, 2), EALang.friday.substr(0, 2),
                 EALang.saturday.substr(0, 2)],
-            monthNames: [EALang.january, EALang.february, EALang.march, EALang.april,
+            monthNames: [
+                EALang.january, EALang.february, EALang.march, EALang.april,
                 EALang.may, EALang.june, EALang.july, EALang.august, EALang.september,
                 EALang.october, EALang.november, EALang.december],
             prevText: EALang.previous,
