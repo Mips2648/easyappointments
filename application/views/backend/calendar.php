@@ -190,17 +190,13 @@
                                     <select id="select-provider" class="required form-control"></select>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" <?= $display_location === '0' ? 'hidden="true"' : '' ?>>
                                     <label for="appointment-location" class="control-label">
                                         <?= lang('location') ?>
                                     </label>
                                     <input id="appointment-location" class="form-control">
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="appointment-notes" class="control-label"><?= lang('notes') ?></label>
-                                    <textarea id="appointment-notes" class="form-control" rows="3"></textarea>
-                                </div>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -214,7 +210,7 @@
                                     <input id="end-datetime" class="required form-control">
                                 </div>
 
-                                <div class="form-group" <?= $display_timezone === '1' ? '' : 'hidden="true"' ?>>
+                                <div class="form-group" <?= $display_timezone === '0' ? 'hidden="true"' : '' ?>>
                                     <label class="control-label"><?= lang('timezone') ?></label>
 
                                     <ul>
@@ -231,6 +227,12 @@
                                             </span>
                                         </li>
                                     </ul>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="appointment-notes" class="control-label"><?= lang('notes') ?></label>
+                                    <textarea id="appointment-notes" class="form-control" rows="3"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -380,7 +382,7 @@
                             <input id="unavailable-end" class="form-control">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" <?= $display_timezone === '0' ? 'hidden="true"' : '' ?>>
                             <label class="control-label"><?= lang('timezone') ?></label>
 
                             <ul>
