@@ -110,6 +110,7 @@ class Backend extends EA_Controller {
         $view['calendar_timeslot'] = $user['settings']['calendar_timeslot'];
         $view['timezones'] = $this->timezones->to_array();
         $view['system_settings'] = $this->settings_model->get_settings();
+        $view['display_timezone'] = $this->settings_model->get_setting('display_timezone');
         $this->set_user_data($view);
 
         if ($this->session->userdata('role_slug') === DB_SLUG_SECRETARY) {

@@ -214,7 +214,7 @@
                                     <input id="end-datetime" class="required form-control">
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" <?= $display_timezone === '1' ? '' : 'hidden="true"' ?>>
                                     <label class="control-label"><?= lang('timezone') ?></label>
 
                                     <ul>
