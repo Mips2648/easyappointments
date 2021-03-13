@@ -198,7 +198,7 @@
 
                             <div class="col-12 col-md-6">
                                 <div id="select-time">
-                                    <div class="form-group" id="div-timezone">
+                                    <div class="form-group" id="div-timezone" <?= $display_timezone === '1' ? '' : 'hidden="true"' ?>>
                                         <label for="select-timezone"><?= lang('timezone') ?></label>
                                         <?= render_timezone_dropdown('id="select-timezone" class="form-control" value="' . $default_timezone . '"'); ?>
                                     </div>
@@ -408,7 +408,6 @@
             providerData: <?= json_encode($provider_data) ?>,
             customerData: <?= json_encode($customer_data) ?>,
             displayAnyProvider: <?= json_encode($display_any_provider) ?>,
-            displayTimezone: <?= json_encode($display_timezone === '1') ?>,
             csrfToken: <?= json_encode($this->security->get_csrf_hash()) ?>,
             captchaSiteKey: <?= json_encode(($require_captcha === '1' ? $captcha_site_key : '')) ?>
         };

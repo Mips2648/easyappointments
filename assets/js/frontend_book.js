@@ -137,7 +137,6 @@ window.FrontendBook = window.FrontendBook || {};
         });
 
         $('#select-timezone').val(Intl.DateTimeFormat().resolvedOptions().timeZone);
-        $("#div-timezone").prop("hidden", !GlobalVariables.displayTimezone);
 
         // Bind the event handlers (might not be necessary every time we use this class).
         if (defaultEventHandlers) {
