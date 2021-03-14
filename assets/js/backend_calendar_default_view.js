@@ -100,7 +100,7 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
                 $dialog.find('#appointment-notes').val(appointment.notes);
                 $dialog.find('#customer-notes').val(customer.notes);
                 $dialog.modal('show');
-            } else {
+            } else if (lastFocusedEventData.extendedProps.data.is_unavailable === '1') {
                 var unavailable = lastFocusedEventData.extendedProps.data;
 
                 // Replace string date values with actual date objects.
@@ -113,7 +113,7 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
                 BackendCalendarUnavailabilityEventsModal.resetUnavailableDialog();
 
                 // Apply unavailable data to dialog.
-                $dialog.find('.modal-header h3').text('Edit Unavailable Period');
+                $dialog.find('.modal-header h3').text(EALang.edit_unavailable_title);
                 $dialog.find('#unavailable-start').datetimepicker('setDate', startDatetime);
                 $dialog.find('#unavailable-id').val(unavailable.id);
                 $dialog.find('#unavailable-provider').val(unavailable.id_users_provider);
@@ -242,10 +242,34 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
                 // is simple click => create appointment
                 createAppointment(selectionInfo);
             } else {
-                $('#insert-unavailable').trigger('click');
-                $('#unavailable-start').datepicker('setDate', selectionInfo.start);
-                $('#unavailable-end').datepicker('setDate', selectionInfo.end);
+                var buttons = [
+                    {
+                        text: EALang.cancel,
+                        click: function () {
+                            $('#message-box').dialog('close');
+                        }
+                    },
+                    {
+                        text: "Disponibilité",
+                        click: function () {
+                            $('#message-box').dialog('close');
+                            $('#insert-available').trigger('click');
+                            $('#available-start').datepicker('setDate', selectionInfo.start);
+                            $('#available-end').datepicker('setDate', selectionInfo.end);
+                        }
+                    },
+                    {
+                        text: 'Indisponibilité',
+                        click: function () {
+                            $('#message-box').dialog('close');
+                            $('#insert-unavailable').trigger('click');
+                            $('#unavailable-start').datepicker('setDate', selectionInfo.start);
+                            $('#unavailable-end').datepicker('setDate', selectionInfo.end);
+                        }
+                    }
+                ];
 
+                GeneralFunctions.displayMessageBox(EALang.create_availability_unavailability_title, EALang.create_availability_unavailability_prompt, buttons);
             }
         }
     }
@@ -1064,7 +1088,7 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
             $('#select-filter-item optgroup:eq(0)')
                 .find('option[value="' + GlobalVariables.user.id + '"]')
                 .prop('selected', true);
-            $('#select-filter-item').prop('disabled', true);
+            // $('#select-filter-item').prop('disabled', true);
         }
 
         if (GlobalVariables.user.role_slug === Backend.DB_SLUG_SECRETARY) {

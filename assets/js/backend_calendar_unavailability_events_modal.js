@@ -108,12 +108,17 @@ window.BackendCalendarUnavailabilityEventsModal = window.BackendCalendarUnavaila
                 start.addHours(1).set({ 'minute': 0 });
             }
 
-            if ($('.calendar-view').length === 0) {
-                $dialog.find('#unavailable-provider')
-                    .val($('#select-filter-item').val())
-                    .closest('.form-group')
-                    .hide();
-            }
+
+            $dialog.find('#unavailable-provider')
+                .val($('#select-filter-item').val())
+                .closest('.form-group');
+
+            // if ($('.calendar-view').length === 0) {
+            //     $dialog.find('#unavailable-provider')
+            //         .val($('#select-filter-item').val())
+            //         .closest('.form-group')
+            //         .hide();
+            // }
 
             $dialog.find('#unavailable-start').val(GeneralFunctions.formatDate(start, GlobalVariables.dateFormat, true));
             $dialog.find('#unavailable-end').val(GeneralFunctions.formatDate(start.addHours(1), GlobalVariables.dateFormat, true));

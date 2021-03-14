@@ -114,6 +114,7 @@ window.BackendCalendar = window.BackendCalendar || {};
     exports.initialize = function (view) {
         BackendCalendarAppointmentsModal.initialize();
         BackendCalendarUnavailabilityEventsModal.initialize();
+        BackendCalendarAvailabilityEventsModal.initialize();
 
         // Load and initialize the calendar view.
         if (view === 'table') {

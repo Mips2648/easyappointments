@@ -304,10 +304,6 @@
         }
 
         customer.appointments.forEach(function (appointment) {
-            if (GlobalVariables.user.role_slug === Backend.DB_SLUG_PROVIDER && parseInt(appointment.id_users_provider) !== GlobalVariables.user.id) {
-                return;
-            }
-
             if (GlobalVariables.user.role_slug === Backend.DB_SLUG_SECRETARY && GlobalVariables.secretaryProviders.indexOf(appointment.id_users_provider) === -1) {
                 return;
             }

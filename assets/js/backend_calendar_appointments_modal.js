@@ -322,10 +322,6 @@ window.BackendCalendarAppointmentsModal = window.BackendCalendarAppointmentsModa
 
             GlobalVariables.availableProviders.forEach(function (provider) {
                 provider.services.forEach(function (providerServiceId) {
-                    if (GlobalVariables.user.role_slug === Backend.DB_SLUG_PROVIDER && Number(provider.id) !== GlobalVariables.user.id) {
-                        return; // continue
-                    }
-
                     if (GlobalVariables.user.role_slug === Backend.DB_SLUG_SECRETARY && GlobalVariables.secretaryProviders.indexOf(provider.id) === -1) {
                         return; // continue
                     }
