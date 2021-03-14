@@ -33,17 +33,17 @@ window.BackendCalendarAvailabilityEventsModal = window.BackendCalendarAvailabili
             $dialog.find('.modal-message').addClass('d-none');
             $dialog.find('.has-error').removeClass('has-error');
 
-            var start = $dialog.find('#available-start').datetimepicker('getDate');
+            var start = $dialog.find('#available-starttime').datetimepicker('getDate');
 
             if (!start) {
-                $dialog.find('#available-start').closest('.form-group').addClass('has-error');
+                $dialog.find('#available-starttime').closest('.form-group').addClass('has-error');
                 return;
             }
 
-            var end = Date.parse($dialog.find('#available-end').datetimepicker('getDate'));
+            var end = Date.parse($dialog.find('#available-endtime').datetimepicker('getDate'));
 
             if (!end) {
-                $dialog.find('#available-end').closest('.form-group').addClass('has-error');
+                $dialog.find('#available-endtime').closest('.form-group').addClass('has-error');
                 return;
             }
 
@@ -54,15 +54,16 @@ window.BackendCalendarAvailabilityEventsModal = window.BackendCalendarAvailabili
                     .addClass('alert-danger')
                     .removeClass('d-none');
 
-                $dialog.find('#available-start, #available-end').closest('.form-group').addClass('has-error');
+                $dialog.find('#available-starttime, #available-endtime').closest('.form-group').addClass('has-error');
                 return;
             }
 
             // available period records go to the availabilities table.
             var available = {
-                start_datetime: start.toString('yyyy-MM-dd HH:mm'),
-                end_datetime: end.toString('yyyy-MM-dd HH:mm'),
-                id_users_provider: $('#available-provider').val() // curr provider
+                start_time: start.toString('yyyy-MM-dd HH:mm'),
+                end_time: end.toString('yyyy-MM-dd HH:mm'),
+                id_users_provider: $('#available-provider').val(),
+                id_services: $dialog.find('#available-service').val(),
             };
 
             if ($dialog.find('#available-id').val() !== '') {
@@ -172,6 +173,15 @@ window.BackendCalendarAvailabilityEventsModal = window.BackendCalendarAvailabili
                 });
             });
         });
+
+        $('#available-recurring').on('change', function () {
+            if ($(this).prop('checked')) {
+                $('.available-recurring-options').show();
+            } else {
+                $('.available-recurring-options').hide();
+            }
+
+        });
     }
 
     /**
@@ -205,7 +215,7 @@ window.BackendCalendarAvailabilityEventsModal = window.BackendCalendarAvailabili
         var fDay = GlobalVariables.firstWeekday;
         var fDaynum = GeneralFunctions.getWeekDayId(fDay);
 
-        $dialog.find('#available-start').datetimepicker({
+        $dialog.find('#available-starttime').timepicker({
             dateFormat: dateFormat,
             timeFormat: GlobalVariables.timeFormat === 'regular' ? 'h:mm TT' : 'HH:mm',
 
@@ -228,14 +238,14 @@ window.BackendCalendarAvailabilityEventsModal = window.BackendCalendarAvailabili
             currentText: EALang.now,
             closeText: EALang.close,
             timeOnlyTitle: EALang.select_time,
-            timeText: EALang.time,
+            timeText: EALang.start,
             hourText: EALang.hour,
             minuteText: EALang.minutes,
             firstDay: fDaynum
         });
-        $dialog.find('#available-start').val(start);
+        $dialog.find('#available-starttime').val(start);
 
-        $dialog.find('#available-end').datetimepicker({
+        $dialog.find('#available-endtime').timepicker({
             dateFormat: dateFormat,
             timeFormat: GlobalVariables.timeFormat === 'regular' ? 'h:mm TT' : 'HH:mm',
 
@@ -258,12 +268,48 @@ window.BackendCalendarAvailabilityEventsModal = window.BackendCalendarAvailabili
             currentText: EALang.now,
             closeText: EALang.close,
             timeOnlyTitle: EALang.select_time,
-            timeText: EALang.time,
+            timeText: EALang.end,
             hourText: EALang.hour,
             minuteText: EALang.minutes,
             firstDay: fDaynum
         });
-        $dialog.find('#available-end').val(end);
+        $dialog.find('#available-endtime').val(end);
+
+        $dialog.find('#available-recurring-end').datetimepicker({
+            dateFormat: dateFormat,
+            timeFormat: GlobalVariables.timeFormat === 'regular' ? 'h:mm TT' : 'HH:mm',
+
+            // Translation
+            dayNames: [
+                EALang.sunday, EALang.monday, EALang.tuesday, EALang.wednesday,
+                EALang.thursday, EALang.friday, EALang.saturday],
+            dayNamesShort: [
+                EALang.sunday.substr(0, 3), EALang.monday.substr(0, 3),
+                EALang.tuesday.substr(0, 3), EALang.wednesday.substr(0, 3),
+                EALang.thursday.substr(0, 3), EALang.friday.substr(0, 3),
+                EALang.saturday.substr(0, 3)],
+            dayNamesMin: [
+                EALang.sunday.substr(0, 2), EALang.monday.substr(0, 2),
+                EALang.tuesday.substr(0, 2), EALang.wednesday.substr(0, 2),
+                EALang.thursday.substr(0, 2), EALang.friday.substr(0, 2),
+                EALang.saturday.substr(0, 2)],
+            monthNames: [
+                EALang.january, EALang.february, EALang.march, EALang.april,
+                EALang.may, EALang.june, EALang.july, EALang.august, EALang.september,
+                EALang.october, EALang.november, EALang.december],
+            prevText: EALang.previous,
+            nextText: EALang.next,
+            currentText: EALang.now,
+            closeText: EALang.close,
+            timeOnlyTitle: EALang.select_time,
+            timeText: EALang.until,
+            hourText: EALang.hour,
+            minuteText: EALang.minutes,
+            firstDay: fDaynum
+        });
+
+        $("#available-recurring").prop("checked", false);
+        $('.available-recurring-options').hide();
     };
 
     exports.initialize = function () {

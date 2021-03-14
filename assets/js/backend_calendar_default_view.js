@@ -254,8 +254,8 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
                         click: function () {
                             $('#message-box').dialog('close');
                             $('#insert-available').trigger('click');
-                            $('#available-start').datepicker('setDate', selectionInfo.start);
-                            $('#available-end').datepicker('setDate', selectionInfo.end);
+                            $('#available-starttime').datepicker('setDate', selectionInfo.start);
+                            $('#available-endtime').datepicker('setDate', selectionInfo.end);
                         }
                     },
                     {

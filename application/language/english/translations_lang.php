@@ -329,3 +329,6 @@ $lang['calendar_timeslot'] = 'Calendar timeslot';
 $lang['calendar_timeslot_hint'] = 'Define calendar timeslot when displaying calendar in gridview';
 $lang['create_availability_unavailability_title'] = 'Add an availability or unavailability period';
 $lang['create_availability_unavailability_prompt'] = 'Do you want to add an availability or unavailability period?';
+$lang['repeat'] = 'Repeat';
+$lang['until'] = 'Until';
+$lang['every'] = 'Every';

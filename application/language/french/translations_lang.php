@@ -328,3 +328,6 @@ $lang['calendar_timeslot'] = 'Créneau horaire sur le calendrier';
 $lang['calendar_timeslot_hint'] = 'Définit le créneau horaire sur le calendrier lors de l\'affichage en mode grille';
 $lang['create_availability_unavailability_title'] = 'Ajouter une période de disponibilité ou d\'indisponibilité';
 $lang['create_availability_unavailability_prompt'] = 'Voulez-vous ajouter une période de disponibilité ou d\'indisponibilité?';
+$lang['repeat'] = 'Répéter';
+$lang['until'] = 'Jusqu\'à';
+$lang['every'] = 'Tous les';

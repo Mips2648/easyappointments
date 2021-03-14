@@ -428,7 +428,7 @@
 <!-- MANAGE AVAILABLE MODAL -->
 
 <div id="manage-available" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title"><?= lang('new_available_title') ?></h3>
@@ -440,109 +440,177 @@
                 <form>
                     <fieldset>
                         <input id="available-id" type="hidden">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label for="available-service" class="control-label">
+                                        <?= lang('service') ?>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select id="available-service" class="required form-control">
+                                        <?php
+                                        // Group services by category, only if there is at least one service
+                                        // with a parent category.
+                                        $has_category = FALSE;
+                                        foreach ($available_services as $service) {
+                                            if ($service['category_id'] != NULL) {
+                                                $has_category = TRUE;
+                                                break;
+                                            }
+                                        }
 
-                        <div class="form-group">
-                            <label for="available-service" class="control-label">
-                                <?= lang('service') ?>
-                                <span class="text-danger">*</span>
-                            </label>
-                            <select id="available-service" class="required form-control">
-                                <?php
-                                // Group services by category, only if there is at least one service
-                                // with a parent category.
-                                $has_category = FALSE;
-                                foreach ($available_services as $service) {
-                                    if ($service['category_id'] != NULL) {
-                                        $has_category = TRUE;
-                                        break;
-                                    }
-                                }
+                                        if ($has_category) {
+                                            $grouped_services = [];
 
-                                if ($has_category) {
-                                    $grouped_services = [];
+                                            foreach ($available_services as $service) {
+                                                if ($service['category_id'] != NULL) {
+                                                    if (!isset($grouped_services[$service['category_name']])) {
+                                                        $grouped_services[$service['category_name']] = [];
+                                                    }
 
-                                    foreach ($available_services as $service) {
-                                        if ($service['category_id'] != NULL) {
-                                            if (!isset($grouped_services[$service['category_name']])) {
-                                                $grouped_services[$service['category_name']] = [];
+                                                    $grouped_services[$service['category_name']][] = $service;
+                                                }
                                             }
 
-                                            $grouped_services[$service['category_name']][] = $service;
-                                        }
-                                    }
+                                            // We need the uncategorized services at the end of the list so we will use
+                                            // another iteration only for the uncategorized services.
+                                            $grouped_services['uncategorized'] = [];
+                                            foreach ($available_services as $service) {
+                                                if ($service['category_id'] == NULL) {
+                                                    $grouped_services['uncategorized'][] = $service;
+                                                }
+                                            }
 
-                                    // We need the uncategorized services at the end of the list so we will use
-                                    // another iteration only for the uncategorized services.
-                                    $grouped_services['uncategorized'] = [];
-                                    foreach ($available_services as $service) {
-                                        if ($service['category_id'] == NULL) {
-                                            $grouped_services['uncategorized'][] = $service;
-                                        }
-                                    }
+                                            foreach ($grouped_services as $key => $group) {
+                                                $group_label = ($key != 'uncategorized')
+                                                    ? $group[0]['category_name'] : 'Uncategorized';
 
-                                    foreach ($grouped_services as $key => $group) {
-                                        $group_label = ($key != 'uncategorized')
-                                            ? $group[0]['category_name'] : 'Uncategorized';
-
-                                        if (count($group) > 0) {
-                                            echo '<optgroup label="' . $group_label . '">';
-                                            foreach ($group as $service) {
+                                                if (count($group) > 0) {
+                                                    echo '<optgroup label="' . $group_label . '">';
+                                                    foreach ($group as $service) {
+                                                        echo '<option value="' . $service['id'] . '">'
+                                                            . $service['name'] . '</option>';
+                                                    }
+                                                    echo '</optgroup>';
+                                                }
+                                            }
+                                        } else {
+                                            foreach ($available_services as $service) {
                                                 echo '<option value="' . $service['id'] . '">'
                                                     . $service['name'] . '</option>';
                                             }
-                                            echo '</optgroup>';
                                         }
-                                    }
-                                } else {
-                                    foreach ($available_services as $service) {
-                                        echo '<option value="' . $service['id'] . '">'
-                                            . $service['name'] . '</option>';
-                                    }
-                                }
-                                ?>
-                            </select>
-                        </div>
+                                        ?>
+                                    </select>
+                                </div>
 
-                        <div class="form-group">
-                            <label for="available-provider" class="control-label">
-                                <?= lang('provider') ?>
-                            </label>
-                            <select id="available-provider" class="form-control"></select>
-                        </div>
+                                <div class="form-group">
+                                    <label for="available-provider" class="control-label">
+                                        <?= lang('provider') ?>
+                                    </label>
+                                    <select id="available-provider" class="form-control"></select>
+                                </div>
 
-                        <div class="form-group">
-                            <label for="available-start" class="control-label">
-                                <?= lang('start') ?>
-                                <span class="text-danger">*</span>
-                            </label>
-                            <input id="available-start" class="form-control">
-                        </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="available-recurring">
+                                        <label class="custom-control-label" for="available-recurring">
+                                            <?= lang('repeat') ?>
+                                        </label>
+                                    </div>
+                                </div>
 
-                        <div class="form-group">
-                            <label for="available-end" class="control-label">
-                                <?= lang('end') ?>
-                                <span class="text-danger">*</span>
-                            </label>
-                            <input id="available-end" class="form-control">
-                        </div>
+                                <div class="form-group available-recurring-options">
+                                    <label for="available-recurring-end" class="control-label">
+                                        <?= lang('every') ?>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="available-recurring-monday">
+                                        <label class="custom-control-label" for="available-recurring-monday">
+                                            <?= lang('monday') ?>
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="available-recurring-tuesday">
+                                        <label class="custom-control-label" for="available-recurring-tuesday">
+                                            <?= lang('tuesday') ?>
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="available-recurring-wednesday">
+                                        <label class="custom-control-label" for="available-recurring-wednesday">
+                                            <?= lang('wednesday') ?>
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="available-recurring-thursday">
+                                        <label class="custom-control-label" for="available-recurring-thursday">
+                                            <?= lang('thursday') ?>
+                                        </label>
 
-                        <div class="form-group" <?= $display_timezone === '0' ? 'hidden="true"' : '' ?>>
-                            <label class="control-label"><?= lang('timezone') ?></label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="available-recurring-friday">
+                                        <label class="custom-control-label" for="available-recurring-friday">
+                                            <?= lang('friday') ?>
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="available-recurring-saturday">
+                                        <label class="custom-control-label" for="available-recurring-saturday">
+                                            <?= lang('saturday') ?>
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="available-recurring-sunday">
+                                        <label class="custom-control-label" for="available-recurring-sunday">
+                                            <?= lang('sunday') ?>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label for="available-starttime" class="control-label">
+                                        <?= lang('start') ?>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input id="available-starttime" class="form-control">
+                                </div>
 
-                            <ul>
-                                <li>
-                                    <?= lang('provider') ?>:
-                                    <span class="provider-timezone">
-                                        -
-                                    </span>
-                                </li>
-                                <li>
-                                    <?= lang('current_user') ?>:
-                                    <span>
-                                        <?= $timezones[$timezone] ?>
-                                    </span>
-                                </li>
-                            </ul>
+                                <div class="form-group">
+                                    <label for="available-endtime" class="control-label">
+                                        <?= lang('end') ?>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input id="available-endtime" class="form-control">
+                                </div>
+                                <div class="form-group available-recurring-options">
+                                    <label for="available-recurring-end" class="control-label">
+                                        <?= lang('until') ?>
+                                    </label>
+                                    <input id="available-recurring-end" class="form-control">
+                                </div>
+                                <div class="form-group" <?= $display_timezone === '0' ? 'hidden="true"' : '' ?>>
+                                    <label class="control-label"><?= lang('timezone') ?></label>
+
+                                    <ul>
+                                        <li>
+                                            <?= lang('provider') ?>:
+                                            <span class="provider-timezone">
+                                                -
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <?= lang('current_user') ?>:
+                                            <span>
+                                                <?= $timezones[$timezone] ?>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
                 </form>
