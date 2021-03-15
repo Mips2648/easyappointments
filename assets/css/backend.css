@@ -429,6 +429,12 @@ body legend {
     background-color: #4790CA;
 }
 
+@media (max-width: 600px) {
+    .hidden-xs {
+      display: none;
+    }
+  }
+
 #existing-customers-list {
     height: 110px;
     overflow-y: auto;

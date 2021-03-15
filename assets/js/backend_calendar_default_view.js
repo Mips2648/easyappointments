@@ -987,8 +987,16 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
             }
         });
 
-        var defaultView = window.innerWidth < 600 ? 'listDay' : 'timeGridWorkWeek';
-        var viewList = window.innerWidth < 600 ? 'listDay,timeGridDay,dayGridMonth' : 'timeGridWorkWeek,timeGridWeek,dayGridMonth';
+        var defaultView = 'timeGridWorkWeek';
+        var viewList = 'timeGridWorkWeek,timeGridWeek,dayGridMonth';
+        var topButton = 'prev,next today';
+        var showWeekends = true;
+        if (window.innerWidth < 600) {
+            defaultView = 'listDay';
+            viewList = 'listDay,timeGridDay,dayGridMonth';
+            topButton = 'prev,next';
+            showWeekends = false;
+        }
 
         let arr = Object.values(workingPlan);
         var minStart = arr.reduce((min, p) => p ? (p.start < min ? p.start : min) : min, arr[0].start);
@@ -1013,8 +1021,9 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
             eventDisplay: 'block',
             weekNumbers: true,
             weekNumberFormat: { week: 'numeric' },
+            weekends: showWeekends,
             headerToolbar: {
-                start: 'prev,next today',
+                start: topButton,
                 center: 'title',
                 end: viewList
             },
